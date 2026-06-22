@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:5173)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(mkdir -p \"/Users/haroldjames/archivos de windows/Paginaweb/.claude\" && cat \"/Users/haroldjames/archivos de windows/Paginaweb/.claude/launch.json\" 2>/dev/null || echo \"not found\")",
+      "mcp__Claude_Preview__preview_start",
+      "WebFetch(domain:demo.awaikenthemes.com)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5174/)",
+      "Bash(lsof -ti:5174)",
+      "Bash(xargs kill -9)",
+      "Bash(brew install *)",
+      "Bash(pdftoppm -v)",
+      "Bash(pdftotext \"/Users/haroldjames/Downloads/ShowClinic_Club_Programa_de_Puntos_1.pdf\" -)",
+      "Bash(node -e \"console.log\\(btoa\\('master:' + btoa\\('@HaJMS-20'\\)\\)\\)\")",
+      "Bash(curl -s \"http://localhost:5173/src/components/WhyChooseUs.jsx\")",
+      "Bash(kill -9 67939)",
+      "Bash(npm install *)",
+      "Bash(kill 75727)",
+      "Bash(ps -p 1494 -o command=)",
+      "Bash(awk '{print $2}')",
+      "Bash(kill 1824)",
+      "Bash(python3 -c \"from PIL import Image; im=Image.open\\('public/Imagenes/logosinfondo.png'\\).convert\\('RGBA'\\); print\\('size', im.size\\); import collections; px=im.getdata\\(\\); op=[p for p in px if p[3]>10]; print\\('opaque px', len\\(op\\)\\); print\\('sample', op[len\\(op\\)//2]\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s \"https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/clients?select=id,name,last_name,phone,points,points_history,created_at\" -H \"apikey: sb_publishable__NvC-LsXnAdTfDBG-RGU4A_yc7-yWXC\" -o /tmp/sc_clients.json)",
+      "Bash(python3 -m pip install reportlab --quiet)",
+      "Bash(python3 scripts/generar_informe_club.py)",
+      "Bash(python3 scripts/optimizar_imagenes.py)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"ShowClinic web — sitio inicial\")",
+      "Bash(git branch *)",
+      "Bash(git remote *)"
+    ]
+  }
+}
