@@ -34,7 +34,9 @@
       "Bash(git remote *)",
       "Bash(GIT_TERMINAL_PROMPT=0 timeout 60 git push -u origin main)",
       "Bash(git push *)",
-      "Bash(gh auth *)"
+      "Bash(gh auth *)",
+      "Bash(curl -sS -m 20 --resolve showclinic.com:443:75.2.60.5 https://showclinic.com)",
+      "Bash(curl -sS -m 20 https://showclinic.netlify.app)"
     ]
   }
 }
