@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Crown, Gift, Star, Sparkles, X, User, ChevronDown, LogOut, Trophy, Calendar, UserPlus, MessageSquare, Gem, TrendingUp, ArrowRight } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 import { cardThemes } from '../lib/tierThemes';
 
 const levels = [
@@ -24,19 +23,9 @@ export default function ClientAccountBar({ session, onLogout }) {
   const [showPanel, setShowPanel] = useState(false);
 
   useEffect(() => {
-    const loadClient = async () => {
-      const { data } = await supabase.from('clients').select('*').eq('id', session.id).single();
-      if (data) setClient({ ...data, lastName: data.last_name, pointsHistory: data.points_history || [] });
-    };
-    loadClient();
-  }, [session]);
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const { data } = await supabase.from('clients').select('*').eq('id', session.id).single();
-      if (data) setClient({ ...data, lastName: data.last_name, pointsHistory: data.points_history || [] });
-    }, 5000);
-    return () => clearInterval(interval);
+    // Los datos del paciente vienen del login seguro (guardados en la sesión)
+    const data = session.client;
+    if (data) setClient({ ...data, lastName: data.last_name, pointsHistory: data.points_history || [] });
   }, [session]);
 
   if (!client) return null;

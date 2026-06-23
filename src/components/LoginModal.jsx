@@ -26,11 +26,11 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
       return;
     }
 
-    const { data: clients } = await supabase.from('clients').select('*').ilike('username', username.trim()).eq('password', password);
-    const client = clients?.[0];
+    // Login de paciente por canal seguro (función con contraseña cifrada, no expone la tabla)
+    const { data: client } = await supabase.rpc('client_login', { p_username: username.trim(), p_password: password });
 
-    if (client) {
-      const session = { role: 'client', name: client.name, user: client.username, id: client.id };
+    if (client && client.id) {
+      const session = { role: 'client', name: client.name, user: client.username, id: client.id, client };
       localStorage.setItem('showclinic_session', JSON.stringify(session));
       onLogin(session);
       resetAndClose();
