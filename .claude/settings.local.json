@@ -38,7 +38,8 @@
       "Bash(curl -sS -m 20 --resolve showclinic.com:443:75.2.60.5 https://showclinic.com)",
       "Bash(curl -sS -m 20 https://showclinic.netlify.app)",
       "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Favicon: logo ShowClinic en pestana y resultados de Google\")",
-      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Antes/despues: comparador con soporte tactil para movil\")"
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Antes/despues: comparador con soporte tactil para movil\")",
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Redes sociales: Instagram, Facebook y TikTok reales\")"
     ]
   }
 }
