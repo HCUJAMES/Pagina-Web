@@ -8,3 +8,20 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Cabeceras de seguridad para todo el sitio
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Evita que tu sitio sea incrustado en otra web (clickjacking)
+    X-Frame-Options = "SAMEORIGIN"
+    # Evita que el navegador "adivine" tipos de archivo (MIME sniffing)
+    X-Content-Type-Options = "nosniff"
+    # Controla qué información de referencia se envía a otros sitios
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Desactiva APIs sensibles que el sitio no usa
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+    # Fuerza HTTPS durante 1 año (incluye subdominios)
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    # Política de contenido: solo permite recursos de orígenes confiables
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co; frame-src https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
