@@ -59,7 +59,7 @@ function App() {
   }
 
   if (session?.role === 'admin' && !viewingSite) {
-    return <AdminDashboard onBack={() => setViewingSite(true)} />
+    return <AdminDashboard session={session} onBack={() => setViewingSite(true)} />
   }
 
   const isClient = session?.role === 'client'

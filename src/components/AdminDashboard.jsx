@@ -14,10 +14,21 @@ function getLevel(points) {
 }
 
 function getTotalEarned(history) {
-  return (history || []).filter(e => e.type === 'add').reduce((sum, e) => sum + e.amount, 0);
+  return (history || []).filter(e => e.type === 'add' && !e.voided).reduce((sum, e) => sum + e.amount, 0);
 }
 
-export default function AdminDashboard({ onBack }) {
+// Saldo disponible recalculado desde el historial (ignora movimientos anulados)
+function computeBalance(history) {
+  return (history || []).reduce((sum, e) => {
+    if (e.voided) return sum;
+    if (e.type === 'add') return sum + e.amount;
+    if (e.type === 'subtract') return sum - e.amount;
+    return sum;
+  }, 0);
+}
+
+export default function AdminDashboard({ onBack, session }) {
+  const adminName = session?.name || session?.user || 'Administrador';
   const [activeTab, setActiveTab] = useState('patients');
   const [clients, setClients] = useState([]);
   const [treatments, setTreatments] = useState([]);
@@ -126,7 +137,7 @@ export default function AdminDashboard({ onBack }) {
     // Leer saldo más reciente para no sobrescribir cambios de otro administrador
     const { data: fresh, error: fErr } = await supabase.from('clients').select('points, points_history').eq('id', id).single();
     if (fErr || !fresh) { alert('No se pudo leer el paciente. Intenta de nuevo.'); return; }
-    const entry = { type: 'add', amount: pts, soles, description: desc, date: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) };
+    const entry = { type: 'add', amount: pts, soles, description: desc, by: adminName, date: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) };
     const newPoints = (fresh.points || 0) + pts;
     const newHistory = [...(fresh.points_history || []), entry];
     const { error } = await supabase.from('clients').update({ points: newPoints, points_history: newHistory }).eq('id', id);
@@ -151,7 +162,7 @@ export default function AdminDashboard({ onBack }) {
     // Leer saldo más reciente para no sobrescribir cambios de otro administrador
     const { data: fresh, error: fErr } = await supabase.from('clients').select('points, points_history').eq('id', id).single();
     if (fErr || !fresh) { alert('No se pudo leer el paciente. Intenta de nuevo.'); return; }
-    const entry = { type: 'add', amount: pts, description: desc, date: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) };
+    const entry = { type: 'add', amount: pts, description: desc, by: adminName, date: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) };
     const newPoints = (fresh.points || 0) + pts;
     const newHistory = [...(fresh.points_history || []), entry];
     const { error } = await supabase.from('clients').update({ points: newPoints, points_history: newHistory }).eq('id', id);
@@ -171,13 +182,49 @@ export default function AdminDashboard({ onBack }) {
     const solesValue = (pts / 100) * level.canje;
     if (!confirm(`¿Confirmar canje de ${pts.toLocaleString()} puntos de ${fresh.name}?\nDescuento aplicado: S/ ${solesValue.toFixed(2)}\nSaldo restante: ${(fresh.points - pts).toLocaleString()} pts`)) return;
     const desc = canjeAction.description.trim() || `Canje de ${pts.toLocaleString()} pts (S/ ${solesValue.toFixed(2)})`;
-    const entry = { type: 'subtract', amount: pts, solesValue, description: desc, date: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) };
+    const entry = { type: 'subtract', amount: pts, solesValue, description: desc, by: adminName, date: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) };
     const newPoints = fresh.points - pts;
     const newHistory = [...(fresh.points_history || []), entry];
     const { error } = await supabase.from('clients').update({ points: newPoints, points_history: newHistory }).eq('id', id);
     if (error) { alert('Error al canjear puntos: ' + error.message); return; }
     setClients(clients.map(c => c.id === id ? { ...c, points: newPoints, pointsHistory: newHistory } : c));
     setCanjeAction({ id: null, points: '', description: '' });
+  };
+
+  // Anular (revertir) un movimiento equivocado del historial
+  const handleReverseEntry = async (id, entryDate, entryDescription) => {
+    if (!confirm('¿Anular este movimiento? Se ajustará el saldo del paciente y quedará registrado como anulado.')) return;
+    const { data: fresh, error: fErr } = await supabase.from('clients').select('points, points_history').eq('id', id).single();
+    if (fErr || !fresh) { alert('No se pudo leer el paciente. Intenta de nuevo.'); return; }
+    const hist = fresh.points_history || [];
+    // localizar el movimiento exacto (por fecha + descripción) que aún no esté anulado
+    const idx = hist.findIndex(e => e.date === entryDate && e.description === entryDescription && !e.voided && e.type !== 'void');
+    if (idx === -1) { alert('No se encontró el movimiento (quizás ya fue anulado). Actualiza e intenta de nuevo.'); await loadClients(); return; }
+    const newHistory = hist.map((e, i) => i === idx ? { ...e, voided: true, voidedBy: adminName, voidedAt: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) } : e);
+    const newPoints = computeBalance(newHistory);
+    const { error } = await supabase.from('clients').update({ points: newPoints, points_history: newHistory }).eq('id', id);
+    if (error) { alert('Error al anular el movimiento: ' + error.message); return; }
+    setClients(clients.map(c => c.id === id ? { ...c, points: newPoints, pointsHistory: newHistory } : c));
+  };
+
+  // Exportar todos los pacientes y sus puntos a CSV (respaldo descargable)
+  const exportCSV = () => {
+    const headers = ['Nombre', 'Apellidos', 'Telefono', 'Usuario', 'Puntos disponibles', 'Total acumulado', 'Nivel', 'Canjes', 'Registro'];
+    const rows = clients.map(c => {
+      const earned = getTotalEarned(c.pointsHistory);
+      const lvl = getLevel(earned);
+      const canjes = (c.pointsHistory || []).filter(e => e.type === 'subtract' && !e.voided).length;
+      const esc = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+      return [c.name, c.lastName || '', c.phone, c.username, c.points, earned, lvl.name, canjes, c.createdAt].map(esc).join(',');
+    });
+    const csv = '﻿' + headers.map(h => `"${h}"`).join(',') + '\n' + rows.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ShowClinic_pacientes_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleSelectTreatment = (t) => {
@@ -309,10 +356,14 @@ export default function AdminDashboard({ onBack }) {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar paciente..." className={`${inputClass} pl-11`} />
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <button onClick={refreshAll} disabled={refreshing} title="Actualizar saldos desde la base de datos"
                   className="inline-flex items-center justify-center gap-2 px-4 py-3 text-[13px] font-semibold text-primary bg-white border border-primary/20 rounded-xl hover:bg-primary/5 transition-colors disabled:opacity-50">
                   <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} /> Actualizar
+                </button>
+                <button onClick={exportCSV} disabled={clients.length === 0} title="Descargar pacientes y puntos en Excel/CSV"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-3 text-[13px] font-semibold text-emerald-600 bg-white border border-emerald-200 rounded-xl hover:bg-emerald-50 transition-colors disabled:opacity-50">
+                  <DollarSign className="w-4 h-4" /> Exportar
                 </button>
                 <button onClick={() => { setShowForm(true); setEditingId(null); setForm({ name: '', lastName: '', phone: '', username: '', password: '', points: 0 }); }}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 text-[13px] font-semibold uppercase tracking-wider text-white bg-accent rounded-xl hover:bg-dark transition-colors">
@@ -679,24 +730,39 @@ export default function AdminDashboard({ onBack }) {
                                   <p className="text-[12px] uppercase tracking-wider text-gray-400 font-semibold mb-3 flex items-center gap-2">
                                     <Clock className="w-3.5 h-3.5" /> Historial de puntos
                                   </p>
-                                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                                  <div className="space-y-2 max-h-72 overflow-y-auto">
                                     {history.slice().reverse().map((entry, i) => (
-                                      <div key={i} className="flex items-start justify-between px-4 py-3 bg-cream rounded-xl">
-                                        <div className="flex items-start gap-3">
-                                          <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${entry.type === 'add' ? 'bg-green-100' : 'bg-red-100'}`}>
-                                            {entry.type === 'add' ? <Plus className="w-3 h-3 text-green-600" /> : <Minus className="w-3 h-3 text-red-500" />}
+                                      <div key={i} className={`flex items-start justify-between px-4 py-3 rounded-xl ${entry.voided ? 'bg-gray-100 opacity-70' : 'bg-cream'}`}>
+                                        <div className="flex items-start gap-3 min-w-0">
+                                          <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${entry.voided ? 'bg-gray-200' : entry.type === 'add' ? 'bg-green-100' : 'bg-red-100'}`}>
+                                            {entry.type === 'add' ? <Plus className={`w-3 h-3 ${entry.voided ? 'text-gray-400' : 'text-green-600'}`} /> : <Minus className={`w-3 h-3 ${entry.voided ? 'text-gray-400' : 'text-red-500'}`} />}
                                           </div>
-                                          <div>
-                                            <p className="text-[13px] font-medium text-dark">{entry.description}</p>
-                                            <div className="flex items-center gap-2 mt-0.5">
+                                          <div className="min-w-0">
+                                            <p className={`text-[13px] font-medium ${entry.voided ? 'text-gray-400 line-through' : 'text-dark'}`}>{entry.description}</p>
+                                            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                                               <p className="text-[11px] text-gray-400">{entry.date}</p>
                                               {entry.soles && <span className="text-[11px] text-gray-400">· S/ {entry.soles}</span>}
+                                              {entry.by && <span className="text-[11px] text-gray-400">· por {entry.by}</span>}
                                             </div>
+                                            {entry.voided && (
+                                              <p className="text-[10px] text-red-400 font-medium mt-0.5">Anulado{entry.voidedBy ? ` por ${entry.voidedBy}` : ''}{entry.voidedAt ? ` · ${entry.voidedAt}` : ''}</p>
+                                            )}
                                           </div>
                                         </div>
-                                        <span className={`text-[14px] font-bold flex-shrink-0 ml-3 ${entry.type === 'add' ? 'text-green-600' : 'text-red-500'}`}>
-                                          {entry.type === 'add' ? '+' : '-'}{entry.amount.toLocaleString()}
-                                        </span>
+                                        <div className="flex flex-col items-end gap-1 flex-shrink-0 ml-3">
+                                          <span className={`text-[14px] font-bold ${entry.voided ? 'text-gray-400 line-through' : entry.type === 'add' ? 'text-green-600' : 'text-red-500'}`}>
+                                            {entry.type === 'add' ? '+' : '-'}{entry.amount.toLocaleString()}
+                                          </span>
+                                          {!entry.voided && (
+                                            <button
+                                              onClick={(e) => { e.stopPropagation(); handleReverseEntry(client.id, entry.date, entry.description); }}
+                                              className="text-[10px] font-semibold text-red-500 hover:text-red-700 hover:underline"
+                                              title="Anular este movimiento (corregir error)"
+                                            >
+                                              Anular
+                                            </button>
+                                          )}
+                                        </div>
                                       </div>
                                     ))}
                                   </div>

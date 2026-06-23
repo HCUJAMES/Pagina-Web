@@ -41,7 +41,7 @@ export default function ClientDashboard({ session, onLogout }) {
   }
 
   const history = client.pointsHistory || [];
-  const totalEarned = history.filter(e => e.type === 'add').reduce((sum, e) => sum + e.amount, 0) || client.points;
+  const totalEarned = history.filter(e => e.type === 'add' && !e.voided).reduce((sum, e) => sum + e.amount, 0) || client.points;
   const level = getLevel(totalEarned);
   const progress = level.next ? ((totalEarned - level.min) / (level.next - level.min)) * 100 : 100;
   const canjeValue = (client.points / 100) * level.canje;
@@ -153,7 +153,7 @@ export default function ClientDashboard({ session, onLogout }) {
               <Sparkles className="w-4 h-4 text-primary" /> Historial de movimientos
             </h3>
             <div className="space-y-2">
-              {history.slice().reverse().slice(0, 10).map((entry, i) => (
+              {history.filter(e => !e.voided).slice().reverse().slice(0, 10).map((entry, i) => (
                 <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${entry.type === 'add' ? 'bg-green-50' : 'bg-red-50'}`}>
