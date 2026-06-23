@@ -1,5 +1,5 @@
+import { useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 import { MoveHorizontal } from 'lucide-react';
 
 const beforeAfterPairs = [
@@ -15,17 +15,84 @@ const beforeAfterPairs = [
   },
 ];
 
-export default function BeforeAfter() {
-  const CustomHandle = () => (
-    <div className="flex flex-col items-center gap-2">
-      <div className="w-[2px] h-full bg-white/80" />
-      <div className="absolute top-1/2 -translate-y-1/2 flex items-center justify-center w-11 h-11 rounded-full bg-white shadow-soft-lg border border-gray-100">
-        <MoveHorizontal className="w-4 h-4 text-primary" />
+// Comparador antes/después con soporte total para móvil (toque) y escritorio (mouse)
+function CompareSlider({ before, after, title }) {
+  const [pos, setPos] = useState(50);
+  const containerRef = useRef(null);
+  const dragging = useRef(false);
+
+  const updateFromClientX = useCallback((clientX) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    let p = ((clientX - rect.left) / rect.width) * 100;
+    p = Math.max(0, Math.min(100, p));
+    setPos(p);
+  }, []);
+
+  const onPointerDown = (e) => {
+    dragging.current = true;
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* noop */ }
+    updateFromClientX(e.clientX);
+  };
+  const onPointerMove = (e) => {
+    if (!dragging.current) return;
+    updateFromClientX(e.clientX);
+  };
+  const endDrag = () => { dragging.current = false; };
+
+  return (
+    <div
+      ref={containerRef}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+      className="relative rounded-2xl overflow-hidden shadow-soft select-none cursor-ew-resize"
+      style={{ aspectRatio: '3 / 4', touchAction: 'pan-y' }}
+    >
+      {/* Imagen "antes" (capa base, completa) */}
+      <img
+        src={before}
+        alt={`Antes - ${title}`}
+        draggable={false}
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      />
+      {/* Imagen "después" (recortada a la derecha del divisor) */}
+      <img
+        src={after}
+        alt={`Después - ${title}`}
+        draggable={false}
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        style={{ clipPath: `inset(0 0 0 ${pos}%)` }}
+      />
+
+      {/* Divisor + tirador */}
+      <div
+        className="absolute top-0 bottom-0 pointer-events-none"
+        style={{ left: `${pos}%`, transform: 'translateX(-50%)' }}
+      >
+        <div className="relative w-[2px] h-full bg-white/90 mx-auto">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-soft-lg border border-gray-100 flex items-center justify-center">
+            <MoveHorizontal className="w-4 h-4 text-primary" />
+          </div>
+        </div>
       </div>
-      <div className="w-[2px] h-full bg-white/80" />
+
+      {/* Etiquetas */}
+      <div className="absolute top-4 left-4 bg-dark/60 backdrop-blur-sm text-white text-[10px] uppercase tracking-[0.12em] font-semibold rounded-full px-3 py-1.5 z-10 pointer-events-none">
+        Antes
+      </div>
+      <div className="absolute top-4 right-4 bg-primary text-white text-[10px] uppercase tracking-[0.12em] font-semibold rounded-full px-3 py-1.5 z-10 pointer-events-none">
+        Después
+      </div>
     </div>
   );
+}
 
+export default function BeforeAfter() {
   return (
     <section id="resultados" className="bg-cream">
       <div className="container-fluid py-20 md:py-28 2xl:py-36">
@@ -57,33 +124,7 @@ export default function BeforeAfter() {
               <h3 className="font-serif text-lg font-semibold text-dark text-center mb-4">
                 {pair.title}
               </h3>
-              <div className="relative rounded-2xl overflow-hidden shadow-soft" style={{ aspectRatio: '3 / 4' }}>
-                <ReactCompareSlider
-                  itemOne={
-                    <ReactCompareSliderImage
-                      src={pair.before}
-                      alt={`Antes - ${pair.title}`}
-                      style={{ objectFit: 'cover', objectPosition: 'center', width: '100%', height: '100%' }}
-                    />
-                  }
-                  itemTwo={
-                    <ReactCompareSliderImage
-                      src={pair.after}
-                      alt={`Después - ${pair.title}`}
-                      style={{ objectFit: 'cover', objectPosition: 'center', width: '100%', height: '100%' }}
-                    />
-                  }
-                  handle={<CustomHandle />}
-                  position={50}
-                  style={{ width: '100%', height: '100%' }}
-                />
-                <div className="absolute top-4 left-4 bg-dark/60 backdrop-blur-sm text-white text-[10px] uppercase tracking-[0.12em] font-semibold rounded-full px-3 py-1.5 z-10 pointer-events-none">
-                  Antes
-                </div>
-                <div className="absolute top-4 right-4 bg-primary text-white text-[10px] uppercase tracking-[0.12em] font-semibold rounded-full px-3 py-1.5 z-10 pointer-events-none">
-                  Después
-                </div>
-              </div>
+              <CompareSlider before={pair.before} after={pair.after} title={pair.title} />
             </motion.div>
           ))}
         </div>
