@@ -39,10 +39,24 @@ export default function AdminDashboard({ onBack }) {
   const [contacts, setContacts] = useState([]);
   const [contactSearch, setContactSearch] = useState('');
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadClients = async () => {
+    const { data: c } = await supabase.from('clients').select('*').order('id');
+    if (c) setClients(c.map(r => ({ ...r, lastName: r.last_name, createdAt: new Date(r.created_at).toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }), pointsHistory: r.points_history || [] })));
+  };
+
+  const refreshAll = async () => {
+    setRefreshing(true);
+    await loadClients();
+    const { data: ct } = await supabase.from('contacts').select('*').order('created_at', { ascending: false });
+    if (ct) setContacts(ct);
+    setRefreshing(false);
+  };
+
   useEffect(() => {
     const loadData = async () => {
-      const { data: c } = await supabase.from('clients').select('*').order('id');
-      if (c) setClients(c.map(r => ({ ...r, lastName: r.last_name, createdAt: new Date(r.created_at).toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }), pointsHistory: r.points_history || [] })));
+      await loadClients();
       const { data: t } = await supabase.from('treatments').select('*').order('id');
       if (t) setTreatments(t);
       const { data: a } = await supabase.from('admins').select('*').order('id');
@@ -109,11 +123,12 @@ export default function AdminDashboard({ onBack }) {
     if (!soles || soles <= 0) return;
     const pts = soles;
     const desc = pointsAction.description.trim() || pointsAction.treatment || `Pago S/ ${soles.toFixed(2)}`;
-    const client = clients.find(c => c.id === id);
-    if (!client) return;
+    // Leer saldo más reciente para no sobrescribir cambios de otro administrador
+    const { data: fresh, error: fErr } = await supabase.from('clients').select('points, points_history').eq('id', id).single();
+    if (fErr || !fresh) { alert('No se pudo leer el paciente. Intenta de nuevo.'); return; }
     const entry = { type: 'add', amount: pts, soles, description: desc, date: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) };
-    const newPoints = client.points + pts;
-    const newHistory = [...(client.pointsHistory || []), entry];
+    const newPoints = (fresh.points || 0) + pts;
+    const newHistory = [...(fresh.points_history || []), entry];
     const { error } = await supabase.from('clients').update({ points: newPoints, points_history: newHistory }).eq('id', id);
     if (error) { alert('Error al guardar puntos: ' + error.message); return; }
     setClients(clients.map(c => c.id === id ? { ...c, points: newPoints, pointsHistory: newHistory } : c));
@@ -132,12 +147,13 @@ export default function AdminDashboard({ onBack }) {
     if (!option) return;
     const pts = option.points > 0 ? option.points : Math.floor(Number(bonusAction.customPoints));
     if (!pts || pts <= 0) return;
-    const client = clients.find(c => c.id === id);
-    if (!client) return;
     const desc = bonusAction.description.trim() || `Bonus: ${bonusAction.type}`;
+    // Leer saldo más reciente para no sobrescribir cambios de otro administrador
+    const { data: fresh, error: fErr } = await supabase.from('clients').select('points, points_history').eq('id', id).single();
+    if (fErr || !fresh) { alert('No se pudo leer el paciente. Intenta de nuevo.'); return; }
     const entry = { type: 'add', amount: pts, description: desc, date: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) };
-    const newPoints = client.points + pts;
-    const newHistory = [...(client.pointsHistory || []), entry];
+    const newPoints = (fresh.points || 0) + pts;
+    const newHistory = [...(fresh.points_history || []), entry];
     const { error } = await supabase.from('clients').update({ points: newPoints, points_history: newHistory }).eq('id', id);
     if (error) { alert('Error al agregar bonus: ' + error.message); return; }
     setClients(clients.map(c => c.id === id ? { ...c, points: newPoints, pointsHistory: newHistory } : c));
@@ -147,15 +163,17 @@ export default function AdminDashboard({ onBack }) {
   const handleCanjeApply = async (id) => {
     const pts = Math.floor(Number(canjeAction.points));
     if (!pts || pts <= 0) return;
-    const client = clients.find(c => c.id === id);
-    if (!client || pts > client.points) return;
-    const level = getLevel(getTotalEarned(client.pointsHistory));
+    // Leer saldo más reciente para validar y no sobrescribir cambios de otro administrador
+    const { data: fresh, error: fErr } = await supabase.from('clients').select('name, points, points_history').eq('id', id).single();
+    if (fErr || !fresh) { alert('No se pudo leer el paciente. Intenta de nuevo.'); return; }
+    if (pts > fresh.points) { alert(`El paciente solo tiene ${(fresh.points || 0).toLocaleString()} puntos disponibles ahora mismo.`); await loadClients(); return; }
+    const level = getLevel(getTotalEarned(fresh.points_history));
     const solesValue = (pts / 100) * level.canje;
-    if (!confirm(`¿Confirmar canje de ${pts.toLocaleString()} puntos de ${client.name}?\nDescuento aplicado: S/ ${solesValue.toFixed(2)}\nSaldo restante: ${(client.points - pts).toLocaleString()} pts`)) return;
+    if (!confirm(`¿Confirmar canje de ${pts.toLocaleString()} puntos de ${fresh.name}?\nDescuento aplicado: S/ ${solesValue.toFixed(2)}\nSaldo restante: ${(fresh.points - pts).toLocaleString()} pts`)) return;
     const desc = canjeAction.description.trim() || `Canje de ${pts.toLocaleString()} pts (S/ ${solesValue.toFixed(2)})`;
     const entry = { type: 'subtract', amount: pts, solesValue, description: desc, date: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) };
-    const newPoints = client.points - pts;
-    const newHistory = [...(client.pointsHistory || []), entry];
+    const newPoints = fresh.points - pts;
+    const newHistory = [...(fresh.points_history || []), entry];
     const { error } = await supabase.from('clients').update({ points: newPoints, points_history: newHistory }).eq('id', id);
     if (error) { alert('Error al canjear puntos: ' + error.message); return; }
     setClients(clients.map(c => c.id === id ? { ...c, points: newPoints, pointsHistory: newHistory } : c));
@@ -168,12 +186,19 @@ export default function AdminDashboard({ onBack }) {
 
   const handleAddTreatment = async (e) => {
     e.preventDefault();
+    const price = Number(treatmentForm.price);
+    if (!treatmentForm.name.trim() || !price || price <= 0) {
+      alert('Ingresa un nombre y un precio válido (mayor a 0) para el tratamiento.');
+      return;
+    }
     if (editingTreatment) {
-      await supabase.from('treatments').update({ name: treatmentForm.name, price: Number(treatmentForm.price), category: treatmentForm.category }).eq('id', editingTreatment);
-      setTreatments(treatments.map(t => t.id === editingTreatment ? { ...t, name: treatmentForm.name, price: Number(treatmentForm.price), category: treatmentForm.category } : t));
+      const { error } = await supabase.from('treatments').update({ name: treatmentForm.name.trim(), price, category: treatmentForm.category }).eq('id', editingTreatment);
+      if (error) { alert('Error al guardar tratamiento: ' + error.message); return; }
+      setTreatments(treatments.map(t => t.id === editingTreatment ? { ...t, name: treatmentForm.name.trim(), price, category: treatmentForm.category } : t));
       setEditingTreatment(null);
     } else {
-      const { data } = await supabase.from('treatments').insert({ name: treatmentForm.name, price: Number(treatmentForm.price), category: treatmentForm.category }).select().single();
+      const { data, error } = await supabase.from('treatments').insert({ name: treatmentForm.name.trim(), price, category: treatmentForm.category }).select().single();
+      if (error) { alert('Error al crear tratamiento: ' + error.message); return; }
       if (data) setTreatments([...treatments, data]);
     }
     setTreatmentForm({ name: '', price: '', category: 'Armonización' });
@@ -284,10 +309,16 @@ export default function AdminDashboard({ onBack }) {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar paciente..." className={`${inputClass} pl-11`} />
               </div>
-              <button onClick={() => { setShowForm(true); setEditingId(null); setForm({ name: '', lastName: '', phone: '', username: '', password: '', points: 0 }); }}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 text-[13px] font-semibold uppercase tracking-wider text-white bg-accent rounded-xl hover:bg-dark transition-colors">
-                <Plus className="w-4 h-4" /> Nuevo paciente
-              </button>
+              <div className="flex items-center gap-3">
+                <button onClick={refreshAll} disabled={refreshing} title="Actualizar saldos desde la base de datos"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-3 text-[13px] font-semibold text-primary bg-white border border-primary/20 rounded-xl hover:bg-primary/5 transition-colors disabled:opacity-50">
+                  <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} /> Actualizar
+                </button>
+                <button onClick={() => { setShowForm(true); setEditingId(null); setForm({ name: '', lastName: '', phone: '', username: '', password: '', points: 0 }); }}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 text-[13px] font-semibold uppercase tracking-wider text-white bg-accent rounded-xl hover:bg-dark transition-colors">
+                  <Plus className="w-4 h-4" /> Nuevo paciente
+                </button>
+              </div>
             </div>
 
             {/* Add/Edit Form */}
