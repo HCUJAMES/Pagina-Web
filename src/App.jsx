@@ -21,6 +21,7 @@ import AdminDashboard from './components/AdminDashboard'
 import ClientAccountBar from './components/ClientAccountBar'
 import AdminAccountBar from './components/AdminAccountBar'
 import AdminPanel from './components/AdminPanel'
+import { supabase } from './lib/supabase'
 
 function App() {
   const [showLogin, setShowLogin] = useState(false)
@@ -45,6 +46,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('showclinic_session')
     setSession(null)
+    supabase.auth.signOut().catch(() => {})
   }
 
   if (isOldAdmin) {

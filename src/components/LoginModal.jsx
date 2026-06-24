@@ -15,7 +15,23 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
     setError('');
     setLoading(true);
 
-    const { data: admins } = await supabase.from('admins').select('*').ilike('username', username.trim()).eq('password', password);
+    const user = username.trim();
+
+    // 1) Administrador por canal seguro (Supabase Auth) — entra con su EMAIL
+    if (user.includes('@')) {
+      const { data: authData } = await supabase.auth.signInWithPassword({ email: user, password });
+      if (authData?.user) {
+        const name = authData.user.user_metadata?.name || authData.user.email;
+        const session = { role: 'admin', name, user: authData.user.email, adminId: authData.user.id };
+        localStorage.setItem('showclinic_session', JSON.stringify(session));
+        onLogin(session);
+        resetAndClose();
+        return;
+      }
+    }
+
+    // 2) Respaldo temporal de administrador (tabla) — se desactiva al activar RLS
+    const { data: admins } = await supabase.from('admins').select('*').ilike('username', user).eq('password', password);
     const admin = admins?.[0];
 
     if (admin) {
@@ -26,7 +42,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
       return;
     }
 
-    // Login de paciente por canal seguro (función con contraseña cifrada, no expone la tabla)
+    // 3) Login de paciente por canal seguro (función con contraseña cifrada, no expone la tabla)
     const { data: client } = await supabase.rpc('client_login', { p_username: username.trim(), p_password: password });
 
     if (client && client.id) {
