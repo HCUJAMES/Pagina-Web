@@ -3,20 +3,14 @@ import { GraduationCap, Award, Star, Crown, ArrowRight, MapPin } from 'lucide-re
 
 const specialists = [
   {
-    name: 'Dra. Alicia Páez',
-    role: 'Médico Estético',
+    name: 'Dra. Nicole Carpio Málaga',
+    role: 'Médico',
     specialty: 'Medicina Estética',
-    university: 'Fac. Medicina Humana UCSM',
-    credential: 'CMP 73943',
-    image: '/Imagenes/DOCTORA Alicia.jpg',
-  },
-  {
-    name: 'Cosmiatra Romina Carbajal',
-    role: 'Cosmiatra',
-    specialty: 'Tratamientos Faciales',
-    university: 'Exel Institute - Buenos Aires',
-    credential: null,
-    image: '/Imagenes/COSMIATRA romina.jpg',
+    university: null,
+    credential: 'CMP 120575',
+    image: '/Imagenes/doctoraNicole.jpeg',
+    featured: true,
+    featuredLabel: 'Directora Médica',
   },
   {
     name: 'Dr. Erick Espetia',
@@ -26,6 +20,15 @@ const specialists = [
     credential: 'COP 28003',
     image: '/Imagenes/DOCTOR ERICK 1.jpg',
     featured: true,
+    featuredLabel: 'Director Clínico',
+  },
+  {
+    name: 'Dra. Alicia Páez',
+    role: 'Médico Estético',
+    specialty: 'Medicina Estética',
+    university: 'Fac. Medicina Humana UCSM',
+    credential: 'CMP 73943',
+    image: '/Imagenes/DOCTORA Alicia.jpg',
   },
   {
     name: 'Dra. Edith Carpio',
@@ -34,6 +37,14 @@ const specialists = [
     university: 'UNINGA-Maringá · UCSM',
     credential: 'COP 43340',
     image: '/Imagenes/DOCTORA edith 1.jpg',
+  },
+  {
+    name: 'Cosmiatra Romina Carbajal',
+    role: 'Cosmiatra',
+    specialty: 'Tratamientos Faciales',
+    university: 'Exel Institute - Buenos Aires',
+    credential: null,
+    image: '/Imagenes/COSMIATRA romina.jpg',
   },
   {
     name: 'Cosmiatra Carla Vargas',
@@ -54,10 +65,10 @@ function SpecialistCard({ specialist, index }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08, duration: 0.5 }}
-      className={`group relative ${isFeatured ? 'lg:-my-6 z-10' : ''}`}
+      className={`group relative ${isFeatured ? 'z-10' : ''}`}
     >
-      <div className={`relative overflow-hidden rounded-2xl ${isFeatured ? 'ring-2 ring-primary/40 shadow-xl shadow-primary/10' : 'ring-1 ring-white/10'}`}>
-        <div className={`relative overflow-hidden ${isFeatured ? 'aspect-[3/5]' : 'aspect-[3/4.5]'}`}>
+      <div className={`relative overflow-hidden rounded-2xl ${isFeatured ? 'ring-2 ring-primary/50 shadow-xl shadow-primary/10' : 'ring-1 ring-white/10'}`}>
+        <div className="relative overflow-hidden aspect-[3/4]">
           <img
             src={specialist.image}
             alt={specialist.name}
@@ -70,11 +81,11 @@ function SpecialistCard({ specialist, index }) {
           {isFeatured && (
             <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary shadow-lg shadow-primary/30">
               <Crown className="w-3 h-3 text-white" />
-              <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-white">Director Clínico</span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-white">{specialist.featuredLabel || 'Director Clínico'}</span>
             </div>
           )}
 
-          <div className={`absolute bottom-0 left-0 right-0 ${isFeatured ? 'p-5' : 'p-4'}`}>
+          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
             <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-2">
               <Star className="w-2 h-2 text-primary-light" />
               <span className="text-[8px] font-semibold uppercase tracking-[0.12em] text-primary-light">{specialist.role}</span>
@@ -87,10 +98,12 @@ function SpecialistCard({ specialist, index }) {
 
             <div className="max-h-0 group-hover:max-h-24 overflow-hidden transition-all duration-500 ease-out">
               <div className="space-y-1 pt-2">
-                <div className="flex items-center gap-2">
-                  <GraduationCap className="w-3 h-3 text-primary-light flex-shrink-0" />
-                  <p className="text-[10px] text-white/50 leading-snug">{specialist.university}</p>
-                </div>
+                {specialist.university && (
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="w-3 h-3 text-primary-light flex-shrink-0" />
+                    <p className="text-[10px] text-white/50 leading-snug">{specialist.university}</p>
+                  </div>
+                )}
                 {specialist.credential && (
                   <div className="flex items-center gap-2">
                     <Award className="w-3 h-3 text-primary-light flex-shrink-0" />
@@ -147,8 +160,8 @@ export default function Doctor() {
           </motion.p>
         </div>
 
-        {/* 5 columns grid - Dr Erick in center is taller */}
-        <div className="max-w-[90rem] mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 lg:gap-6 items-center">
+        {/* 6 especialistas — cuadrícula equilibrada (2 filas de 3 en escritorio) */}
+        <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 gap-5 lg:gap-6">
           {specialists.map((specialist, i) => (
             <SpecialistCard key={specialist.name} specialist={specialist} index={i} />
           ))}
