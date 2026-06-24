@@ -946,77 +946,41 @@ export default function AdminDashboard({ onBack, session }) {
               </div>
             </div>
 
-            {/* Add/Edit admin form */}
-            <form onSubmit={async (e) => {
-              e.preventDefault();
-              if (editingAdmin) {
-                const updateData = { name: adminForm.name, username: adminForm.username };
-                if (adminForm.password) updateData.password = adminForm.password;
-                await supabase.from('admins').update(updateData).eq('id', editingAdmin);
-                setAdmins(admins.map(a => a.id === editingAdmin ? { ...a, ...updateData } : a));
-                setEditingAdmin(null);
-              } else {
-                if (!adminForm.password) return;
-                const { data } = await supabase.from('admins').insert({ name: adminForm.name, username: adminForm.username, password: adminForm.password }).select().single();
-                if (data) setAdmins([...admins, data]);
-              }
-              setAdminForm({ name: '', username: '', password: '' });
-            }} className="bg-white rounded-2xl p-6 shadow-soft mb-6">
-              <h3 className="font-serif text-lg font-semibold text-dark mb-4">{editingAdmin ? 'Editar administrador' : 'Nuevo administrador'}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                <input type="text" value={adminForm.name} onChange={(e) => setAdminForm({ ...adminForm, name: e.target.value })} placeholder="Nombre completo" className={inputClass} required />
-                <input type="text" value={adminForm.username} onChange={(e) => setAdminForm({ ...adminForm, username: e.target.value })} placeholder="Usuario" className={inputClass} required />
-                <input type="text" value={adminForm.password} onChange={(e) => setAdminForm({ ...adminForm, password: e.target.value })} placeholder={editingAdmin ? 'Nueva contraseña (dejar vacío para mantener)' : 'Contraseña'} className={inputClass} required={!editingAdmin} />
+            {/* Aviso: gestión de admins en Supabase */}
+            <div className="bg-white rounded-2xl p-6 shadow-soft mb-6 border-l-4 border-primary">
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Shield className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-serif text-lg font-semibold text-dark mb-1">Cuentas gestionadas de forma segura</h3>
+                  <p className="text-[13px] text-gray-500 leading-relaxed">
+                    Por seguridad, las cuentas de administrador ahora se crean en <span className="font-semibold text-dark">Supabase → Authentication → Users</span> (login cifrado).
+                    Los administradores inician sesión con su <span className="font-semibold text-dark">email</span> y contraseña.
+                  </p>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <button type="submit" className="inline-flex items-center gap-2 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-white bg-primary rounded-xl hover:bg-primary-dark transition-colors">
-                  <Save className="w-3.5 h-3.5" /> {editingAdmin ? 'Guardar' : 'Crear administrador'}
-                </button>
-                {editingAdmin && (
-                  <button type="button" onClick={() => { setEditingAdmin(null); setAdminForm({ name: '', username: '', password: '' }); }}
-                    className="px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-gray-500 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">Cancelar</button>
-                )}
-              </div>
-            </form>
+            </div>
 
-            {/* Admins list */}
-            <div className="bg-white rounded-2xl shadow-soft overflow-hidden">
-              <div className="divide-y divide-gray-50">
-                {admins.map(admin => (
-                  <div key={admin.id} className="flex items-center justify-between px-6 py-5 hover:bg-cream/30 transition-colors">
-                    <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-                        <Shield className="w-5 h-5 text-accent" />
-                      </div>
-                      <div>
-                        <p className="text-[15px] font-semibold text-dark">{admin.name}</p>
-                        <p className="text-[12px] text-gray-400">@{admin.username} · {new Date(admin.created_at).toLocaleDateString('es-PE', { dateStyle: 'medium' })}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-1.5 bg-cream rounded-lg px-3 py-2">
-                        <span className="text-[13px] font-medium text-dark font-mono">
-                          {showAdminPass[admin.id] ? admin.password : '••••••••'}
-                        </span>
-                        <button onClick={() => setShowAdminPass(prev => ({ ...prev, [admin.id]: !prev[admin.id] }))}
-                          className="text-gray-400 hover:text-primary transition-colors ml-1">
-                          {showAdminPass[admin.id] ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                        </button>
-                      </div>
-                      <button onClick={() => { setEditingAdmin(admin.id); setAdminForm({ name: admin.name, username: admin.username, password: '' }); }}
-                        className="w-9 h-9 rounded-full bg-cream flex items-center justify-center text-gray-500 hover:text-primary hover:bg-primary/10 transition-colors">
-                        <Edit3 className="w-3.5 h-3.5" />
-                      </button>
-                      {admins.length > 1 && (
-                        <button onClick={async () => { if (confirm(`¿Eliminar al administrador ${admin.name}?`)) { await supabase.from('admins').delete().eq('id', admin.id); setAdmins(admins.filter(a => a.id !== admin.id)); } }}
-                          className="w-9 h-9 rounded-full bg-cream flex items-center justify-center text-gray-500 hover:text-red-500 hover:bg-red-50 transition-colors">
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
+            {/* Pasos para agregar un administrador */}
+            <div className="bg-cream rounded-2xl p-6">
+              <p className="text-[12px] uppercase tracking-wider text-gray-400 font-semibold mb-4">Cómo agregar un nuevo administrador</p>
+              <ol className="space-y-3">
+                {[
+                  'Entra a tu proyecto en supabase.com → menú "Authentication" → "Users".',
+                  'Clic en "Add user" → escribe el email y una contraseña, y marca "Auto Confirm User".',
+                  '(Opcional) En "User Metadata" agrega { "name": "Nombre del admin" } para que se vea su nombre en el historial.',
+                  'Listo: esa persona ya puede iniciar sesión en el panel con su email y contraseña.',
+                ].map((step, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="w-6 h-6 rounded-full bg-primary text-white text-[12px] font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
+                    <span className="text-[14px] text-dark leading-relaxed">{step}</span>
+                  </li>
                 ))}
-              </div>
+              </ol>
+              <p className="text-[12px] text-gray-400 mt-5">
+                Todos los administradores tienen el mismo acceso al panel. Para quitarle el acceso a alguien, elimínalo desde la misma sección de Supabase.
+              </p>
             </div>
           </>
         )}
