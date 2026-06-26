@@ -5,36 +5,40 @@ import { cardThemes, tierOrder } from '../lib/tierThemes';
 
 const offers = [
   {
-    title: 'Mirada Descansada',
-    subtitle: 'Jalupro + HIFU',
-    description: 'Mejora la calidad de la ojera, hidrata profundamente y aporta un aspecto más fresco y rejuvenecido.',
-    discount: '-20%',
+    title: 'Botox',
+    description: 'Suaviza las líneas de expresión manteniendo la naturalidad de tu rostro.',
+    discount: '-25%',
     tag: 'Más popular',
     icon: Flame,
-    accent: 'from-amber-500 to-orange-600',
     accentBg: 'bg-amber-500',
-    image: '/Imagenes/PROMOS JUNIO-14.jpg',
+    image: '/Imagenes/promo-botox.jpg',
   },
   {
-    title: 'Botox + HIFU + Limpieza Facial',
-    description: 'Suaviza líneas de expresión, redefine y revitaliza tu piel. Combo completo de rejuvenecimiento.',
+    title: 'Mini Armonización',
+    description: 'Equilibra y realza las proporciones de tu rostro con un resultado natural.',
     discount: '-20%',
     tag: 'Top ventas',
     icon: Sparkles,
-    accent: 'from-rose-500 to-pink-600',
     accentBg: 'bg-rose-500',
-    image: '/Imagenes/PROMOS JUNIO-19.jpg',
+    image: '/Imagenes/promo-armonizacion.jpg',
   },
   {
-    title: 'Contorno Perfecto',
-    subtitle: 'Enzimas + HIFU + Limpieza Facial',
-    description: 'Trabaja grasa localizada, reafirma y mejora la apariencia general del rostro.',
-    discount: '-20%',
+    title: 'Rinomodelación + Mentón',
+    description: 'Define tu perfil: afina la nariz y proyecta el mentón sin cirugía.',
+    discount: '-15%',
     tag: 'Oferta del mes',
     icon: Zap,
-    accent: 'from-primary to-amber-700',
     accentBg: 'bg-primary',
-    image: '/Imagenes/PROMOS JUNIO-20.jpg',
+    image: '/Imagenes/promo-rino-menton.jpg',
+  },
+  {
+    title: 'Exosomas',
+    description: 'Suavizan arrugas finas y líneas de expresión, y mejoran la textura de tu piel.',
+    discount: '-10%',
+    tag: 'Nuevo',
+    icon: Star,
+    accentBg: 'bg-violet-500',
+    image: '/Imagenes/promo-exosomas.jpg',
   },
 ];
 
@@ -49,29 +53,15 @@ const clubFeatures = [
 function OfferCard({ offer }) {
   const Icon = offer.icon;
   return (
-    <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch min-h-[400px]">
-      {/* Image side */}
-      <div className="relative overflow-hidden md:rounded-l-3xl">
-        {offer.image ? (
-          <>
-            <img src={offer.image} alt={offer.title} className="w-full h-full object-cover min-h-[250px] md:min-h-full" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-accent/80 hidden md:block" />
-            <div className="absolute inset-0 bg-gradient-to-t from-accent/80 via-transparent to-transparent md:hidden" />
-          </>
-        ) : (
-          <div className={`w-full h-full min-h-[250px] bg-gradient-to-br ${offer.accent} opacity-30`} />
-        )}
-        {/* Discount badge on image */}
-        <motion.div
-          initial={{ rotate: -10, scale: 0.8 }}
-          animate={{ rotate: 0, scale: 1 }}
-          transition={{ type: 'spring', damping: 12 }}
-          className={`absolute top-5 right-5 w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br ${offer.accent} flex flex-col items-center justify-center shadow-2xl ring-4 ring-white/20`}
-        >
-          <span className="text-white/70 text-[9px] font-semibold uppercase tracking-wider">Hasta</span>
-          <span className="text-white text-3xl md:text-4xl font-black leading-none">{offer.discount.replace('-', '')}</span>
-          <span className="text-white/70 text-[9px] font-semibold uppercase">Dcto.</span>
-        </motion.div>
+    <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch">
+      {/* Image side — promoción completa, sin recortar */}
+      <div className="bg-white flex items-center justify-center p-3 sm:p-4 md:rounded-l-3xl">
+        <img
+          src={offer.image}
+          alt={`Promoción ${offer.title} ${offer.discount}`}
+          className="w-full h-auto rounded-2xl"
+          loading="lazy"
+        />
       </div>
 
       {/* Content side */}
@@ -83,23 +73,25 @@ function OfferCard({ offer }) {
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-[10px] font-semibold uppercase tracking-wider text-white/60">
             <Clock className="w-3 h-3" />
-            Hasta el 17 de junio
+            Hasta el 30 de junio
           </span>
         </div>
 
-        <h3 className="font-serif text-3xl md:text-4xl font-bold text-white leading-[1.1] mb-2">
+        <div className="flex items-end gap-3 mb-3">
+          <span className="font-serif text-5xl md:text-6xl font-black text-primary-light leading-none">{offer.discount.replace('-', '')}</span>
+          <span className="text-white/50 text-[13px] uppercase tracking-wider font-semibold pb-1.5">de descuento</span>
+        </div>
+
+        <h3 className="font-serif text-2xl md:text-3xl font-bold text-white leading-[1.1] mb-3">
           {offer.title}
         </h3>
-        {offer.subtitle && (
-          <p className="text-white/70 text-[16px] font-semibold mb-4">{offer.subtitle}</p>
-        )}
 
         <p className="text-white/50 text-[15px] leading-relaxed mb-8 max-w-lg">
           {offer.description}
         </p>
 
         <a
-          href={`https://wa.me/51974212114?text=Hola%2C%20me%20interesa%20la%20oferta%3A%20${encodeURIComponent(offer.title)}`}
+          href={`https://wa.me/51974212114?text=Hola%2C%20me%20interesa%20la%20oferta%3A%20${encodeURIComponent(offer.title)}%20(${encodeURIComponent(offer.discount)})`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.12em] text-accent bg-white rounded-full hover:bg-cream transition-colors duration-300 self-start"
