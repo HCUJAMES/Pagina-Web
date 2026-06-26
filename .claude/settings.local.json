@@ -46,7 +46,10 @@
       "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Seguridad: login de paciente por canal seguro \\(RPC cifrado\\), panel sin lectura directa de tabla\")",
       "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Equipo: agregar Dra. Nicole Carpio Malaga como Directora Medica\")",
       "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Seguridad: login de admin por Supabase Auth \\(con respaldo temporal\\), logout cierra sesion Auth\")",
-      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Admin: pestana Administradores ahora explica gestion via Supabase Auth\")"
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Admin: pestana Administradores ahora explica gestion via Supabase Auth\")",
+      "Bash(python3 -)",
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Favicon: logo sin fondo \\(disco dorado con S blanca, transparente\\)\")",
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Promociones: nuevas promos de junio \\(Botox, Mini Armonizacion, Rino+Menton, Exosomas\\)\")"
     ]
   }
 }
