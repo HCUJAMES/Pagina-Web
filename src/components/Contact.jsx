@@ -111,7 +111,7 @@ export default function Contact() {
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d821.5771759223795!2d-71.54541322397263!3d-16.39055484702853!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91424bdbcdb4fe49%3A0xd7dc19185f13d70b!2sShowclinic%20Yanahuara!5e0!3m2!1ses-419!2spe!4v1780092101550!5m2!1ses-419!2spe"
               width="100%" height="100%" style={{ border: 0, minHeight: 400 }} allowFullScreen="" loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade" title="Ubicación ShowClinic Yanahuara"
+              referrerPolicy="no-referrer-when-downgrade" title="Ubicación Showclinic Yanahuara"
             />
           </motion.div>
         </div>

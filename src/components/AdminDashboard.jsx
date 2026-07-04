@@ -222,7 +222,7 @@ export default function AdminDashboard({ onBack, session }) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `ShowClinic_pacientes_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `Showclinic_pacientes_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -277,7 +277,7 @@ export default function AdminDashboard({ onBack, session }) {
               </div>
               <div>
                 <h1 className="text-white font-serif text-xl font-semibold leading-tight">Panel de Administración</h1>
-                <p className="text-white/50 text-[12px]">ShowClinic Club · Gestión de fidelización</p>
+                <p className="text-white/50 text-[12px]">Showclinic Club · Gestión de fidelización</p>
               </div>
             </div>
           </div>
@@ -546,7 +546,7 @@ export default function AdminDashboard({ onBack, session }) {
                                             <p className="text-[16px] font-bold text-primary">{(client.points + previewPoints).toLocaleString()}</p>
                                           </div>
                                         </div>
-                                        <p className="text-[11px] text-gray-400 text-center mt-2">S/ 1 = 1 punto ShowClinic</p>
+                                        <p className="text-[11px] text-gray-400 text-center mt-2">S/ 1 = 1 punto Showclinic</p>
                                       </div>
                                     )}
 

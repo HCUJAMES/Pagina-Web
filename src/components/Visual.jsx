@@ -57,7 +57,7 @@ export default function About() {
             </div>
 
             <h2 className="font-serif font-semibold text-dark tracking-tight leading-[1.1] mb-6">
-              ShowClinic, donde la ciencia y el arte se encuentran
+              Showclinic, donde la ciencia y el arte se encuentran
             </h2>
 
             <p className="text-gray-500 leading-[1.8] mb-8">
@@ -100,7 +100,7 @@ export default function About() {
               <div className="relative rounded-[2rem] rounded-tl-[4rem] overflow-hidden shadow-xl shadow-primary/15 ring-1 ring-primary/10">
                 <img
                   src="/Imagenes/fotoporqueelegirnosgrande.jpg"
-                  alt="Equipo ShowClinic"
+                  alt="Equipo Showclinic"
                   className="w-full object-cover aspect-[3/4]"
                   loading="lazy"
                 />
@@ -118,7 +118,7 @@ export default function About() {
                 <div className="rounded-[1.5rem] rounded-br-[3rem] overflow-hidden shadow-2xl shadow-accent/25 ring-2 ring-white/80">
                   <img
                     src="/Imagenes/salaesperafoto.jpg"
-                    alt="Sala de espera ShowClinic"
+                    alt="Sala de espera Showclinic"
                     className="w-full aspect-[3/4] object-cover"
                     loading="lazy"
                   />

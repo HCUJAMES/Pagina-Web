@@ -59,7 +59,7 @@ export default function Footer() {
           ))}
         </div>
         <div className="py-5 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/20">© {new Date().getFullYear()} ShowClinic. Todos los derechos reservados.</p>
+          <p className="text-xs text-white/20">© {new Date().getFullYear()} Showclinic. Todos los derechos reservados.</p>
           <div className="flex items-center gap-5">
             <a href="#" className="text-xs text-white/20 hover:text-white/40 transition-colors">Privacidad</a>
             <a href="#" className="text-xs text-white/20 hover:text-white/40 transition-colors">Términos</a>

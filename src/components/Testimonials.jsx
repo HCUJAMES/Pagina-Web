@@ -7,7 +7,7 @@ const testimonials = [
     name: 'Milagros Bolaños',
     treatment: 'Paciente frecuente',
     content:
-      'Mi casa, mi refugio, mis sesiones sanadoras durante casi 4 años. Mi mejor y más maravillosa experiencia en ShowClinic y en manos del mejor doctor.',
+      'Mi casa, mi refugio, mis sesiones sanadoras durante casi 4 años. Mi mejor y más maravillosa experiencia en Showclinic y en manos del mejor doctor.',
     rating: 5,
     avatar: 'MB',
   },

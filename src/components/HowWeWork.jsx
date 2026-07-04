@@ -76,7 +76,7 @@ export default function HowWeWork() {
           >
             <img
               src="/Imagenes/fotoconpacientes.jpg"
-              alt="Proceso ShowClinic"
+              alt="Proceso Showclinic"
               className="w-full aspect-[4/5] object-cover rounded-2xl shadow-soft"
               loading="lazy"
             />

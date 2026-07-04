@@ -197,7 +197,7 @@ export default function AdminPanel({ onBack }) {
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <a
-                            href={`https://wa.me/${patient.phone.replace(/\D/g, '')}?text=Hola%20${encodeURIComponent(patient.name)}%2C%20gracias%20por%20registrarte%20en%20ShowClinic.`}
+                            href={`https://wa.me/${patient.phone.replace(/\D/g, '')}?text=Hola%20${encodeURIComponent(patient.name)}%2C%20gracias%20por%20registrarte%20en%20Showclinic.`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-8 h-8 rounded-lg bg-green-50 hover:bg-green-100 flex items-center justify-center transition-colors"
@@ -261,7 +261,7 @@ export default function AdminPanel({ onBack }) {
                   )}
                   <div className="flex items-center gap-2 pt-1">
                     <a
-                      href={`https://wa.me/${patient.phone.replace(/\D/g, '')}?text=Hola%20${encodeURIComponent(patient.name)}%2C%20gracias%20por%20registrarte%20en%20ShowClinic.`}
+                      href={`https://wa.me/${patient.phone.replace(/\D/g, '')}?text=Hola%20${encodeURIComponent(patient.name)}%2C%20gracias%20por%20registrarte%20en%20Showclinic.`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 py-2 rounded-lg bg-green-50 text-green-600 text-xs font-medium text-center hover:bg-green-100 transition-colors"

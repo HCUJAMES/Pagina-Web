@@ -8,7 +8,7 @@ export default function Hero() {
       <div className="absolute inset-0">
         <img
           src="/Imagenes/primeraimagenweb.jpg"
-          alt="ShowClinic - Estética Avanzada"
+          alt="Showclinic - Estética Avanzada"
           className="w-full h-full object-cover object-top"
           loading="eager"
           fetchPriority="high"

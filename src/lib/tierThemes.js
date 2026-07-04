@@ -1,5 +1,5 @@
-// Single source of truth for the ShowClinic Club membership card themes.
-// Used by the client account panel and the public "ShowClinic Club" showcase.
+// Single source of truth for the Showclinic Club membership card themes.
+// Used by the client account panel and the public "Showclinic Club" showcase.
 export const cardThemes = {
   Bronce: {
     label: 'Bronce', icon: 'I', range: '0 – 4,999 pts', canje: '3%',

@@ -48,7 +48,7 @@ export default function ClientAccountBar({ session, onLogout }) {
           <div className="flex items-center justify-between h-12">
             <div className="flex items-center gap-3">
               <Crown className="w-3.5 h-3.5 text-primary-light" />
-              <span className="text-[11px] font-medium tracking-wide opacity-80">ShowClinic Club</span>
+              <span className="text-[11px] font-medium tracking-wide opacity-80">Showclinic Club</span>
               <span className="text-[11px] opacity-40">|</span>
               <span className="text-[11px] font-semibold">{client.points.toLocaleString()} pts</span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 font-medium">{level.icon} {level.name}</span>
@@ -89,7 +89,7 @@ export default function ClientAccountBar({ session, onLogout }) {
                   <div className="flex items-center justify-between mb-8">
                     <div className="flex items-center gap-2">
                       <Crown className="w-4 h-4 text-white/80" />
-                      <span className="text-white/70 text-[11px] uppercase tracking-[0.2em] font-semibold">ShowClinic Club</span>
+                      <span className="text-white/70 text-[11px] uppercase tracking-[0.2em] font-semibold">Showclinic Club</span>
                     </div>
                     <button onClick={() => setShowPanel(false)} className="w-8 h-8 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/25 transition-colors">
                       <X className="w-4 h-4" />
@@ -125,7 +125,7 @@ export default function ClientAccountBar({ session, onLogout }) {
                       <div className="flex items-start justify-between mb-5">
                         <div className="flex items-center gap-2">
                           <Crown className="w-3.5 h-3.5 text-white/70" />
-                          <span className="text-white/85 text-[11px] uppercase tracking-[0.22em] font-bold">ShowClinic Club</span>
+                          <span className="text-white/85 text-[11px] uppercase tracking-[0.22em] font-bold">Showclinic Club</span>
                         </div>
                         <span className="font-serif text-lg font-semibold text-white leading-none drop-shadow">{theme.label}</span>
                       </div>
@@ -169,7 +169,7 @@ export default function ClientAccountBar({ session, onLogout }) {
                       {/* Cardholder row */}
                       <div className="flex items-center gap-3 mt-5 pt-4 border-t border-white/10">
                         <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${theme.chip} flex items-center justify-center shadow-lg ring-1 ring-white/40 flex-shrink-0`}>
-                          <img src="/Imagenes/logo-negro.png" alt="ShowClinic" className="w-7 h-7" />
+                          <img src="/Imagenes/logo-negro.png" alt="Showclinic" className="w-7 h-7" />
                         </div>
                         <div className="min-w-0">
                           <p className="text-white text-[13px] font-semibold tracking-wide truncate">{fullName}</p>
@@ -299,7 +299,7 @@ export default function ClientAccountBar({ session, onLogout }) {
                 {/* Contact CTA */}
                 <div className="pb-8 pt-2">
                   <a
-                    href="https://wa.me/51974212114?text=Hola%2C%20tengo%20una%20consulta%20sobre%20mis%20puntos%20ShowClinic"
+                    href="https://wa.me/51974212114?text=Hola%2C%20tengo%20una%20consulta%20sobre%20mis%20puntos%20Showclinic"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-between w-full px-5 py-4 bg-accent rounded-2xl hover:bg-dark transition-colors group"

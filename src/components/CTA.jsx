@@ -22,7 +22,7 @@ export default function CTA() {
             <div className="relative rounded-[2rem] rounded-tr-[4rem] overflow-hidden shadow-xl shadow-primary/15 ring-1 ring-primary/10">
               <img
                 src="/Imagenes/POST LA ESTETICA ESTA CAMBIANDO_Mesa de trabajo 1.jpg"
-                alt="ShowClinic - Tu tratamiento ideal"
+                alt="Showclinic - Tu tratamiento ideal"
                 className="w-full aspect-[3/4] object-cover"
                 loading="lazy"
               />

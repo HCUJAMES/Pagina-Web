@@ -179,7 +179,7 @@ export default function Doctor() {
               <MapPin className="w-4.5 h-4.5 text-primary-light" />
             </div>
             <div>
-              <p className="text-white font-serif text-[17px] font-semibold">ShowClinic Arequipa</p>
+              <p className="text-white font-serif text-[17px] font-semibold">Showclinic Arequipa</p>
               <p className="text-white/40 text-[12px]">Formación internacional · Tecnología de vanguardia</p>
             </div>
           </div>

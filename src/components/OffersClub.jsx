@@ -43,7 +43,7 @@ const offers = [
 ];
 
 const clubFeatures = [
-  { icon: Star, text: '1 punto ShowClinic por cada S/ 1 en tratamientos' },
+  { icon: Star, text: '1 punto Showclinic por cada S/ 1 en tratamientos' },
   { icon: Gift, text: 'Canjea puntos por descuento directo' },
   { icon: Calendar, text: '+3,000 pts de regalo en tu cumpleaños' },
   { icon: UserPlus, text: '+3,000 pts por referir un paciente' },
@@ -135,7 +135,7 @@ function TierCard({ name }) {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-1.5">
             <Crown className="w-3.5 h-3.5 text-white/70" />
-            <span className="text-white/85 text-[10px] uppercase tracking-[0.2em] font-bold">ShowClinic Club</span>
+            <span className="text-white/85 text-[10px] uppercase tracking-[0.2em] font-bold">Showclinic Club</span>
           </div>
           <span className="font-serif text-base font-semibold text-white leading-none drop-shadow">{t.label}</span>
         </div>
@@ -149,7 +149,7 @@ function TierCard({ name }) {
         {/* Bottom: emblem + tier */}
         <div className="flex items-center gap-3">
           <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${t.chip} flex items-center justify-center shadow-lg ring-1 ring-white/40 flex-shrink-0`}>
-            <img src="/Imagenes/logo-negro.png" alt="ShowClinic" className="w-6 h-6" />
+            <img src="/Imagenes/logo-negro.png" alt="Showclinic" className="w-6 h-6" />
           </div>
           <div>
             <p className="text-white text-[13px] font-semibold tracking-wide leading-tight">Nivel {name}</p>
@@ -264,7 +264,7 @@ export default function OffersClub() {
           </div>
         </div>
 
-        {/* ShowClinic Club — Premium Banner */}
+        {/* Showclinic Club — Premium Banner */}
         <div className="relative">
           {/* Top accent strip */}
           <motion.div
@@ -281,7 +281,7 @@ export default function OffersClub() {
               </span>
             </div>
             <h2 className="font-serif font-semibold text-dark tracking-tight leading-[1.1] mb-3">
-              ShowClinic <span className="italic text-primary">Club</span>
+              Showclinic <span className="italic text-primary">Club</span>
             </h2>
             <p className="text-gray-500 max-w-lg mx-auto">
               Tu fidelidad tiene recompensa. Gana puntos en cada visita y canjéalos por descuentos exclusivos.
@@ -319,7 +319,7 @@ export default function OffersClub() {
               </h3>
 
               <p className="text-white/45 text-[15px] md:text-base max-w-2xl mx-auto mb-4">
-                Por cada S/ 1 que inviertes en tu belleza, ganas 1 punto ShowClinic.
+                Por cada S/ 1 que inviertes en tu belleza, ganas 1 punto Showclinic.
                 Sube de nivel y tus puntos valen más — hasta un 7% de descuento directo.
               </p>
 
@@ -392,7 +392,7 @@ export default function OffersClub() {
                 {/* CTA */}
                 <div className="flex flex-col items-center md:items-end gap-4">
                   <a
-                    href="https://wa.me/51974212114?text=Hola%2C%20quiero%20saber%20más%20sobre%20ShowClinic%20Club"
+                    href="https://wa.me/51974212114?text=Hola%2C%20quiero%20saber%20más%20sobre%20Showclinic%20Club"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 px-10 py-4.5 text-[13px] font-bold uppercase tracking-[0.12em] text-accent bg-white rounded-full hover:bg-cream shadow-xl hover:shadow-2xl transition-all duration-300"

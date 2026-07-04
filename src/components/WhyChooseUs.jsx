@@ -24,18 +24,18 @@ export default function WhyChooseUs() {
             <div className="grid grid-cols-2 gap-4">
               <RevealImage
                 src="/Imagenes/EQUIPO 2.jpg"
-                alt="Equipo ShowClinic"
+                alt="Equipo Showclinic"
                 className="w-full aspect-[3/4] object-cover rounded-2xl shadow-warm"
               />
               <div className="space-y-4 pt-8">
                 <RevealImage
                   src="/Imagenes/imagenmodelo.jpg"
-                  alt="Tratamiento ShowClinic"
+                  alt="Tratamiento Showclinic"
                   className="w-full aspect-square object-cover rounded-2xl shadow-warm"
                 />
                 <RevealImage
                   src="/Imagenes/imagenmodelo2.jpg"
-                  alt="Resultados ShowClinic"
+                  alt="Resultados Showclinic"
                   className="w-full aspect-square object-cover rounded-2xl shadow-warm"
                 />
               </div>
@@ -61,7 +61,7 @@ export default function WhyChooseUs() {
             </RevealText>
 
             <RevealText as="p" delay={0.2} className="text-[#6B5547] leading-[1.9] max-w-[65ch] mb-8">
-              En ShowClinic combinamos experiencia médica, tecnología avanzada y atención personalizada para ofrecerte los mejores resultados en medicina estética.
+              En Showclinic combinamos experiencia médica, tecnología avanzada y atención personalizada para ofrecerte los mejores resultados en medicina estética.
             </RevealText>
 
             {/* Benefits */}

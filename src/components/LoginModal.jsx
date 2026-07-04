@@ -96,7 +96,7 @@ export default function LoginModal({ isOpen, onClose, onLogin }) {
                 <LogIn className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-serif text-2xl font-semibold text-dark mb-1">Iniciar sesión</h3>
-              <p className="text-gray-400 text-sm">Accede a tu cuenta ShowClinic</p>
+              <p className="text-gray-400 text-sm">Accede a tu cuenta Showclinic</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
