@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, LogIn, UserPlus, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import WelcomeTour from './WelcomeTour';
 
 const inputCls = 'w-full px-5 py-3.5 bg-cream border border-gray-200 rounded-xl text-[15px] text-dark placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all';
 
@@ -14,6 +15,7 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
   const [ok, setOk] = useState('');
   const [loading, setLoading] = useState(false);
   const [reg, setReg] = useState({ name: '', lastName: '', phone: '', username: '', password: '' });
+  const [pendingSession, setPendingSession] = useState(null);
 
   useEffect(() => {
     if (isOpen) { setMode(initialMode); setError(''); setOk(''); }
@@ -22,7 +24,17 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
   const resetAndClose = () => {
     setUsername(''); setPassword(''); setError(''); setOk(''); setLoading(false);
     setReg({ name: '', lastName: '', phone: '', username: '', password: '' });
+    setPendingSession(null);
     onClose();
+  };
+
+  // Al terminar (o saltar) el recorrido, inicia sesión y cierra
+  const finishTour = () => {
+    if (pendingSession) {
+      localStorage.setItem('showclinic_session', JSON.stringify(pendingSession));
+      onLogin(pendingSession);
+    }
+    resetAndClose();
   };
 
   // ---- LOGIN ----
@@ -82,16 +94,18 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
     if (data?.error) { setError('Revisa tus datos e intenta de nuevo.'); setLoading(false); return; }
 
     if (data?.id) {
-      // registro exitoso → iniciar sesión automáticamente
+      // registro exitoso → guardar sesión y mostrar recorrido de bienvenida
       const session = { role: 'client', name: data.name, user: data.username, id: data.id, client: data };
-      localStorage.setItem('showclinic_session', JSON.stringify(session));
-      onLogin(session); resetAndClose();
+      setPendingSession(session);
+      setMode('tour');
+      setLoading(false);
     } else {
       setError('No se pudo completar el registro. Intenta de nuevo.'); setLoading(false);
     }
   };
 
   const isRegister = mode === 'register';
+  const isTour = mode === 'tour';
 
   return (
     <AnimatePresence>
@@ -100,7 +114,7 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8 overflow-y-auto"
         >
-          <div className="absolute inset-0 bg-dark/60 backdrop-blur-sm" onClick={resetAndClose} />
+          <div className="absolute inset-0 bg-dark/60 backdrop-blur-sm" onClick={isTour ? finishTour : resetAndClose} />
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -109,24 +123,28 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
             transition={{ duration: 0.3 }}
             className="relative bg-white rounded-2xl p-8 md:p-10 w-full max-w-md shadow-soft-lg z-10 my-auto"
           >
-            <button onClick={resetAndClose}
+            <button onClick={isTour ? finishTour : resetAndClose}
               className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 hover:text-dark hover:bg-gray-200 transition-colors">
               <X className="w-4 h-4" />
             </button>
 
-            <div className="text-center mb-8">
-              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                {isRegister ? <UserPlus className="w-6 h-6 text-primary" /> : <LogIn className="w-6 h-6 text-primary" />}
+            {!isTour && (
+              <div className="text-center mb-8">
+                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  {isRegister ? <UserPlus className="w-6 h-6 text-primary" /> : <LogIn className="w-6 h-6 text-primary" />}
+                </div>
+                <h3 className="font-serif text-2xl font-semibold text-dark mb-1">
+                  {isRegister ? 'Crea tu cuenta' : 'Iniciar sesión'}
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  {isRegister ? 'Únete al Showclinic Club y acumula puntos' : 'Accede a tu cuenta Showclinic'}
+                </p>
               </div>
-              <h3 className="font-serif text-2xl font-semibold text-dark mb-1">
-                {isRegister ? 'Crea tu cuenta' : 'Iniciar sesión'}
-              </h3>
-              <p className="text-gray-400 text-sm">
-                {isRegister ? 'Únete al Showclinic Club y acumula puntos' : 'Accede a tu cuenta Showclinic'}
-              </p>
-            </div>
+            )}
 
-            {isRegister ? (
+            {isTour ? (
+              <WelcomeTour name={pendingSession?.name} onFinish={finishTour} />
+            ) : isRegister ? (
               <form onSubmit={handleRegister} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <input type="text" value={reg.name} onChange={(e) => { setReg({ ...reg, name: e.target.value }); setError(''); }} placeholder="Nombre" className={inputCls} required />
