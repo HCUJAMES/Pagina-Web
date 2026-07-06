@@ -25,6 +25,7 @@ import { supabase } from './lib/supabase'
 
 function App() {
   const [showLogin, setShowLogin] = useState(false)
+  const [loginMode, setLoginMode] = useState('login')
   const [session, setSession] = useState(null)
   const [isOldAdmin, setIsOldAdmin] = useState(false)
   const [viewingSite, setViewingSite] = useState(false)
@@ -37,7 +38,15 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const checkHash = () => setIsOldAdmin(window.location.hash === '#admin')
+    const checkHash = () => {
+      const h = window.location.hash
+      setIsOldAdmin(h === '#admin')
+      // QR de registro: showclinic.com/#registro abre directo el formulario de registro
+      if (h === '#registro' || h === '#registrarse') {
+        setLoginMode('register')
+        setShowLogin(true)
+      }
+    }
     checkHash()
     window.addEventListener('hashchange', checkHash)
     return () => window.removeEventListener('hashchange', checkHash)
@@ -73,7 +82,7 @@ function App() {
       {isClient && <ClientAccountBar session={session} onLogout={handleLogout} />}
       {isAdmin && <AdminAccountBar onBackToPanel={() => setViewingSite(false)} onLogout={handleLogout} />}
       <div className={showAccountBar ? 'pt-12' : ''}>
-        <Navbar onLoginClick={showAccountBar ? null : () => setShowLogin(true)} session={session} onLogout={handleLogout} accountBar={showAccountBar} />
+        <Navbar onLoginClick={showAccountBar ? null : () => { setLoginMode('login'); setShowLogin(true); }} session={session} onLogout={handleLogout} accountBar={showAccountBar} />
         <Hero />
         <ContactBar />
         <OffersClub />
@@ -93,7 +102,8 @@ function App() {
       </div>
       <LoginModal
         isOpen={showLogin}
-        onClose={() => setShowLogin(false)}
+        initialMode={loginMode}
+        onClose={() => { setShowLogin(false); if (window.location.hash === '#registro' || window.location.hash === '#registrarse') window.location.hash = '' }}
         onLogin={(s) => setSession(s)}
       />
     </div>
