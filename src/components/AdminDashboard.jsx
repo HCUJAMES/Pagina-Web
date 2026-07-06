@@ -227,6 +227,28 @@ export default function AdminDashboard({ onBack, session }) {
     URL.revokeObjectURL(url);
   };
 
+  // Copia de seguridad COMPLETA (pacientes + puntos + historial) en JSON — para restaurar si hace falta
+  const [backingUp, setBackingUp] = useState(false);
+  const backupJSON = async () => {
+    setBackingUp(true);
+    const { data, error } = await supabase.from('clients').select('*').order('id');
+    setBackingUp(false);
+    if (error || !data) { alert('No se pudo generar la copia de seguridad. Intenta de nuevo.'); return; }
+    const backup = {
+      tipo: 'Showclinic - copia de seguridad de pacientes',
+      generado: new Date().toLocaleString('es-PE', { dateStyle: 'full', timeStyle: 'short' }),
+      total_pacientes: data.length,
+      pacientes: data,
+    };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Showclinic_copia_seguridad_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handleSelectTreatment = (t) => {
     setPointsAction({ ...pointsAction, soles: String(t.price), treatment: t.name, description: t.name, mode: 'treatment' });
   };
@@ -364,6 +386,10 @@ export default function AdminDashboard({ onBack, session }) {
                 <button onClick={exportCSV} disabled={clients.length === 0} title="Descargar pacientes y puntos en Excel/CSV"
                   className="inline-flex items-center justify-center gap-2 px-4 py-3 text-[13px] font-semibold text-emerald-600 bg-white border border-emerald-200 rounded-xl hover:bg-emerald-50 transition-colors disabled:opacity-50">
                   <DollarSign className="w-4 h-4" /> Exportar
+                </button>
+                <button onClick={backupJSON} disabled={backingUp || clients.length === 0} title="Descargar copia de seguridad completa (pacientes + puntos + historial)"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-3 text-[13px] font-semibold text-accent bg-white border border-accent/20 rounded-xl hover:bg-accent/5 transition-colors disabled:opacity-50">
+                  <Shield className={`w-4 h-4 ${backingUp ? 'animate-pulse' : ''}`} /> {backingUp ? 'Generando...' : 'Copia de seguridad'}
                 </button>
                 <button onClick={() => { setShowForm(true); setEditingId(null); setForm({ name: '', lastName: '', phone: '', username: '', password: '', points: 0 }); }}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 text-[13px] font-semibold uppercase tracking-wider text-white bg-accent rounded-xl hover:bg-dark transition-colors">
