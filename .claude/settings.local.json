@@ -52,7 +52,11 @@
       "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Promociones: nuevas promos de junio \\(Botox, Mini Armonizacion, Rino+Menton, Exosomas\\)\")",
       "WebSearch",
       "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Marca: nombre correcto 'Showclinic' \\(antes ShowClinic\\) en toda la web\")",
-      "Bash(curl -s -m 15 https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/clients?select=id,username,password,password_hash -H 'apikey: __TRACKED_VAR__')"
+      "Bash(curl -s -m 15 https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/clients?select=id,username,password,password_hash -H 'apikey: __TRACKED_VAR__')",
+      "Bash(python3 -m pip install \"qrcode[pil]\" --quiet)",
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Auto-registro de pacientes \\(formulario + enlace #registro para QR\\)\")",
+      "Bash(ls /System/Library/Fonts/Supplemental/ 2>/dev/null | grep -iE \"georgia|arial|didot|baskerville\" | head; echo \"---\"; ls /System/Library/Fonts/ | grep -iE \"NewYork|Times|Palatino\" | head)",
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Admin: boton Copia de seguridad \\(respaldo completo JSON de pacientes y puntos\\)\")"
     ]
   }
 }
