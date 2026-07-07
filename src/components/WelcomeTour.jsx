@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { PartyPopper, Sparkles, Crown, Gift, Cake, Trophy, ArrowRight, ArrowLeft } from 'lucide-react';
 
 const slides = [
@@ -35,8 +35,7 @@ export default function WelcomeTour({ name, onFinish }) {
         ))}
       </div>
 
-      <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.3 }}>
+      <motion.div key={step} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
           {/* Icono con brillo + destellos */}
           <div className="relative w-28 h-28 mx-auto mb-7">
             <motion.div
@@ -70,8 +69,7 @@ export default function WelcomeTour({ name, onFinish }) {
 
           <h3 className="font-serif text-[26px] leading-tight font-bold text-dark mb-3 px-2">{s.title(first)}</h3>
           <p className="text-gray-500 text-[15px] leading-relaxed px-3 min-h-[72px]">{s.text}</p>
-        </motion.div>
-      </AnimatePresence>
+      </motion.div>
 
       {/* Controles */}
       <div className="flex items-center gap-3 mt-9">
