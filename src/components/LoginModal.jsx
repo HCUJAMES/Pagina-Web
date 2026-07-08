@@ -28,11 +28,25 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
     onClose();
   };
 
+  // Reclamar el bono de bienvenida (1000 pts) de forma segura — devuelve datos actualizados del cliente
+  const claimWelcome = async () => {
+    if (!pendingSession?.id) return null;
+    const { data } = await supabase.rpc('claim_welcome_bonus', { p_id: pendingSession.id });
+    if (data && data.id) {
+      const updated = { ...pendingSession, client: data };
+      setPendingSession(updated);
+      return data;
+    }
+    return null;
+  };
+
   // Al terminar (o saltar) el recorrido, inicia sesión y cierra
-  const finishTour = () => {
-    if (pendingSession) {
-      localStorage.setItem('showclinic_session', JSON.stringify(pendingSession));
-      onLogin(pendingSession);
+  const finishTour = (updatedClient) => {
+    const base = pendingSession;
+    if (base) {
+      const session = updatedClient ? { ...base, client: updatedClient } : base;
+      localStorage.setItem('showclinic_session', JSON.stringify(session));
+      onLogin(session);
     }
     resetAndClose();
   };
@@ -143,7 +157,7 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
             )}
 
             {isTour ? (
-              <WelcomeTour name={pendingSession?.name} onFinish={finishTour} />
+              <WelcomeTour name={pendingSession?.name} onFinish={finishTour} onClaim={claimWelcome} />
             ) : isRegister ? (
               <form onSubmit={handleRegister} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">

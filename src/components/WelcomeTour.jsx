@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { PartyPopper, Sparkles, Crown, Gift, Cake, Trophy, ArrowRight, ArrowLeft } from 'lucide-react';
+import { PartyPopper, Sparkles, Crown, Gift, Cake, Coins, Check, ArrowRight, ArrowLeft } from 'lucide-react';
 
 const slides = [
   { icon: PartyPopper, grad: 'from-amber-400 via-primary to-amber-700', glow: 'bg-amber-400/40', title: (f) => `¡Bienvenido/a al Club${f ? ', ' + f : ''}!`, text: 'Acabas de unirte al programa de fidelización de Showclinic. Te mostramos en unos pasos todo lo que ganas. ✨' },
@@ -8,7 +8,7 @@ const slides = [
   { icon: Crown, grad: 'from-yellow-400 to-amber-600', glow: 'bg-yellow-400/40', title: () => '2. Sube de nivel', text: 'Avanza por 5 niveles — Bronce, Plata, Oro, Platinium y Diamante. Mientras más acumulas, mejores tus beneficios.' },
   { icon: Gift, grad: 'from-rose-400 to-pink-600', glow: 'bg-rose-400/40', title: () => '3. Canjea por descuentos', text: 'Convierte tus puntos en descuento directo (hasta 7%). Y lo mejor: tu nivel se mantiene aunque canjees.' },
   { icon: Cake, grad: 'from-violet-400 to-purple-600', glow: 'bg-violet-400/40', title: () => '4. Bonos de regalo', text: 'Recibe puntos extra de regalo en tu cumpleaños 🎂 y por cada persona que refieras a Showclinic.' },
-  { icon: Trophy, grad: 'from-emerald-400 to-teal-600', glow: 'bg-emerald-400/40', title: (f) => `¡Todo listo${f ? ', ' + f : ''}!`, text: 'Empieza a acumular puntos en tu próxima visita. Bienvenido/a al Showclinic Club. 💛' },
+  { icon: Coins, grad: 'from-amber-400 via-primary to-amber-700', glow: 'bg-amber-400/50', reward: true, title: (f) => `¡Tu regalo de bienvenida${f ? ', ' + f : ''}!`, text: 'Por unirte al Club, reclama ahora tus primeros 1,000 puntos Showclinic. ¡Empieza con ventaja! 🎁' },
 ];
 
 const sparkles = [
@@ -19,12 +19,21 @@ const sparkles = [
   { top: '40%', left: '104%', d: 2.6, delay: 1 },
 ];
 
-export default function WelcomeTour({ name, onFinish }) {
+export default function WelcomeTour({ name, onFinish, onClaim }) {
   const first = (name || '').split(' ')[0] || '';
   const [step, setStep] = useState(0);
+  const [claiming, setClaiming] = useState(false);
+  const [claimed, setClaimed] = useState(null); // datos actualizados del cliente tras reclamar
   const isLast = step === slides.length - 1;
   const s = slides[step];
-  const Icon = s.icon;
+  const Icon = claimed ? Check : s.icon;
+
+  const handleClaim = async () => {
+    setClaiming(true);
+    const updated = onClaim ? await onClaim() : null;
+    setClaiming(false);
+    setClaimed(updated || {}); // aunque falle, dejamos entrar
+  };
 
   return (
     <div className="relative text-center">
@@ -35,65 +44,76 @@ export default function WelcomeTour({ name, onFinish }) {
         ))}
       </div>
 
-      <motion.div key={step} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
-          {/* Icono con brillo + destellos */}
-          <div className="relative w-28 h-28 mx-auto mb-7">
-            <motion.div
-              className={`absolute inset-0 rounded-full ${s.glow} blur-2xl`}
-              animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0.3, 0.6] }}
-              transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            <motion.div
-              initial={{ scale: 0.4, opacity: 0, rotate: -12 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              transition={{ type: 'spring', damping: 11, stiffness: 190 }}
-              className={`relative w-28 h-28 rounded-[2rem] bg-gradient-to-br ${s.grad} flex items-center justify-center shadow-xl shadow-black/10 ring-1 ring-white/40`}
-            >
-              {/* brillo diagonal */}
-              <div className="absolute inset-0 rounded-[2rem] overflow-hidden pointer-events-none">
-                <div className="absolute -top-1/2 -left-1/4 w-1/2 h-[200%] bg-white/25 rotate-12 blur-md" />
-              </div>
-              <Icon className="w-12 h-12 text-white drop-shadow relative" strokeWidth={1.8} />
-            </motion.div>
-            {/* destellos flotantes */}
-            {sparkles.map((sp, i) => (
-              <motion.span
-                key={i}
-                className="absolute w-2 h-2 rounded-full bg-primary-light"
-                style={{ top: sp.top, left: sp.left }}
-                animate={{ opacity: [0, 1, 0], scale: [0, 1, 0], y: [0, -6, 0] }}
-                transition={{ duration: sp.d, repeat: Infinity, delay: sp.delay, ease: 'easeInOut' }}
-              />
-            ))}
-          </div>
+      <motion.div key={step + (claimed ? '-ok' : '')} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
+        {/* Icono con brillo + destellos */}
+        <div className="relative w-28 h-28 mx-auto mb-7">
+          <motion.div
+            className={`absolute inset-0 rounded-full ${claimed ? 'bg-emerald-400/40' : s.glow} blur-2xl`}
+            animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0.3, 0.6] }}
+            transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            initial={{ scale: 0.4, opacity: 0, rotate: -12 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            transition={{ type: 'spring', damping: 11, stiffness: 190 }}
+            className={`relative w-28 h-28 rounded-[2rem] bg-gradient-to-br ${claimed ? 'from-emerald-400 to-teal-600' : s.grad} flex items-center justify-center shadow-xl shadow-black/10 ring-1 ring-white/40`}
+          >
+            <div className="absolute inset-0 rounded-[2rem] overflow-hidden pointer-events-none">
+              <div className="absolute -top-1/2 -left-1/4 w-1/2 h-[200%] bg-white/25 rotate-12 blur-md" />
+            </div>
+            <Icon className="w-12 h-12 text-white drop-shadow relative" strokeWidth={1.8} />
+          </motion.div>
+          {(s.reward || claimed) && sparkles.map((sp, i) => (
+            <motion.span key={i} className="absolute w-2 h-2 rounded-full bg-primary-light" style={{ top: sp.top, left: sp.left }}
+              animate={{ opacity: [0, 1, 0], scale: [0, 1, 0], y: [0, -6, 0] }}
+              transition={{ duration: sp.d, repeat: Infinity, delay: sp.delay, ease: 'easeInOut' }} />
+          ))}
+        </div>
 
-          <h3 className="font-serif text-[26px] leading-tight font-bold text-dark mb-3 px-2">{s.title(first)}</h3>
-          <p className="text-gray-500 text-[15px] leading-relaxed px-3 min-h-[72px]">{s.text}</p>
+        {claimed ? (
+          <>
+            <h3 className="font-serif text-[26px] leading-tight font-bold text-dark mb-3 px-2">¡1,000 puntos reclamados! 🎉</h3>
+            <p className="text-gray-500 text-[15px] leading-relaxed px-3 min-h-[72px]">Ya tienes tus primeros <span className="font-semibold text-primary">1,000 puntos Showclinic</span> en tu cuenta. ¡Bienvenido/a al Club! 💛</p>
+          </>
+        ) : (
+          <>
+            <h3 className="font-serif text-[26px] leading-tight font-bold text-dark mb-3 px-2">{s.title(first)}</h3>
+            <p className="text-gray-500 text-[15px] leading-relaxed px-3 min-h-[72px]">{s.text}</p>
+          </>
+        )}
       </motion.div>
 
       {/* Controles */}
       <div className="flex items-center gap-3 mt-9">
-        {step > 0 && (
+        {step > 0 && !isLast && (
           <motion.button whileTap={{ scale: 0.96 }} onClick={() => setStep(step - 1)}
             className="inline-flex items-center justify-center gap-2 px-5 py-4 text-[13px] font-semibold text-gray-500 bg-gray-100 rounded-2xl hover:bg-gray-200 transition-colors">
             <ArrowLeft className="w-4 h-4" />
           </motion.button>
         )}
+
         {!isLast ? (
           <motion.button whileTap={{ scale: 0.97 }} onClick={() => setStep(step + 1)}
             className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 text-[13px] font-bold uppercase tracking-[0.1em] text-white bg-gradient-to-r from-accent to-dark rounded-2xl shadow-lg shadow-accent/20 hover:shadow-xl transition-all">
             {step === 0 ? 'Empezar' : 'Siguiente'} <ArrowRight className="w-4 h-4" />
           </motion.button>
-        ) : (
-          <motion.button whileTap={{ scale: 0.97 }} onClick={onFinish}
-            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 text-[13px] font-bold uppercase tracking-[0.1em] text-white bg-gradient-to-r from-primary to-amber-700 rounded-2xl shadow-lg shadow-primary/25 hover:shadow-xl transition-all">
+        ) : claimed ? (
+          <motion.button whileTap={{ scale: 0.97 }} onClick={() => onFinish(claimed)}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 text-[13px] font-bold uppercase tracking-[0.1em] text-white bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl shadow-lg shadow-emerald-500/25 hover:shadow-xl transition-all">
             Entrar a mi cuenta <ArrowRight className="w-4 h-4" />
+          </motion.button>
+        ) : (
+          <motion.button whileTap={{ scale: 0.97 }} disabled={claiming} onClick={handleClaim}
+            animate={claiming ? {} : { scale: [1, 1.03, 1] }}
+            transition={claiming ? {} : { duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 text-[14px] font-bold uppercase tracking-[0.08em] text-white bg-gradient-to-r from-primary to-amber-700 rounded-2xl shadow-lg shadow-primary/30 hover:shadow-xl transition-all disabled:opacity-70">
+            <Coins className="w-5 h-5" /> {claiming ? 'Reclamando...' : 'Reclamar 1,000 puntos'}
           </motion.button>
         )}
       </div>
 
       {!isLast && (
-        <button onClick={onFinish} className="mt-4 text-[12px] text-gray-300 hover:text-gray-500 transition-colors">
+        <button onClick={() => onFinish()} className="mt-4 text-[12px] text-gray-300 hover:text-gray-500 transition-colors">
           Saltar
         </button>
       )}
