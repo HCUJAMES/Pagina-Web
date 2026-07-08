@@ -12,17 +12,16 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState('');
-  const [ok, setOk] = useState('');
   const [loading, setLoading] = useState(false);
   const [reg, setReg] = useState({ name: '', lastName: '', phone: '', username: '', password: '' });
   const [pendingSession, setPendingSession] = useState(null);
 
   useEffect(() => {
-    if (isOpen) { setMode(initialMode); setError(''); setOk(''); }
+    if (isOpen) { setMode(initialMode); setError(''); }
   }, [isOpen, initialMode]);
 
   const resetAndClose = () => {
-    setUsername(''); setPassword(''); setError(''); setOk(''); setLoading(false);
+    setUsername(''); setPassword(''); setError(''); setLoading(false);
     setReg({ name: '', lastName: '', phone: '', username: '', password: '' });
     setPendingSession(null);
     onClose();

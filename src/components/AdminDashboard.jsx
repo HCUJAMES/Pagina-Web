@@ -44,9 +44,6 @@ export default function AdminDashboard({ onBack, session }) {
   const [editingTreatment, setEditingTreatment] = useState(null);
   const [treatmentSearch, setTreatmentSearch] = useState('');
   const [admins, setAdmins] = useState([]);
-  const [adminForm, setAdminForm] = useState({ name: '', username: '', password: '' });
-  const [editingAdmin, setEditingAdmin] = useState(null);
-  const [showAdminPass, setShowAdminPass] = useState({});
   const [contacts, setContacts] = useState([]);
   const [contactSearch, setContactSearch] = useState('');
 
