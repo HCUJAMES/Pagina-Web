@@ -31,20 +31,20 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
   // Reclamar el bono de bienvenida (1000 pts) de forma segura — devuelve datos actualizados del cliente
   const claimWelcome = async () => {
     if (!pendingSession?.id) return null;
-    const { data } = await supabase.rpc('claim_welcome_bonus', { p_id: pendingSession.id });
-    if (data && data.id) {
-      const updated = { ...pendingSession, client: data };
-      setPendingSession(updated);
-      return data;
-    }
+    try {
+      const { data, error } = await supabase.rpc('claim_welcome_bonus', { p_id: pendingSession.id });
+      if (!error && data && data.id) return data;
+    } catch { /* si falla, se entra sin bono */ }
     return null;
   };
 
-  // Al terminar (o saltar) el recorrido, inicia sesión y cierra
+  // Al terminar (o saltar) el recorrido, inicia sesión y cierra.
+  // Solo usa datos actualizados si son un cliente válido; si no, usa la sesión del registro.
   const finishTour = (updatedClient) => {
     const base = pendingSession;
     if (base) {
-      const session = updatedClient ? { ...base, client: updatedClient } : base;
+      const client = (updatedClient && updatedClient.id) ? updatedClient : base.client;
+      const session = { ...base, client };
       localStorage.setItem('showclinic_session', JSON.stringify(session));
       onLogin(session);
     }

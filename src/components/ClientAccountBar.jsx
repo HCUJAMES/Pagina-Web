@@ -23,15 +23,25 @@ export default function ClientAccountBar({ session, onLogout }) {
   const [showPanel, setShowPanel] = useState(false);
 
   useEffect(() => {
-    // Los datos del paciente vienen del login seguro (guardados en la sesión)
+    // Los datos del paciente vienen del login seguro (guardados en la sesión).
+    // Se normalizan para que nunca falten campos (evita pantallas en blanco).
     const data = session.client;
-    if (data) setClient({ ...data, lastName: data.last_name, pointsHistory: data.points_history || [] });
+    if (data && data.id) {
+      setClient({
+        ...data,
+        id: data.id,
+        name: data.name || 'Cliente',
+        points: Number(data.points) || 0,
+        lastName: data.last_name || '',
+        pointsHistory: Array.isArray(data.points_history) ? data.points_history : [],
+      });
+    }
   }, [session]);
 
   if (!client) return null;
 
   const history = client.pointsHistory || [];
-  const totalEarned = history.filter(e => e.type === 'add' && !e.voided).reduce((sum, e) => sum + e.amount, 0) || client.points;
+  const totalEarned = history.filter(e => e && e.type === 'add' && !e.voided).reduce((sum, e) => sum + (Number(e.amount) || 0), 0) || client.points;
   const level = getLevel(totalEarned);
   const progress = level.next ? ((totalEarned - level.min) / (level.next - level.min)) * 100 : 100;
   const canjeValue = (client.points / 100) * level.canje;

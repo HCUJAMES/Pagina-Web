@@ -23,17 +23,23 @@ export default function WelcomeTour({ name, onFinish, onClaim }) {
   const first = (name || '').split(' ')[0] || '';
   const [step, setStep] = useState(0);
   const [claiming, setClaiming] = useState(false);
-  const [claimed, setClaimed] = useState(null); // datos actualizados del cliente tras reclamar
+  const [done, setDone] = useState(false);              // muestra el estado de éxito
+  const [updatedClient, setUpdatedClient] = useState(null); // datos válidos del cliente (o null)
+  const [claimOk, setClaimOk] = useState(false);
   const isLast = step === slides.length - 1;
   const s = slides[step];
-  const Icon = claimed ? Check : s.icon;
+  const Icon = done ? Check : s.icon;
 
   const handleClaim = async () => {
     setClaiming(true);
-    const updated = onClaim ? await onClaim() : null;
+    let updated = null;
+    try { updated = onClaim ? await onClaim() : null; } catch { updated = null; }
     setClaiming(false);
-    setClaimed(updated || {}); // aunque falle, dejamos entrar
+    if (updated && updated.id) { setUpdatedClient(updated); setClaimOk(true); }
+    setDone(true);
   };
+
+  const enterAccount = () => onFinish(updatedClient); // null-safe: LoginModal usa la sesión base si es null
 
   return (
     <div className="relative text-center">
@@ -44,11 +50,10 @@ export default function WelcomeTour({ name, onFinish, onClaim }) {
         ))}
       </div>
 
-      <motion.div key={step + (claimed ? '-ok' : '')} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
-        {/* Icono con brillo + destellos */}
+      <motion.div key={step + (done ? '-ok' : '')} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
         <div className="relative w-28 h-28 mx-auto mb-7">
           <motion.div
-            className={`absolute inset-0 rounded-full ${claimed ? 'bg-emerald-400/40' : s.glow} blur-2xl`}
+            className={`absolute inset-0 rounded-full ${done ? 'bg-emerald-400/40' : s.glow} blur-2xl`}
             animate={{ scale: [1, 1.25, 1], opacity: [0.6, 0.3, 0.6] }}
             transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
           />
@@ -56,24 +61,30 @@ export default function WelcomeTour({ name, onFinish, onClaim }) {
             initial={{ scale: 0.4, opacity: 0, rotate: -12 }}
             animate={{ scale: 1, opacity: 1, rotate: 0 }}
             transition={{ type: 'spring', damping: 11, stiffness: 190 }}
-            className={`relative w-28 h-28 rounded-[2rem] bg-gradient-to-br ${claimed ? 'from-emerald-400 to-teal-600' : s.grad} flex items-center justify-center shadow-xl shadow-black/10 ring-1 ring-white/40`}
+            className={`relative w-28 h-28 rounded-[2rem] bg-gradient-to-br ${done ? 'from-emerald-400 to-teal-600' : s.grad} flex items-center justify-center shadow-xl shadow-black/10 ring-1 ring-white/40`}
           >
             <div className="absolute inset-0 rounded-[2rem] overflow-hidden pointer-events-none">
               <div className="absolute -top-1/2 -left-1/4 w-1/2 h-[200%] bg-white/25 rotate-12 blur-md" />
             </div>
             <Icon className="w-12 h-12 text-white drop-shadow relative" strokeWidth={1.8} />
           </motion.div>
-          {(s.reward || claimed) && sparkles.map((sp, i) => (
+          {(s.reward || done) && sparkles.map((sp, i) => (
             <motion.span key={i} className="absolute w-2 h-2 rounded-full bg-primary-light" style={{ top: sp.top, left: sp.left }}
               animate={{ opacity: [0, 1, 0], scale: [0, 1, 0], y: [0, -6, 0] }}
               transition={{ duration: sp.d, repeat: Infinity, delay: sp.delay, ease: 'easeInOut' }} />
           ))}
         </div>
 
-        {claimed ? (
+        {done ? (
           <>
-            <h3 className="font-serif text-[26px] leading-tight font-bold text-dark mb-3 px-2">¡1,000 puntos reclamados! 🎉</h3>
-            <p className="text-gray-500 text-[15px] leading-relaxed px-3 min-h-[72px]">Ya tienes tus primeros <span className="font-semibold text-primary">1,000 puntos Showclinic</span> en tu cuenta. ¡Bienvenido/a al Club! 💛</p>
+            <h3 className="font-serif text-[26px] leading-tight font-bold text-dark mb-3 px-2">
+              {claimOk ? '¡1,000 puntos reclamados! 🎉' : '¡Cuenta creada! 🎉'}
+            </h3>
+            <p className="text-gray-500 text-[15px] leading-relaxed px-3 min-h-[72px]">
+              {claimOk
+                ? <>Ya tienes tus primeros <span className="font-semibold text-primary">1,000 puntos Showclinic</span> en tu cuenta. ¡Bienvenido/a al Club! 💛</>
+                : <>Tu cuenta ya está lista. Cuando visites la clínica, empezarás a acumular tus puntos. ¡Bienvenido/a al Club! 💛</>}
+            </p>
           </>
         ) : (
           <>
@@ -97,8 +108,8 @@ export default function WelcomeTour({ name, onFinish, onClaim }) {
             className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 text-[13px] font-bold uppercase tracking-[0.1em] text-white bg-gradient-to-r from-accent to-dark rounded-2xl shadow-lg shadow-accent/20 hover:shadow-xl transition-all">
             {step === 0 ? 'Empezar' : 'Siguiente'} <ArrowRight className="w-4 h-4" />
           </motion.button>
-        ) : claimed ? (
-          <motion.button whileTap={{ scale: 0.97 }} onClick={() => onFinish(claimed)}
+        ) : done ? (
+          <motion.button whileTap={{ scale: 0.97 }} onClick={enterAccount}
             className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 text-[13px] font-bold uppercase tracking-[0.1em] text-white bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl shadow-lg shadow-emerald-500/25 hover:shadow-xl transition-all">
             Entrar a mi cuenta <ArrowRight className="w-4 h-4" />
           </motion.button>
