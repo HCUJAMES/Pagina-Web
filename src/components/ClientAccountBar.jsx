@@ -40,8 +40,9 @@ export default function ClientAccountBar({ session, onLogout }) {
 
   if (!client) return null;
 
-  const history = client.pointsHistory || [];
-  const totalEarned = history.filter(e => e && e.type === 'add' && !e.voided).reduce((sum, e) => sum + (Number(e.amount) || 0), 0) || client.points;
+  // Solo entradas válidas (evita crasheos si el historial tiene datos incompletos)
+  const history = (client.pointsHistory || []).filter(e => e && typeof e === 'object');
+  const totalEarned = history.filter(e => e.type === 'add' && !e.voided).reduce((sum, e) => sum + (Number(e.amount) || 0), 0) || client.points;
   const level = getLevel(totalEarned);
   const progress = level.next ? ((totalEarned - level.min) / (level.next - level.min)) * 100 : 100;
   const canjeValue = (client.points / 100) * level.canje;
@@ -295,7 +296,7 @@ export default function ClientAccountBar({ session, onLogout }) {
                             </div>
                           </div>
                           <span className={`text-[14px] font-bold flex-shrink-0 ml-3 ${entry.type === 'add' ? 'text-green-600' : 'text-red-500'}`}>
-                            {entry.type === 'add' ? '+' : '-'}{entry.amount.toLocaleString()}
+                            {entry.type === 'add' ? '+' : '-'}{(Number(entry.amount) || 0).toLocaleString()}
                           </span>
                         </div>
                       ))}

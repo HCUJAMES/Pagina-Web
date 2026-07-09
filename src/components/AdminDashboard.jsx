@@ -754,7 +754,7 @@ export default function AdminDashboard({ onBack, session }) {
                                     <Clock className="w-3.5 h-3.5" /> Historial de puntos
                                   </p>
                                   <div className="space-y-2 max-h-72 overflow-y-auto">
-                                    {history.slice().reverse().map((entry, i) => (
+                                    {history.filter(e => e && typeof e === 'object').slice().reverse().map((entry, i) => (
                                       <div key={i} className={`flex items-start justify-between px-4 py-3 rounded-xl ${entry.voided ? 'bg-gray-100 opacity-70' : 'bg-cream'}`}>
                                         <div className="flex items-start gap-3 min-w-0">
                                           <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${entry.voided ? 'bg-gray-200' : entry.type === 'add' ? 'bg-green-100' : 'bg-red-100'}`}>
@@ -774,7 +774,7 @@ export default function AdminDashboard({ onBack, session }) {
                                         </div>
                                         <div className="flex flex-col items-end gap-1 flex-shrink-0 ml-3">
                                           <span className={`text-[14px] font-bold ${entry.voided ? 'text-gray-400 line-through' : entry.type === 'add' ? 'text-green-600' : 'text-red-500'}`}>
-                                            {entry.type === 'add' ? '+' : '-'}{entry.amount.toLocaleString()}
+                                            {entry.type === 'add' ? '+' : '-'}{(Number(entry.amount) || 0).toLocaleString()}
                                           </span>
                                           {!entry.voided && (
                                             <button
