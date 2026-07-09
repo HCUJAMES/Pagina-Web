@@ -60,7 +60,11 @@
       "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Registro: recorrido de bienvenida del Showclinic Club para nuevos pacientes\")",
       "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Recorrido de bienvenida mas premium \\(iconos animados, brillo, destellos\\) + fix de avance\")",
       "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Recorrido: boton reclamar 1000 puntos de bienvenida al finalizar\")",
-      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Fix: evitar pantalla en blanco tras registro/reclamo \\(datos siempre validos, panel a prueba de fallos\\)\")"
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Fix: evitar pantalla en blanco tras registro/reclamo \\(datos siempre validos, panel a prueba de fallos\\)\")",
+      "Bash(npx eslint *)",
+      "Bash(awk '/^\\\\// {f=$0} /error/ {print f\": \"$0}')",
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Limpieza: eliminar estado sin uso \\(admin form legacy, ok en login\\)\")",
+      "Bash(git -c user.email=\"hcugatito97@gmail.com\" -c user.name=\"HCUJAMES\" commit -q -m \"Fix: panel del cliente/admin a prueba de historial con datos incompletos \\(evita pantalla en blanco\\)\")"
     ]
   }
 }
