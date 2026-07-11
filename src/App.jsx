@@ -33,7 +33,16 @@ function App() {
   useEffect(() => {
     const saved = localStorage.getItem('showclinic_session')
     if (saved) {
-      try { setSession(JSON.parse(saved)) } catch { /* ignore */ }
+      try {
+        const s = JSON.parse(saved)
+        // Validar la sesión: debe tener rol y, si es cliente, datos válidos.
+        const valid = s && typeof s === 'object' &&
+          (s.role === 'admin' || (s.role === 'client' && s.client && s.client.id))
+        if (valid) setSession(s)
+        else localStorage.removeItem('showclinic_session')
+      } catch {
+        localStorage.removeItem('showclinic_session')
+      }
     }
   }, [])
 
