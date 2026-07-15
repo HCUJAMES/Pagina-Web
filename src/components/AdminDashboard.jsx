@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Plus, Minus, Search, Trash2, Edit3, Save, X, Crown, ArrowLeft, Gift, ChevronDown, ChevronUp, Clock, Package, RefreshCw, Eye, DollarSign, Shield, EyeOff, Mail, MailOpen, MessageSquare } from 'lucide-react';
+import { Users, Plus, Minus, Search, Trash2, Edit3, Save, X, Check, Crown, ArrowLeft, Gift, ChevronDown, ChevronUp, Clock, Package, RefreshCw, Eye, DollarSign, Shield, EyeOff, Mail, MailOpen, MessageSquare } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 const inputClass = 'w-full px-4 py-3 bg-cream border border-gray-200 rounded-xl text-[14px] text-dark placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all';
@@ -15,6 +15,19 @@ function getLevel(points) {
 
 function getTotalEarned(history) {
   return (history || []).filter(e => e.type === 'add' && !e.voided).reduce((sum, e) => sum + e.amount, 0);
+}
+
+// Estado inicial del formulario de registro de tratamiento
+const emptyPointsAction = { id: null, soles: '', items: [], description: '', touched: false };
+
+// Suma de los tratamientos marcados (los marcados como gratis no suman)
+function itemsSubtotal(items) {
+  return (items || []).reduce((sum, i) => sum + (i.free ? 0 : Number(i.price) || 0), 0);
+}
+
+// Descripción automática a partir de los tratamientos marcados
+function itemsLabel(items) {
+  return (items || []).map(i => (i.free ? `${i.name} (gratis)` : i.name)).join(' + ');
 }
 
 // Saldo disponible recalculado desde el historial (ignora movimientos anulados)
@@ -36,7 +49,8 @@ export default function AdminDashboard({ onBack, session }) {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({ name: '', lastName: '', phone: '', username: '', password: '', points: 0 });
-  const [pointsAction, setPointsAction] = useState({ id: null, soles: '', treatment: '', description: '', mode: 'treatment' });
+  const [pointsAction, setPointsAction] = useState(emptyPointsAction);
+  const [pointsTreatmentSearch, setPointsTreatmentSearch] = useState('');
   const [bonusAction, setBonusAction] = useState({ id: null, type: '', customPoints: '', description: '' });
   const [canjeAction, setCanjeAction] = useState({ id: null, points: '', description: '' });
   const [expandedId, setExpandedId] = useState(null);
@@ -127,20 +141,36 @@ export default function AdminDashboard({ onBack, session }) {
   };
 
   const handlePointsApply = async (id) => {
+    // El TOTAL PAGADO es el que manda: los puntos siempre reflejan el dinero real (S/ 1 = 1 punto)
     const soles = Math.floor(Number(pointsAction.soles));
     if (!soles || soles <= 0) return;
     const pts = soles;
-    const desc = pointsAction.description.trim() || pointsAction.treatment || `Pago S/ ${soles.toFixed(2)}`;
+    const items = pointsAction.items || [];
+    const subtotal = itemsSubtotal(items);
+    const discount = items.length ? Math.max(0, subtotal - soles) : 0;
+
+    // Descripción: tratamientos marcados + nota opcional + descuento aplicado
+    const auto = itemsLabel(items);
+    const note = pointsAction.description.trim();
+    let desc = auto && note ? `${auto} — ${note}` : (auto || note || `Pago S/ ${soles.toFixed(2)}`);
+    if (discount > 0) desc += ` — Descuento S/ ${discount.toFixed(2)}`;
+
     // Leer saldo más reciente para no sobrescribir cambios de otro administrador
     const { data: fresh, error: fErr } = await supabase.from('clients').select('points, points_history').eq('id', id).single();
     if (fErr || !fresh) { alert('No se pudo leer el paciente. Intenta de nuevo.'); return; }
     const entry = { type: 'add', amount: pts, soles, description: desc, by: adminName, date: new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' }) };
+    if (items.length) {
+      entry.items = items.map(i => ({ name: i.name, price: Number(i.price) || 0, free: !!i.free }));
+      entry.subtotal = subtotal;
+      if (discount > 0) entry.discount = discount;
+    }
     const newPoints = (fresh.points || 0) + pts;
     const newHistory = [...(fresh.points_history || []), entry];
     const { error } = await supabase.from('clients').update({ points: newPoints, points_history: newHistory }).eq('id', id);
     if (error) { alert('Error al guardar puntos: ' + error.message); return; }
     setClients(clients.map(c => c.id === id ? { ...c, points: newPoints, pointsHistory: newHistory } : c));
-    setPointsAction({ id: null, soles: '', treatment: '', description: '', mode: 'treatment' });
+    setPointsAction(emptyPointsAction);
+    setPointsTreatmentSearch('');
   };
 
   const bonusOptions = [
@@ -246,8 +276,24 @@ export default function AdminDashboard({ onBack, session }) {
     URL.revokeObjectURL(url);
   };
 
-  const handleSelectTreatment = (t) => {
-    setPointsAction({ ...pointsAction, soles: String(t.price), treatment: t.name, description: t.name, mode: 'treatment' });
+  // Marcar / desmarcar un tratamiento. El total pagado se recalcula solo con cada cambio;
+  // si luego lo editan a mano, ese número manda (touched).
+  const toggleTreatment = (t) => {
+    setPointsAction(prev => {
+      const exists = prev.items.some(i => i.id === t.id);
+      const items = exists
+        ? prev.items.filter(i => i.id !== t.id)
+        : [...prev.items, { id: t.id, name: t.name, price: Number(t.price) || 0, free: false }];
+      return { ...prev, items, soles: items.length ? String(itemsSubtotal(items)) : '', touched: false };
+    });
+  };
+
+  // Marcar un tratamiento como cortesía (no suma al total)
+  const toggleFree = (itemId) => {
+    setPointsAction(prev => {
+      const items = prev.items.map(i => i.id === itemId ? { ...i, free: !i.free } : i);
+      return { ...prev, items, soles: String(itemsSubtotal(items)), touched: false };
+    });
   };
 
   const handleAddTreatment = async (e) => {
@@ -437,7 +483,9 @@ export default function AdminDashboard({ onBack, session }) {
                   const isAddingPoints = pointsAction.id === client.id;
                   const isCanjeing = canjeAction.id === client.id;
                   const solesAmount = Number(pointsAction.soles) || 0;
-                  const previewPoints = solesAmount;
+                  const previewPoints = Math.floor(solesAmount);
+                  const pointsSubtotal = itemsSubtotal(pointsAction.items);
+                  const pointsDiscount = pointsAction.items.length ? Math.max(0, pointsSubtotal - solesAmount) : 0;
                   const canjePoints = Number(canjeAction.points) || 0;
                   const canjeValue = (canjePoints / 100) * level.canje;
 
@@ -498,53 +546,130 @@ export default function AdminDashboard({ onBack, session }) {
                                   <Crown className="w-3.5 h-3.5" /> Registrar tratamiento
                                 </p>
                                 {isAddingPoints ? (
-                                  <div className="space-y-3">
-                                    {/* Treatment selector */}
+                                  <div className="space-y-4">
+                                    {/* Paso 1 — Marcar tratamientos (un toque cada uno) */}
                                     <div>
-                                      <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Seleccionar tratamiento</label>
-                                      <select
-                                        value={pointsAction.treatment}
-                                        onChange={(e) => {
-                                          const t = treatments.find(t => t.name === e.target.value);
-                                          if (t) handleSelectTreatment(t);
-                                          else setPointsAction({ ...pointsAction, treatment: '', soles: '', description: '' });
-                                        }}
-                                        className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-[13px] bg-white font-medium"
-                                      >
-                                        <option value="">— Seleccionar o ingresar monto manual —</option>
-                                        {categories.map(cat => (
-                                          <optgroup key={cat} label={cat}>
-                                            {treatments.filter(t => t.category === cat).map(t => (
-                                              <option key={t.id} value={t.name}>{t.name} — S/ {t.price.toLocaleString()}</option>
-                                            ))}
-                                          </optgroup>
-                                        ))}
-                                      </select>
-                                    </div>
-
-                                    {/* Amount in soles */}
-                                    <div>
-                                      <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Monto pagado (S/)</label>
-                                      <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-[13px] font-medium">S/</span>
+                                      <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 flex items-center gap-1.5">
+                                        <span className="w-4 h-4 rounded-full bg-primary/10 text-primary text-[9px] font-bold flex items-center justify-center">1</span>
+                                        Marcar tratamientos
+                                        <span className="text-gray-300 normal-case tracking-normal font-normal">(opcional)</span>
+                                      </label>
+                                      <div className="relative mb-2">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                                         <input
-                                          type="number"
-                                          value={pointsAction.soles}
-                                          onChange={(e) => setPointsAction({ ...pointsAction, soles: e.target.value })}
-                                          placeholder="0.00"
-                                          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-[14px] text-center bg-white font-medium"
-                                          min="1"
-                                          step="0.01"
+                                          type="text"
+                                          value={pointsTreatmentSearch}
+                                          onChange={(e) => setPointsTreatmentSearch(e.target.value)}
+                                          placeholder="Buscar tratamiento..."
+                                          className="w-full pl-9 pr-3 py-2 rounded-xl border border-gray-200 text-[13px] bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
                                         />
+                                      </div>
+                                      <div className="max-h-48 overflow-y-auto space-y-3 pr-1">
+                                        {categories.map(cat => {
+                                          const list = treatments.filter(t => t.category === cat && t.name.toLowerCase().includes(pointsTreatmentSearch.toLowerCase()));
+                                          if (!list.length) return null;
+                                          return (
+                                            <div key={cat}>
+                                              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-1.5">{cat}</p>
+                                              <div className="flex flex-wrap gap-1.5">
+                                                {list.map(t => {
+                                                  const sel = pointsAction.items.some(i => i.id === t.id);
+                                                  return (
+                                                    <button
+                                                      key={t.id}
+                                                      type="button"
+                                                      onClick={() => toggleTreatment(t)}
+                                                      className={`inline-flex items-center gap-1.5 pl-2.5 pr-3 py-2 rounded-xl text-[12px] font-medium border transition-all ${sel ? 'bg-primary text-white border-primary shadow-sm' : 'bg-white text-dark border-gray-200 hover:border-primary/40 hover:bg-primary/5'}`}
+                                                    >
+                                                      <span className={`w-4 h-4 rounded-md flex items-center justify-center flex-shrink-0 ${sel ? 'bg-white/25' : 'border border-gray-300'}`}>
+                                                        {sel && <Check className="w-2.5 h-2.5" strokeWidth={3} />}
+                                                      </span>
+                                                      {t.name}
+                                                      <span className={sel ? 'text-white/60' : 'text-gray-400'}>S/ {t.price.toLocaleString()}</span>
+                                                    </button>
+                                                  );
+                                                })}
+                                              </div>
+                                            </div>
+                                          );
+                                        })}
+                                        {treatments.filter(t => t.name.toLowerCase().includes(pointsTreatmentSearch.toLowerCase())).length === 0 && (
+                                          <p className="text-[12px] text-gray-400 text-center py-3">No se encontraron tratamientos</p>
+                                        )}
                                       </div>
                                     </div>
 
-                                    {/* Description */}
+                                    {/* Tratamientos marcados + subtotal */}
+                                    {pointsAction.items.length > 0 && (
+                                      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                                        {pointsAction.items.map(i => (
+                                          <div key={i.id} className="flex items-center gap-2 px-3 py-2 border-b border-gray-100">
+                                            <span className={`flex-1 text-[13px] truncate ${i.free ? 'text-gray-400 line-through' : 'text-dark'}`}>{i.name}</span>
+                                            <span className={`text-[13px] font-semibold flex-shrink-0 ${i.free ? 'text-green-600' : 'text-dark'}`}>
+                                              {i.free ? 'Gratis' : `S/ ${i.price.toLocaleString()}`}
+                                            </span>
+                                            <button
+                                              type="button"
+                                              onClick={() => toggleFree(i.id)}
+                                              className={`px-2 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider border transition-colors flex-shrink-0 ${i.free ? 'bg-green-50 text-green-700 border-green-200' : 'bg-white text-gray-400 border-gray-200 hover:text-green-600 hover:border-green-200'}`}
+                                              title="Marcar como cortesía (no suma al total)"
+                                            >
+                                              Gratis
+                                            </button>
+                                            <button type="button" onClick={() => toggleTreatment(i)} className="text-gray-300 hover:text-red-500 transition-colors flex-shrink-0" title="Quitar">
+                                              <X className="w-3.5 h-3.5" />
+                                            </button>
+                                          </div>
+                                        ))}
+                                        <div className="flex items-center justify-between px-3 py-2 bg-cream/60">
+                                          <span className="text-[11px] uppercase tracking-wider text-gray-400 font-semibold">Subtotal</span>
+                                          <span className="text-[13px] font-bold text-dark">S/ {pointsSubtotal.toLocaleString()}</span>
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {/* Paso 2 — Total pagado (define los puntos) */}
+                                    <div>
+                                      <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 flex items-center gap-1.5">
+                                        <span className="w-4 h-4 rounded-full bg-primary/10 text-primary text-[9px] font-bold flex items-center justify-center">2</span>
+                                        Total pagado
+                                        <span className="text-primary normal-case tracking-normal font-semibold">— este define los puntos</span>
+                                      </label>
+                                      <div className="relative">
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-[14px] font-medium">S/</span>
+                                        <input
+                                          type="number"
+                                          value={pointsAction.soles}
+                                          onChange={(e) => setPointsAction({ ...pointsAction, soles: e.target.value, touched: true })}
+                                          placeholder="0"
+                                          className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-primary/30 text-[18px] text-center bg-white font-bold text-dark focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                          min="1"
+                                          step="1"
+                                        />
+                                      </div>
+                                      {pointsAction.items.length > 0 && (
+                                        <div className="mt-1.5 min-h-[18px]">
+                                          {pointsDiscount > 0 ? (
+                                            <p className="text-[12px] text-green-600 font-medium text-center">
+                                              Descuento aplicado: S/ {pointsDiscount.toLocaleString()} · quedan {previewPoints.toLocaleString()} puntos
+                                            </p>
+                                          ) : solesAmount > pointsSubtotal ? (
+                                            <p className="text-[12px] text-amber-600 font-medium text-center">
+                                              El total supera el subtotal en S/ {(solesAmount - pointsSubtotal).toLocaleString()} — verifica el monto
+                                            </p>
+                                          ) : (
+                                            <p className="text-[11px] text-gray-400 text-center">Sin descuento · puedes editar el total si el doctor rebajó el precio</p>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+
+                                    {/* Nota opcional */}
                                     <input
                                       type="text"
                                       value={pointsAction.description}
                                       onChange={(e) => setPointsAction({ ...pointsAction, description: e.target.value })}
-                                      placeholder="Descripción adicional (opcional)"
+                                      placeholder="Nota adicional (opcional)"
                                       className={inputClass}
                                     />
 
@@ -557,8 +682,8 @@ export default function AdminDashboard({ onBack, session }) {
                                         </div>
                                         <div className="grid grid-cols-3 gap-4 text-center">
                                           <div>
-                                            <p className="text-[11px] text-gray-400 mb-1">Monto</p>
-                                            <p className="text-[16px] font-bold text-dark">S/ {solesAmount.toFixed(2)}</p>
+                                            <p className="text-[11px] text-gray-400 mb-1">Total pagado</p>
+                                            <p className="text-[16px] font-bold text-dark">S/ {solesAmount.toLocaleString()}</p>
                                           </div>
                                           <div>
                                             <p className="text-[11px] text-gray-400 mb-1">Puntos generados</p>
@@ -569,23 +694,29 @@ export default function AdminDashboard({ onBack, session }) {
                                             <p className="text-[16px] font-bold text-primary">{(client.points + previewPoints).toLocaleString()}</p>
                                           </div>
                                         </div>
+                                        {pointsAction.items.length > 0 && (
+                                          <p className="text-[11px] text-gray-500 text-center mt-2 leading-relaxed border-t border-gray-100 pt-2">
+                                            {itemsLabel(pointsAction.items)}
+                                            {pointsDiscount > 0 && <span className="text-green-600 font-medium"> — Descuento S/ {pointsDiscount.toLocaleString()}</span>}
+                                          </p>
+                                        )}
                                         <p className="text-[11px] text-gray-400 text-center mt-2">S/ 1 = 1 punto Showclinic</p>
                                       </div>
                                     )}
 
                                     <div className="flex items-center gap-2">
-                                      <button onClick={() => handlePointsApply(client.id)} disabled={solesAmount <= 0}
+                                      <button onClick={() => handlePointsApply(client.id)} disabled={previewPoints <= 0}
                                         className="inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold uppercase tracking-wider text-white bg-primary rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                                         <Save className="w-3.5 h-3.5" /> Registrar
                                       </button>
-                                      <button onClick={() => setPointsAction({ id: null, soles: '', treatment: '', description: '', mode: 'treatment' })}
+                                      <button onClick={() => { setPointsAction(emptyPointsAction); setPointsTreatmentSearch(''); }}
                                         className="px-4 py-2 text-[12px] font-semibold uppercase tracking-wider text-gray-500 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                                         Cancelar
                                       </button>
                                     </div>
                                   </div>
                                 ) : (
-                                  <button onClick={(e) => { e.stopPropagation(); setPointsAction({ id: client.id, soles: '', treatment: '', description: '', mode: 'treatment' }); setCanjeAction({ id: null, points: '', description: '' }); setBonusAction({ id: null, type: '', customPoints: '', description: '' }); }}
+                                  <button onClick={(e) => { e.stopPropagation(); setPointsAction({ ...emptyPointsAction, id: client.id }); setPointsTreatmentSearch(''); setCanjeAction({ id: null, points: '', description: '' }); setBonusAction({ id: null, type: '', customPoints: '', description: '' }); }}
                                     className="inline-flex items-center gap-2 px-4 py-2.5 text-[12px] font-semibold text-primary bg-white border border-primary/20 rounded-xl hover:bg-primary/5 transition-colors">
                                     <Plus className="w-3.5 h-3.5" /> Registrar tratamiento / agregar puntos
                                   </button>
@@ -667,7 +798,7 @@ export default function AdminDashboard({ onBack, session }) {
                                     </div>
                                   </div>
                                 ) : (
-                                  <button onClick={(e) => { e.stopPropagation(); setBonusAction({ id: client.id, type: '', customPoints: '', description: '' }); setPointsAction({ id: null, soles: '', treatment: '', description: '', mode: 'treatment' }); setCanjeAction({ id: null, points: '', description: '' }); }}
+                                  <button onClick={(e) => { e.stopPropagation(); setBonusAction({ id: client.id, type: '', customPoints: '', description: '' }); setPointsAction(emptyPointsAction); setCanjeAction({ id: null, points: '', description: '' }); }}
                                     className="inline-flex items-center gap-2 px-4 py-2.5 text-[12px] font-semibold text-green-600 bg-white border border-green-200 rounded-xl hover:bg-green-50 transition-colors">
                                     <Gift className="w-3.5 h-3.5" /> Cumpleaños / Referido / Otro bonus
                                   </button>
@@ -740,7 +871,7 @@ export default function AdminDashboard({ onBack, session }) {
                                     </div>
                                   </div>
                                 ) : (
-                                  <button onClick={(e) => { e.stopPropagation(); setCanjeAction({ id: client.id, points: '', description: '' }); setPointsAction({ id: null, soles: '', treatment: '', description: '', mode: 'treatment' }); setBonusAction({ id: null, type: '', customPoints: '', description: '' }); }}
+                                  <button onClick={(e) => { e.stopPropagation(); setCanjeAction({ id: client.id, points: '', description: '' }); setPointsAction(emptyPointsAction); setBonusAction({ id: null, type: '', customPoints: '', description: '' }); }}
                                     className="inline-flex items-center gap-2 px-4 py-2.5 text-[12px] font-semibold text-red-500 bg-white border border-red-200 rounded-xl hover:bg-red-50 transition-colors">
                                     <RefreshCw className="w-3.5 h-3.5" /> Canjear puntos del paciente
                                   </button>
