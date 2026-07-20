@@ -546,32 +546,43 @@ export default function AdminDashboard({ onBack, session }) {
                                   <Crown className="w-3.5 h-3.5" /> Registrar tratamiento
                                 </p>
                                 {isAddingPoints ? (
-                                  <div className="space-y-4">
+                                  <div className="space-y-5">
                                     {/* Paso 1 — Marcar tratamientos (un toque cada uno) */}
                                     <div>
-                                      <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 flex items-center gap-1.5">
-                                        <span className="w-4 h-4 rounded-full bg-primary/10 text-primary text-[9px] font-bold flex items-center justify-center">1</span>
-                                        Marcar tratamientos
-                                        <span className="text-gray-300 normal-case tracking-normal font-normal">(opcional)</span>
-                                      </label>
-                                      <div className="relative mb-2">
-                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+                                      <div className="flex items-center justify-between mb-2.5">
+                                        <label className="text-[12px] font-semibold text-dark flex items-center gap-2">
+                                          <span className="w-5 h-5 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">1</span>
+                                          Marcar tratamientos
+                                          <span className="text-gray-400 font-normal">(opcional)</span>
+                                        </label>
+                                        {pointsAction.items.length > 0 && (
+                                          <span className="text-[11px] font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full">
+                                            {pointsAction.items.length} marcado{pointsAction.items.length > 1 ? 's' : ''}
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div className="relative mb-3">
+                                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                                         <input
                                           type="text"
                                           value={pointsTreatmentSearch}
                                           onChange={(e) => setPointsTreatmentSearch(e.target.value)}
                                           placeholder="Buscar tratamiento..."
-                                          className="w-full pl-9 pr-3 py-2 rounded-xl border border-gray-200 text-[13px] bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+                                          className="w-full pl-10 pr-3 py-2.5 rounded-xl border border-gray-200 text-[13px] bg-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all"
                                         />
                                       </div>
-                                      <div className="max-h-48 overflow-y-auto space-y-3 pr-1">
+                                      <div className="max-h-64 overflow-y-auto pr-1 space-y-4">
                                         {categories.map(cat => {
                                           const list = treatments.filter(t => t.category === cat && t.name.toLowerCase().includes(pointsTreatmentSearch.toLowerCase()));
                                           if (!list.length) return null;
                                           return (
                                             <div key={cat}>
-                                              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-1.5">{cat}</p>
-                                              <div className="flex flex-wrap gap-1.5">
+                                              <div className="flex items-center gap-2.5 mb-2">
+                                                <span className="h-px flex-1 bg-gradient-to-r from-transparent to-gray-200" />
+                                                <p className="text-[10px] uppercase tracking-[0.14em] text-gray-400 font-semibold whitespace-nowrap">{cat}</p>
+                                                <span className="h-px flex-1 bg-gradient-to-l from-transparent to-gray-200" />
+                                              </div>
+                                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                                                 {list.map(t => {
                                                   const sel = pointsAction.items.some(i => i.id === t.id);
                                                   return (
@@ -579,13 +590,13 @@ export default function AdminDashboard({ onBack, session }) {
                                                       key={t.id}
                                                       type="button"
                                                       onClick={() => toggleTreatment(t)}
-                                                      className={`inline-flex items-center gap-1.5 pl-2.5 pr-3 py-2 rounded-xl text-[12px] font-medium border transition-all ${sel ? 'bg-primary text-white border-primary shadow-sm' : 'bg-white text-dark border-gray-200 hover:border-primary/40 hover:bg-primary/5'}`}
+                                                      className={`group flex items-center gap-2.5 px-3 py-2.5 rounded-xl border text-left transition-all duration-150 ${sel ? 'bg-primary/[0.07] border-primary shadow-[0_1px_3px_rgba(139,111,78,0.12)]' : 'bg-white border-gray-200 hover:border-primary/40 hover:bg-cream/40'}`}
                                                     >
-                                                      <span className={`w-4 h-4 rounded-md flex items-center justify-center flex-shrink-0 ${sel ? 'bg-white/25' : 'border border-gray-300'}`}>
-                                                        {sel && <Check className="w-2.5 h-2.5" strokeWidth={3} />}
+                                                      <span className={`w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 transition-all ${sel ? 'bg-primary text-white' : 'border-[1.5px] border-gray-300 group-hover:border-primary/50'}`}>
+                                                        {sel && <Check className="w-3 h-3" strokeWidth={3} />}
                                                       </span>
-                                                      {t.name}
-                                                      <span className={sel ? 'text-white/60' : 'text-gray-400'}>S/ {t.price.toLocaleString()}</span>
+                                                      <span className={`flex-1 text-[12.5px] leading-tight truncate ${sel ? 'font-semibold text-dark' : 'font-medium text-gray-600'}`}>{t.name}</span>
+                                                      <span className={`text-[12px] font-semibold flex-shrink-0 tabular-nums ${sel ? 'text-primary' : 'text-gray-400'}`}>S/ {t.price.toLocaleString()}</span>
                                                     </button>
                                                   );
                                                 })}
@@ -594,46 +605,49 @@ export default function AdminDashboard({ onBack, session }) {
                                           );
                                         })}
                                         {treatments.filter(t => t.name.toLowerCase().includes(pointsTreatmentSearch.toLowerCase())).length === 0 && (
-                                          <p className="text-[12px] text-gray-400 text-center py-3">No se encontraron tratamientos</p>
+                                          <p className="text-[12px] text-gray-400 text-center py-4">No se encontraron tratamientos</p>
                                         )}
                                       </div>
                                     </div>
 
                                     {/* Tratamientos marcados + subtotal */}
                                     {pointsAction.items.length > 0 && (
-                                      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                                      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                                        <div className="px-4 py-2.5 bg-cream/50 border-b border-gray-100">
+                                          <p className="text-[10px] uppercase tracking-[0.14em] text-gray-400 font-semibold">Seleccionados</p>
+                                        </div>
                                         {pointsAction.items.map(i => (
-                                          <div key={i.id} className="flex items-center gap-2 px-3 py-2 border-b border-gray-100">
-                                            <span className={`flex-1 text-[13px] truncate ${i.free ? 'text-gray-400 line-through' : 'text-dark'}`}>{i.name}</span>
-                                            <span className={`text-[13px] font-semibold flex-shrink-0 ${i.free ? 'text-green-600' : 'text-dark'}`}>
+                                          <div key={i.id} className="flex items-center gap-3 px-4 py-2.5 border-b border-gray-50 last:border-b-0">
+                                            <span className={`flex-1 text-[13px] truncate ${i.free ? 'text-gray-400 line-through' : 'text-dark font-medium'}`}>{i.name}</span>
+                                            <span className={`text-[13px] font-semibold flex-shrink-0 tabular-nums w-20 text-right ${i.free ? 'text-green-600' : 'text-dark'}`}>
                                               {i.free ? 'Gratis' : `S/ ${i.price.toLocaleString()}`}
                                             </span>
                                             <button
                                               type="button"
                                               onClick={() => toggleFree(i.id)}
-                                              className={`px-2 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider border transition-colors flex-shrink-0 ${i.free ? 'bg-green-50 text-green-700 border-green-200' : 'bg-white text-gray-400 border-gray-200 hover:text-green-600 hover:border-green-200'}`}
+                                              className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider border transition-colors flex-shrink-0 ${i.free ? 'bg-green-50 text-green-700 border-green-200' : 'bg-white text-gray-400 border-gray-200 hover:text-green-600 hover:border-green-300'}`}
                                               title="Marcar como cortesía (no suma al total)"
                                             >
                                               Gratis
                                             </button>
-                                            <button type="button" onClick={() => toggleTreatment(i)} className="text-gray-300 hover:text-red-500 transition-colors flex-shrink-0" title="Quitar">
+                                            <button type="button" onClick={() => toggleTreatment(i)} className="w-6 h-6 rounded-lg flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0" title="Quitar">
                                               <X className="w-3.5 h-3.5" />
                                             </button>
                                           </div>
                                         ))}
-                                        <div className="flex items-center justify-between px-3 py-2 bg-cream/60">
-                                          <span className="text-[11px] uppercase tracking-wider text-gray-400 font-semibold">Subtotal</span>
-                                          <span className="text-[13px] font-bold text-dark">S/ {pointsSubtotal.toLocaleString()}</span>
+                                        <div className="flex items-center justify-between px-4 py-3 bg-cream/40">
+                                          <span className="text-[11px] uppercase tracking-[0.12em] text-gray-500 font-semibold">Subtotal</span>
+                                          <span className="text-[15px] font-bold text-dark tabular-nums">S/ {pointsSubtotal.toLocaleString()}</span>
                                         </div>
                                       </div>
                                     )}
 
                                     {/* Paso 2 — Total pagado (define los puntos) */}
                                     <div>
-                                      <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 flex items-center gap-1.5">
-                                        <span className="w-4 h-4 rounded-full bg-primary/10 text-primary text-[9px] font-bold flex items-center justify-center">2</span>
+                                      <label className="text-[12px] font-semibold text-dark mb-2.5 flex items-center gap-2">
+                                        <span className="w-5 h-5 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">2</span>
                                         Total pagado
-                                        <span className="text-primary normal-case tracking-normal font-semibold">— este define los puntos</span>
+                                        <span className="text-primary font-semibold">— define los puntos</span>
                                       </label>
                                       <div className="relative">
                                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-[14px] font-medium">S/</span>
