@@ -56,6 +56,8 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
     setError(''); setLoading(true);
     const user = username.trim();
 
+    // Administradores: solo por Supabase Auth (correo + contraseña).
+    // Si falla, se continúa: algunos pacientes usan su correo como usuario.
     if (user.includes('@')) {
       const { data: authData } = await supabase.auth.signInWithPassword({ email: user, password });
       if (authData?.user) {
@@ -64,14 +66,6 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
         localStorage.setItem('showclinic_session', JSON.stringify(session));
         onLogin(session); resetAndClose(); return;
       }
-    }
-
-    const { data: admins } = await supabase.from('admins').select('*').ilike('username', user).eq('password', password);
-    const admin = admins?.[0];
-    if (admin) {
-      const session = { role: 'admin', name: admin.name, user: admin.username, adminId: admin.id };
-      localStorage.setItem('showclinic_session', JSON.stringify(session));
-      onLogin(session); resetAndClose(); return;
     }
 
     const { data: client } = await supabase.rpc('client_login', { p_username: user, p_password: password });

@@ -57,7 +57,6 @@ export default function AdminDashboard({ onBack, session }) {
   const [treatmentForm, setTreatmentForm] = useState({ name: '', price: '', category: 'Armonización' });
   const [editingTreatment, setEditingTreatment] = useState(null);
   const [treatmentSearch, setTreatmentSearch] = useState('');
-  const [admins, setAdmins] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [contactSearch, setContactSearch] = useState('');
 
@@ -81,8 +80,6 @@ export default function AdminDashboard({ onBack, session }) {
       await loadClients();
       const { data: t } = await supabase.from('treatments').select('*').order('id');
       if (t) setTreatments(t);
-      const { data: a } = await supabase.from('admins').select('*').order('id');
-      if (a) setAdmins(a);
       const { data: ct } = await supabase.from('contacts').select('*').order('created_at', { ascending: false });
       if (ct) setContacts(ct);
     };
@@ -1110,7 +1107,7 @@ export default function AdminDashboard({ onBack, session }) {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6">
               <div>
                 <h2 className="font-serif text-2xl font-semibold text-dark mb-1">Administradores</h2>
-                <p className="text-gray-400 text-[13px]">{admins.length} administrador{admins.length !== 1 ? 'es' : ''} registrado{admins.length !== 1 ? 's' : ''} · Pueden acceder al panel de gestión</p>
+                <p className="text-gray-400 text-[13px]">Cuentas gestionadas desde Supabase · Acceso con email y contraseña cifrada</p>
               </div>
             </div>
 

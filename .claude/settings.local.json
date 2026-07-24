@@ -69,7 +69,17 @@
       "Bash(perl -pi -e \"s/setPointsAction\\\\\\(\\\\{ id: null, soles: '', treatment: '', description: '', mode: 'treatment' \\\\}\\\\\\)/setPointsAction\\(emptyPointsAction\\)/g\" src/components/AdminDashboard.jsx)",
       "Bash(git stash *)",
       "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Registro de tratamientos: marcar con un toque, total pagado define los puntos *)",
-      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Panel: seleccion de tratamientos mas ordenada y premium *)"
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Panel: seleccion de tratamientos mas ordenada y premium *)",
+      "Bash(curl -s -o /dev/null -w \"showclinic.com -> HTTP %{http_code} | %{time_total}s | %{size_download} bytes\\\\n\" https://showclinic.com)",
+      "Bash(curl -s https://showclinic.com)",
+      "Bash(xargs basename)",
+      "Bash(curl -s \"https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/clients?select=id,name,phone,username,points&limit=3\" -H \"apikey: sb_publishable__NvC-LsXnAdTfDBG-RGU4A_yc7-yWXC\")",
+      "Bash(curl -s https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/clients?select=id -H 'apikey: sb_publishable__NvC-LsXnAdTfDBG-RGU4A_yc7-yWXC' -H 'Prefer: count=exact' -I)",
+      "Bash(curl -s 'https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/admins?select=id,name,username,created_at&order=id' -H 'apikey: sb_publishable__NvC-LsXnAdTfDBG-RGU4A_yc7-yWXC')",
+      "Bash(curl -s -o /dev/null -w 'HTTP %{http_code}\\\\n' -X DELETE https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/admins?id=eq.1 -H 'apikey: sb_publishable__NvC-LsXnAdTfDBG-RGU4A_yc7-yWXC')",
+      "Bash(curl -s -o /dev/null -w 'HTTP %{http_code}\\\\n' -X DELETE https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/admins?id=eq.3 -H 'apikey: sb_publishable__NvC-LsXnAdTfDBG-RGU4A_yc7-yWXC')",
+      "Bash(curl -s https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/admins?select=id,username -H 'apikey: sb_publishable__NvC-LsXnAdTfDBG-RGU4A_yc7-yWXC')",
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Seguridad: eliminar login de admin con contrasena en texto plano *)"
     ]
   }
 }
