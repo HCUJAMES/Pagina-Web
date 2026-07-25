@@ -1,47 +1,43 @@
 -- ============================================================
---  SHOWCLINIC — BLINDAJE URGENTE DE LA BASE DE DATOS
+--  SHOWCLINIC - BLINDAJE DE LA BASE DE DATOS
 -- ============================================================
 --  PROBLEMA: hoy cualquier persona en internet puede LEER,
 --  MODIFICAR y BORRAR los datos de tus pacientes.
 --
---  ANTES DE EJECUTAR ESTO:
---  1) Crea tu usuario admin en Supabase > Authentication > Users
---     (boton "Add user" > correo + contrasena NUEVA y segura).
---     Sin ese usuario te quedas fuera de tu propio panel.
---  2) Ejecuta este archivo en Supabase > SQL Editor > Run.
---
---  Los administradores entraran con su CORREO y contrasena.
+--  ANTES DE EJECUTAR:
+--  1) Confirma que ENTRAS AL PANEL con tu correo (Supabase Auth).
+--     Si no entras, avisa antes de correr esto.
+--  2) Copia TODO este archivo en Supabase > SQL Editor > Run.
 -- ============================================================
 
 
 -- ------------------------------------------------------------
--- PASO 1 — Activar la proteccion (RLS) en todas las tablas
+-- PASO 1 - Activar la proteccion (RLS)
 -- ------------------------------------------------------------
 alter table public.clients    enable row level security;
 alter table public.treatments enable row level security;
 alter table public.contacts   enable row level security;
-alter table public.admins     enable row level security;
 
--- Por si quedaron permisos abiertos de antes
+
+-- ------------------------------------------------------------
+-- PASO 2 - Cerrar el acceso publico directo a las tablas
+-- ------------------------------------------------------------
 revoke all on public.clients    from anon;
 revoke all on public.treatments from anon;
 revoke all on public.contacts   from anon;
-revoke all on public.admins     from anon;
 
 
 -- ------------------------------------------------------------
--- PASO 2 — Limpiar politicas viejas (si existieran)
+-- PASO 3 - Los administradores (Supabase Auth) mantienen acceso
 -- ------------------------------------------------------------
+grant select, insert, update, delete on public.clients    to authenticated;
+grant select, insert, update, delete on public.treatments to authenticated;
+grant select, insert, update, delete on public.contacts   to authenticated;
+
 drop policy if exists "admins_all_clients"    on public.clients;
 drop policy if exists "admins_all_treatments" on public.treatments;
 drop policy if exists "admins_all_contacts"   on public.contacts;
-drop policy if exists "public_insert_contacts" on public.contacts;
-drop policy if exists "admins_all_admins"     on public.admins;
 
-
--- ------------------------------------------------------------
--- PASO 3 — Solo administradores autenticados acceden a los datos
--- ------------------------------------------------------------
 create policy "admins_all_clients" on public.clients
   for all to authenticated using (true) with check (true);
 
@@ -53,31 +49,69 @@ create policy "admins_all_contacts" on public.contacts
 
 
 -- ------------------------------------------------------------
--- PASO 4 — El formulario de contacto de la web sigue funcionando
+-- PASO 4 - El formulario de contacto sigue funcionando
 --          (puede ESCRIBIR mensajes, pero NO leerlos)
 -- ------------------------------------------------------------
 grant insert on public.contacts to anon;
 
+drop policy if exists "public_insert_contacts" on public.contacts;
 create policy "public_insert_contacts" on public.contacts
   for insert to anon with check (true);
 
 
 -- ------------------------------------------------------------
--- PASO 5 — Eliminar la tabla de contrasenas en texto plano
+-- PASO 5 - Los logins de pacientes siguen funcionando
+--          (las funciones corren con permisos propios y
+--           no se ven afectadas por el bloqueo anterior)
 -- ------------------------------------------------------------
--- Los 2 usuarios viejos (master, Erick Espetia) YA FUERON BORRADOS.
--- La tabla quedo vacia y el login de admin es 100% por Supabase Auth.
---
--- IMPORTANTE: ejecuta esta linea SOLO despues de confirmar que
--- entras al panel con tu correo. Es el ultimo paso.
+do $$
+declare f record;
+begin
+  for f in
+    select p.oid::regprocedure as sig
+    from pg_proc p
+    join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public'
+      and p.proname in ('client_login', 'register_client', 'claim_welcome_bonus')
+  loop
+    execute format('alter function %s security definer', f.sig);
+    execute format('alter function %s set search_path = public, extensions', f.sig);
+    execute format('grant execute on function %s to anon', f.sig);
+    execute format('grant execute on function %s to authenticated', f.sig);
+  end loop;
+end $$;
+
+
+-- ------------------------------------------------------------
+-- PASO 6 - Eliminar la tabla de contrasenas en texto plano
+-- ------------------------------------------------------------
+-- Los 2 usuarios viejos (master, Erick Espetia) ya fueron borrados
+-- y la tabla quedo vacia. El login de admin es 100% Supabase Auth.
 drop table if exists public.admins;
 
 
--- ------------------------------------------------------------
--- PASO 6 — Verificacion
--- ------------------------------------------------------------
--- Debe mostrar rowsecurity = true en las 4 tablas
-select tablename, rowsecurity
+-- ============================================================
+--  VERIFICACION - revisa los resultados de abajo
+-- ============================================================
+
+-- 1) Debe decir rowsecurity = true en las 3 tablas
+select tablename, rowsecurity as protegida
 from pg_tables
 where schemaname = 'public'
-  and tablename in ('clients','treatments','contacts','admins');
+  and tablename in ('clients', 'treatments', 'contacts')
+order by tablename;
+
+-- 2) Debe listar las 4 politicas creadas
+select tablename, policyname, roles::text
+from pg_policies
+where schemaname = 'public'
+order by tablename, policyname;
+
+-- 3) Las funciones de login deben decir seguridad = 'definer'
+select proname as funcion,
+       case when prosecdef then 'definer' else 'REVISAR' end as seguridad
+from pg_proc p
+join pg_namespace n on n.oid = p.pronamespace
+where n.nspname = 'public'
+  and proname in ('client_login', 'register_client', 'claim_welcome_bonus')
+order by proname;
