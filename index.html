@@ -33,46 +33,125 @@
     <meta name="twitter:description" content="Tratamientos estéticos con especialistas certificados en Arequipa. Agenda tu consulta." />
     <meta name="twitter:image" content="https://showclinic.com/Imagenes/primeraimagenweb.jpg" />
 
-    <!-- Negocio local (Google / Maps) -->
+    <!-- Datos estructurados: clinica, especialistas, servicios y preguntas frecuentes -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "HealthAndBeautyBusiness",
-      "name": "Showclinic",
-      "description": "Clínica de estética avanzada en Arequipa: botox, diseño de labios, HIFU, armonización facial y más.",
-      "image": "https://showclinic.com/Imagenes/logo-showclinic.png",
-      "url": "https://showclinic.com/",
-      "telephone": "+51974212114",
-      "email": "showclinicyanahuara@gmail.com",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Av. Ejército 616, 5.º piso, Yanahuara",
-        "addressLocality": "Arequipa",
-        "addressRegion": "Arequipa",
-        "addressCountry": "PE"
-      },
-      "openingHoursSpecification": [
+      "@graph": [
         {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "opens": "09:00", "closes": "13:00"
+          "@type": ["MedicalClinic", "HealthAndBeautyBusiness"],
+          "@id": "https://showclinic.com/#clinica",
+          "name": "Showclinic",
+          "alternateName": "Showclinic Arequipa",
+          "description": "Cl\u00ednica de est\u00e9tica avanzada en Arequipa: botox, dise\u00f1o de labios, HIFU, armonizaci\u00f3n facial y orofacial, bioestimuladores y tratamientos dermatol\u00f3gicos, con m\u00e9dicos especialistas.",
+          "url": "https://showclinic.com/",
+          "logo": "https://showclinic.com/Imagenes/logo-showclinic.png",
+          "image": "https://showclinic.com/Imagenes/primeraimagenweb.jpg",
+          "telephone": "+51974212114",
+          "email": "showclinicyanahuara@gmail.com",
+          "priceRange": "$$",
+          "currenciesAccepted": "PEN",
+          "medicalSpecialty": ["Dermatology", "PlasticSurgery"],
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Av. Ej\u00e9rcito 616, 5.\u00ba piso, Yanahuara",
+            "addressLocality": "Arequipa",
+            "addressRegion": "Arequipa",
+            "postalCode": "04107",
+            "addressCountry": "PE"
+          },
+          "areaServed": [
+            { "@type": "City", "name": "Arequipa" },
+            { "@type": "AdministrativeArea", "name": "Regi\u00f3n Arequipa" }
+          ],
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              "opens": "09:00", "closes": "13:00"
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              "opens": "16:00", "closes": "20:00"
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Saturday"],
+              "opens": "09:00", "closes": "13:00"
+            }
+          ],
+          "sameAs": [
+            "https://www.instagram.com/showclinic/",
+            "https://www.facebook.com/profile.php?id=100063552821608",
+            "https://www.tiktok.com/@showclinic_"
+          ],
+          "employee": [
+            { "@type": "Physician", "name": "Dra. Nicole Carpio M\u00e1laga", "jobTitle": "M\u00e9dico", "medicalSpecialty": "Dermatology", "knowsAbout": "Medicina Est\u00e9tica" },
+            { "@type": "Physician", "name": "Dr. Erick Espetia", "jobTitle": "Director Cl\u00ednico", "medicalSpecialty": "Dermatology", "knowsAbout": "Armonizaci\u00f3n Orofacial" },
+            { "@type": "Physician", "name": "Dra. Alicia P\u00e1ez", "jobTitle": "M\u00e9dico Est\u00e9tico", "medicalSpecialty": "Dermatology", "knowsAbout": "Medicina Est\u00e9tica" },
+            { "@type": "Physician", "name": "Dra. Edith Carpio", "jobTitle": "Especialista Orofacial", "medicalSpecialty": "Dermatology", "knowsAbout": "Armonizaci\u00f3n Orofacial" },
+            { "@type": "Person", "name": "Cosmiatra Romina Carbajal", "jobTitle": "Cosmiatra", "knowsAbout": "Cosmiatr\u00eda" }
+          ],
+          "availableService": [
+            { "@type": "MedicalProcedure", "name": "Dise\u00f1o de Labios", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "Baby Botox", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "Botox", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "Rinomodelaci\u00f3n", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "Proyecci\u00f3n de Ment\u00f3n", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "Armonizaci\u00f3n Facial", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "HIFU Facial", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "Carboxiterapia", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "EM Slim", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "Bioestimuladores de Col\u00e1geno", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "Exosomas", "procedureType": "https://schema.org/NoninvasiveProcedure" },
+            { "@type": "MedicalProcedure", "name": "Limpieza Facial Profunda", "procedureType": "https://schema.org/NoninvasiveProcedure" }
+          ],
+          "potentialAction": {
+            "@type": "ReserveAction",
+            "name": "Agendar cita",
+            "target": "https://wa.me/51974212114"
+          }
         },
         {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "opens": "16:00", "closes": "20:00"
+          "@type": "WebSite",
+          "@id": "https://showclinic.com/#web",
+          "url": "https://showclinic.com/",
+          "name": "Showclinic",
+          "inLanguage": "es-PE",
+          "publisher": { "@id": "https://showclinic.com/#clinica" }
         },
         {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Saturday"],
-          "opens": "09:00", "closes": "13:00"
+          "@type": "FAQPage",
+          "@id": "https://showclinic.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "\u00bfQu\u00e9 tratamientos ofrecen?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Ofrecemos tratamientos de medicina est\u00e9tica, armonizaci\u00f3n facial, tratamientos dermatol\u00f3gicos y armonizaci\u00f3n orofacial. Cada tratamiento es personalizado seg\u00fan las necesidades de cada paciente." }
+            },
+            {
+              "@type": "Question",
+              "name": "\u00bfNecesito una consulta previa?",
+              "acceptedAnswer": { "@type": "Answer", "text": "S\u00ed, recomendamos una consulta inicial donde evaluamos tu caso, discutimos tus objetivos y dise\u00f1amos un plan de tratamiento personalizado para ofrecerte los mejores resultados." }
+            },
+            {
+              "@type": "Question",
+              "name": "\u00bfSus tratamientos son para todo tipo de piel?",
+              "acceptedAnswer": { "@type": "Answer", "text": "S\u00ed, nuestros especialistas est\u00e1n capacitados para trabajar con todo tipo de piel. Durante la consulta evaluamos las caracter\u00edsticas espec\u00edficas de tu piel para adaptar el tratamiento." }
+            },
+            {
+              "@type": "Question",
+              "name": "\u00bfOfrecen dermatolog\u00eda cosm\u00e9tica?",
+              "acceptedAnswer": { "@type": "Answer", "text": "S\u00ed, contamos con especialistas en dermatolog\u00eda cosm\u00e9tica que ofrecen tratamientos para el cuidado y rejuvenecimiento de la piel, incluyendo tratamientos faciales avanzados." }
+            },
+            {
+              "@type": "Question",
+              "name": "\u00bfQu\u00e9 debo esperar en mi primera cita?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Realizaremos una evaluaci\u00f3n completa, discutiremos tus expectativas, explicaremos las opciones de tratamiento disponibles y responderemos todas tus preguntas." }
+            }
+          ]
         }
-      ],
-      "priceRange": "S/S/",
-      "sameAs": [
-        "https://www.instagram.com/showclinic/",
-        "https://www.facebook.com/profile.php?id=100063552821608",
-        "https://www.tiktok.com/@showclinic_"
       ]
     }
     </script>
