@@ -3,42 +3,63 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Gift, Crown, Star, Sparkles, ArrowRight, Calendar, UserPlus, Clock, Flame, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cardThemes, tierOrder } from '../lib/tierThemes';
 
+// Promociones Fiestas Patrias — válidas del 20 al 28 de julio
+const VIGENCIA = 'Del 20 al 28 de julio';
+
 const offers = [
   {
-    title: 'Botox',
-    description: 'Suaviza las líneas de expresión manteniendo la naturalidad de tu rostro.',
-    discount: '-25%',
-    tag: 'Más popular',
+    title: 'Exosomas',
+    description: 'Regeneran tu piel desde adentro: suavizan arrugas finas y mejoran la textura y luminosidad.',
+    discount: '-30%',
+    tag: 'Mayor descuento',
     icon: Flame,
-    accentBg: 'bg-amber-500',
-    image: '/Imagenes/promo-botox.jpg',
+    accentBg: 'bg-rose-600',
+    image: '/Imagenes/promo-fp-exosomas.jpg',
   },
   {
-    title: 'Mini Armonización',
-    description: 'Equilibra y realza las proporciones de tu rostro con un resultado natural.',
+    title: 'Baby Botox',
+    description: 'Suaviza las líneas de expresión con dosis mínimas, manteniendo la naturalidad de tu rostro.',
+    discount: '-20%',
+    tag: 'Más popular',
+    icon: Star,
+    accentBg: 'bg-amber-500',
+    image: '/Imagenes/promo-fp-babybotox.jpg',
+  },
+  {
+    title: 'Afinamiento Facial',
+    description: 'Baby botox en maseteros: estiliza el contorno de tu rostro y alivia la tensión mandibular.',
     discount: '-20%',
     tag: 'Top ventas',
     icon: Sparkles,
-    accentBg: 'bg-rose-500',
-    image: '/Imagenes/promo-armonizacion.jpg',
+    accentBg: 'bg-violet-500',
+    image: '/Imagenes/promo-fp-afinamiento.jpg',
   },
   {
-    title: 'Rinomodelación + Mentón',
-    description: 'Define tu perfil: afina la nariz y proyecta el mentón sin cirugía.',
+    title: 'Lifting en Surcos Nasogenianos',
+    description: 'Atenúa los surcos entre nariz y boca para un rostro más descansado y armónico.',
+    discount: '-20%',
+    tag: 'Efecto rejuvenecedor',
+    icon: Zap,
+    accentBg: 'bg-teal-600',
+    image: '/Imagenes/promo-fp-surcos.jpg',
+  },
+  {
+    title: 'Mentón + Rinomodelación',
+    description: 'Define tu perfil: afina la nariz y proyecta el mentón sin cirugía y en una sola sesión.',
     discount: '-15%',
-    tag: 'Oferta del mes',
+    tag: 'Combo perfil',
     icon: Zap,
     accentBg: 'bg-primary',
-    image: '/Imagenes/promo-rino-menton.jpg',
+    image: '/Imagenes/promo-fp-menton-rino.jpg',
   },
   {
-    title: 'Exosomas',
-    description: 'Suavizan arrugas finas y líneas de expresión, y mejoran la textura de tu piel.',
-    discount: '-10%',
-    tag: 'Nuevo',
-    icon: Star,
-    accentBg: 'bg-violet-500',
-    image: '/Imagenes/promo-exosomas.jpg',
+    title: 'Baby Botox + Diseño de Labios',
+    description: 'Rostro fresco y labios definidos: el combo que realza tu expresión con resultados naturales.',
+    discount: '-15%',
+    tag: 'Combo estrella',
+    icon: Sparkles,
+    accentBg: 'bg-pink-600',
+    image: '/Imagenes/promo-fp-babybotox-labios.jpg',
   },
 ];
 
@@ -73,7 +94,7 @@ function OfferCard({ offer }) {
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-[10px] font-semibold uppercase tracking-wider text-white/60">
             <Clock className="w-3 h-3" />
-            Hasta el 30 de junio
+            {VIGENCIA}
           </span>
         </div>
 
@@ -194,10 +215,10 @@ export default function OffersClub() {
               </span>
             </motion.div>
             <h2 className="font-serif font-semibold text-dark tracking-tight leading-[1.1] mb-4">
-              Promociones del <span className="italic text-primary">mes</span>
+              Promociones de <span className="italic text-primary">Fiestas Patrias</span>
             </h2>
             <p className="text-gray-500">
-              Ofertas exclusivas por tiempo limitado en nuestros tratamientos más solicitados
+              Descuentos de hasta 30% en nuestros tratamientos más solicitados · {VIGENCIA}
             </p>
           </div>
 
