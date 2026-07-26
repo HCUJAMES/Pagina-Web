@@ -71,36 +71,78 @@ const clubFeatures = [
   { icon: Sparkles, text: '5 niveles: Bronce → Diamante' },
 ];
 
+// Bandera del Perú — franjas rojo · blanco · rojo con brillo sutil
+function PeruFlag({ className = 'w-8 h-5' }) {
+  return (
+    <span className={`relative inline-block overflow-hidden rounded-[3px] ring-1 ring-black/10 shadow-sm align-middle ${className}`} aria-hidden="true">
+      <span className="absolute inset-0 grid grid-cols-3">
+        <span className="bg-[#D91023]" />
+        <span className="bg-white" />
+        <span className="bg-[#D91023]" />
+      </span>
+      <span className="absolute inset-0 bg-gradient-to-b from-white/35 via-transparent to-black/15" />
+    </span>
+  );
+}
+
+// Cinta tricolor decorativa (evoca las serpentinas de las piezas gráficas)
+function PeruRibbon({ className = '' }) {
+  return (
+    <div className={`h-1 w-full bg-gradient-to-r from-[#D91023] via-white to-[#D91023] ${className}`} aria-hidden="true" />
+  );
+}
+
 function OfferCard({ offer }) {
   const Icon = offer.icon;
   return (
     <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch">
       {/* Image side — promoción completa, sin recortar */}
-      <div className="bg-white flex items-center justify-center p-3 sm:p-4 md:rounded-l-3xl">
-        <img
-          src={offer.image}
-          alt={`Promoción ${offer.title} ${offer.discount}`}
-          className="w-full h-auto rounded-2xl"
-          loading="lazy"
-        />
+      <div className="relative flex items-center justify-center p-5 sm:p-6 md:p-7 md:rounded-l-3xl bg-gradient-to-br from-white via-cream to-[#F2EBE2]">
+        {/* Marco premium con brillo */}
+        <div className="relative group w-full max-w-[380px]">
+          <div className="absolute -inset-2 rounded-[1.6rem] bg-gradient-to-br from-primary/25 via-transparent to-[#D91023]/15 blur-xl opacity-70" />
+          <div className="relative overflow-hidden rounded-[1.25rem] ring-1 ring-black/[0.06] shadow-[0_18px_45px_-12px_rgba(0,0,0,0.35)]">
+            <img
+              src={offer.image}
+              alt={`Promoción ${offer.title} ${offer.discount}`}
+              className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+              loading="lazy"
+              width="1000"
+              height="1250"
+            />
+            {/* Brillo diagonal al pasar el cursor */}
+            <div className="absolute -top-1/3 -left-1/4 w-1/3 h-[180%] rotate-[18deg] bg-gradient-to-r from-transparent via-white/35 to-transparent blur-md opacity-0 group-hover:opacity-100 group-hover:translate-x-[380%] transition-all duration-[1100ms] ease-out pointer-events-none" />
+          </div>
+        </div>
       </div>
 
       {/* Content side */}
-      <div className="p-8 md:p-10 lg:p-12 flex flex-col justify-center">
+      <div className="relative p-8 md:p-10 lg:p-12 flex flex-col justify-center">
         <div className="flex items-center gap-3 mb-5 flex-wrap">
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.12em] text-white ${offer.accentBg}`}>
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-lg ${offer.accentBg}`}>
             <Icon className="w-3 h-3" />
             {offer.tag}
           </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-[10px] font-semibold uppercase tracking-wider text-white/60">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 ring-1 ring-white/15 text-[10px] font-semibold uppercase tracking-wider text-white/70">
             <Clock className="w-3 h-3" />
             {VIGENCIA}
           </span>
         </div>
 
-        <div className="flex items-end gap-3 mb-3">
-          <span className="font-serif text-5xl md:text-6xl font-black text-primary-light leading-none">{offer.discount.replace('-', '')}</span>
-          <span className="text-white/50 text-[13px] uppercase tracking-wider font-semibold pb-1.5">de descuento</span>
+        <div className="flex items-end gap-3 mb-4">
+          <span className="font-serif text-6xl md:text-7xl font-black leading-none bg-gradient-to-br from-white via-primary-light to-primary bg-clip-text text-transparent drop-shadow-sm">
+            {offer.discount.replace('-', '')}
+          </span>
+          <div className="pb-2">
+            <span className="block text-white/70 text-[12px] uppercase tracking-[0.16em] font-bold leading-tight">de</span>
+            <span className="block text-white/70 text-[12px] uppercase tracking-[0.16em] font-bold leading-tight">descuento</span>
+          </div>
+        </div>
+
+        {/* Cinta tricolor: acento de Fiestas Patrias */}
+        <div className="flex items-center gap-2 mb-5">
+          <PeruRibbon className="max-w-[60px] rounded-full" />
+          <span className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-semibold">Fiestas Patrias</span>
         </div>
 
         <h3 className="font-serif text-2xl md:text-3xl font-bold text-white leading-[1.1] mb-3">
@@ -199,12 +241,12 @@ export default function OffersClub() {
       <div className="container-fluid py-20 md:py-28 2xl:py-36">
         {/* Offers — Hero Banner */}
         <div className="mb-20 md:mb-28">
-          <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
+          <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-100 mb-6"
+              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-red-50 border border-red-100 mb-6"
             >
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
@@ -213,12 +255,26 @@ export default function OffersClub() {
               <span className="text-[12px] font-bold uppercase tracking-[0.15em] text-red-600">
                 Ofertas activas
               </span>
+              <PeruFlag className="w-5 h-3.5" />
             </motion.div>
-            <h2 className="font-serif font-semibold text-dark tracking-tight leading-[1.1] mb-4">
-              Promociones de <span className="italic text-primary">Fiestas Patrias</span>
+
+            <h2 className="font-serif font-semibold text-dark tracking-tight leading-[1.15] mb-5">
+              Promociones de{' '}
+              <span className="italic text-primary whitespace-nowrap">
+                Fiestas Patrias
+                <PeruFlag className="w-9 h-6 md:w-10 md:h-[1.7rem] ml-3 -translate-y-1" />
+              </span>
             </h2>
+
+            {/* Cinta tricolor bajo el título */}
+            <div className="flex items-center justify-center gap-2 mb-5">
+              <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#D91023]/40" />
+              <PeruRibbon className="max-w-[110px] rounded-full shadow-sm" />
+              <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#D91023]/40" />
+            </div>
+
             <p className="text-gray-500">
-              Descuentos de hasta 30% en nuestros tratamientos más solicitados · {VIGENCIA}
+              Descuentos de hasta <span className="font-bold text-dark">30%</span> en nuestros tratamientos más solicitados · {VIGENCIA}
             </p>
           </div>
 
@@ -236,8 +292,10 @@ export default function OffersClub() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.6, ease: 'easeInOut' }}
                 style={{ gridArea: '1 / 1' }}
-                className="relative overflow-hidden rounded-3xl bg-accent"
+                className="relative overflow-hidden rounded-3xl bg-accent ring-1 ring-white/10 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
               >
+                {/* Cinta tricolor superior */}
+                <PeruRibbon className="absolute top-0 left-0 right-0 z-20 opacity-90" />
                 <div className={`absolute inset-0 bg-gradient-to-br ${currentOffer.accent} opacity-20`} />
                 <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
@@ -268,15 +326,17 @@ export default function OffersClub() {
                 <button
                   key={i}
                   onClick={() => setActive(i)}
-                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-[13px] font-medium transition-all duration-300 ${
+                  className={`group inline-flex items-center gap-2 pl-4 pr-2 py-2.5 rounded-full text-[13px] font-medium transition-all duration-300 ${
                     active === i
-                      ? 'bg-accent text-white shadow-lg'
-                      : 'bg-cream text-gray-500 hover:bg-gray-100'
+                      ? 'bg-accent text-white shadow-xl shadow-accent/25 ring-1 ring-white/15 scale-[1.04]'
+                      : 'bg-cream text-gray-500 hover:bg-white hover:shadow-md hover:text-dark ring-1 ring-transparent hover:ring-gray-200'
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
+                  <Icon className={`w-3.5 h-3.5 transition-colors ${active === i ? 'text-primary-light' : 'text-primary/70'}`} />
                   {offer.title}
-                  <span className={`text-[11px] font-bold ml-1 ${active === i ? 'text-primary-light' : 'text-primary'}`}>
+                  <span className={`text-[11px] font-bold px-2 py-1 rounded-full transition-colors ${
+                    active === i ? 'bg-primary text-white' : 'bg-white text-primary group-hover:bg-primary/10'
+                  }`}>
                     {offer.discount}
                   </span>
                 </button>

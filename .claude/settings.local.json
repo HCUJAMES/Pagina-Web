@@ -84,7 +84,12 @@
       "Bash(mkdir -p image_backup_originals)",
       "Bash(mv \"public/Imagenes/promociones fiestas patrias julio\" image_backup_originals/)",
       "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones Fiestas Patrias: 6 nuevas ofertas de julio *)",
-      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Seguridad: reforzar SQL de blindaje \\(grants a authenticated y funciones de login\\) *)"
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Seguridad: reforzar SQL de blindaje \\(grants a authenticated y funciones de login\\) *)",
+      "Bash(curl -s 'https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/clients?select=id,name,phone&limit=3' -H 'apikey: sb_publishable__NvC-LsXnAdTfDBG-RGU4A_yc7-yWXC')",
+      "Bash(curl -s -w '\\\\nHTTP %{http_code}\\\\n' -X POST https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/rpc/client_login -H 'apikey: sb_publishable__NvC-LsXnAdTfDBG-RGU4A_yc7-yWXC' -H 'Content-Type: application/json' -d '{\"p_username\":\"prueba_qa_inexistente\",\"p_password\":\"x\"}')",
+      "Bash(curl -s -o /tmp/c.txt -w 'HTTP %{http_code}\\\\n' -X POST https://tbdmikdfsrsuuxjiikql.supabase.co/rest/v1/contacts -H 'apikey: sb_publishable__NvC-LsXnAdTfDBG-RGU4A_yc7-yWXC' -H 'Content-Type: application/json' -d '{\"name\":\"PRUEBA TECNICA - BORRAR\",\"email\":\"prueba@showclinic.com\",\"phone\":\"000000000\",\"message\":\"Mensaje de prueba automatico para verificar que el formulario de contacto sigue funcionando tras el blindaje de seguridad. Puedes borrarlo.\",\"date\":\"25 jul 2026\"}')",
+      "Read(//tmp/**)",
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: diseno premium con identidad de Fiestas Patrias *)"
     ]
   }
 }
