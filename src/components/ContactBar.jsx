@@ -30,7 +30,7 @@ export default function ContactBar() {
                   <item.icon className="w-4 h-4 text-primary" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-gray-400 font-medium mb-0.5">{item.label}</p>
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-gray-500 font-semibold mb-0.5">{item.label}</p>
                   {item.lines ? (
                     <div>
                       {item.lines.map((line, i) => (
@@ -38,7 +38,7 @@ export default function ContactBar() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-[13px] font-medium text-dark truncate">{item.value}</p>
+                    <p className="text-[12px] lg:text-[13px] font-medium text-dark leading-snug break-words">{item.value}</p>
                   )}
                 </div>
               </Wrapper>

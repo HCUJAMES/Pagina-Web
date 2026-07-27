@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus } from 'lucide-react';
+import { Plus, Minus, MessageCircle } from 'lucide-react';
 
 const faqs = [
   {
@@ -29,7 +29,7 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <section className="bg-accent">
+    <section id="faq" className="bg-accent">
       <div className="container-fluid py-20 md:py-28 2xl:py-36">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-20">
           {/* Left: Title */}
@@ -40,12 +40,33 @@ export default function FAQ() {
                 FAQ
               </span>
             </div>
-            <h2 className="font-serif font-semibold text-white tracking-tight leading-[1.1] mb-6 lg:sticky lg:top-28">
-              Preguntas frecuentes
-            </h2>
-            <p className="text-white/40 leading-relaxed lg:sticky lg:top-48 max-w-sm">
-              Todo lo que necesitas saber antes de tu primera consulta.
-            </p>
+            <div className="lg:sticky lg:top-28">
+              <h2 className="font-serif font-semibold text-white tracking-tight leading-[1.1] mb-6">
+                Preguntas frecuentes
+              </h2>
+              <p className="text-white/65 leading-relaxed max-w-sm mb-8">
+                Todo lo que necesitas saber antes de tu primera consulta.
+              </p>
+
+              {/* Ayuda directa: aprovecha el espacio y da una salida al visitante */}
+              <div className="bg-white/[0.06] ring-1 ring-white/10 rounded-2xl p-6 max-w-sm">
+                <p className="text-white font-serif text-lg font-semibold mb-1.5">
+                  ¿No encuentras tu respuesta?
+                </p>
+                <p className="text-white/60 text-[14px] leading-relaxed mb-5">
+                  Escríbenos por WhatsApp y una de nuestras especialistas te orienta sin compromiso.
+                </p>
+                <a
+                  href="https://wa.me/51974212114?text=Hola%2C%20tengo%20una%20consulta%20sobre%20sus%20tratamientos"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white text-accent text-[12px] font-semibold uppercase tracking-[0.12em] hover:bg-cream transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Preguntar por WhatsApp
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Right: Accordion */}

@@ -39,7 +39,7 @@ export default function Navbar({ onLoginClick, session, onLogout, accountBar }) 
       <div className="container-fluid">
         <div className="flex items-center justify-between h-14 lg:h-16">
           <a href="#hero" className="flex items-center flex-shrink-0">
-            <img src="/Imagenes/logosinfondo.png" alt="Showclinic" className="h-14 lg:h-18 w-auto object-contain" />
+            <img src="/Imagenes/logosinfondo.png" alt="Showclinic" className="h-14 lg:h-18 w-auto object-contain" loading="eager" fetchPriority="high" />
           </a>
 
           <div className="hidden lg:flex items-center gap-9">

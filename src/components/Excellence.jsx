@@ -54,8 +54,7 @@ export default function Excellence() {
               <img
                 src="/Imagenes/imagenmodelo.jpg"
                 alt="Paciente satisfecho"
-                className="w-full h-full object-cover"
-              />
+                className="w-full h-full object-cover" loading="lazy" decoding="async" />
             </div>
           </motion.div>
 

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 
 const inputBase = 'w-full px-5 py-4 bg-cream border border-gray-200 rounded-xl text-[15px] text-dark placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all duration-300';
 
@@ -23,6 +22,7 @@ export default function Contact() {
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return; }
     const date = new Date().toLocaleString('es-PE', { dateStyle: 'medium', timeStyle: 'short' });
+    const { supabase } = await import('../lib/supabase');
     await supabase.from('contacts').insert({ name: formData.name.trim(), email: formData.email.trim(), phone: formData.phone.trim() || null, message: formData.message.trim(), date });
     setSubmitted(true);
     setFormData({ name: '', email: '', phone: '', message: '' });
@@ -94,7 +94,7 @@ export default function Contact() {
                   Enviar mensaje
                 </button>
                 <p className="text-xs text-gray-400 text-center">
-                  Al enviar aceptas nuestra <a href="#" className="text-primary hover:underline">política de privacidad</a>
+                  Al enviar aceptas nuestra <a href="/privacidad.html" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">política de privacidad</a>
                 </p>
               </form>
             )}

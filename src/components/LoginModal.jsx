@@ -70,7 +70,14 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
 
     const { data: client } = await supabase.rpc('client_login', { p_username: user, p_password: password });
     if (client && client.id) {
-      const session = { role: 'client', name: client.name, user: client.username, id: client.id, client };
+      // Llave privada para que el paciente pueda refrescar SUS puntos.
+      // Si aún no existe la función en la base, se continúa sin ella.
+      let token = null;
+      try {
+        const { data: t } = await supabase.rpc('issue_client_token', { p_username: user, p_password: password });
+        token = t || null;
+      } catch { /* la sesión funciona igual, solo sin refresco automático */ }
+      const session = { role: 'client', name: client.name, user: client.username, id: client.id, token, client };
       localStorage.setItem('showclinic_session', JSON.stringify(session));
       onLogin(session); resetAndClose();
     } else {

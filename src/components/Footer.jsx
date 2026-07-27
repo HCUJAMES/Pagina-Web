@@ -1,9 +1,27 @@
 import { Phone, Mail, MapPin } from 'lucide-react';
 
+const WHATSAPP = 'https://wa.me/51974212114?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20consulta';
+
+// Cada enlace apunta a su sección real de la página
 const footerLinks = {
-  Servicios: ['Diseño de Labios', 'Baby Botox', 'HIFU Facial', 'Carboxiterapia', 'EM Slim'],
-  Clínica: ['Sobre nosotros', 'Nuestro equipo', 'Resultados', 'Contacto'],
-  Soporte: ['Preguntas frecuentes', 'Política de privacidad', 'Agendar cita'],
+  Servicios: [
+    { label: 'Diseño de Labios', href: '#services' },
+    { label: 'Baby Botox', href: '#services' },
+    { label: 'HIFU Facial', href: '#services' },
+    { label: 'Carboxiterapia', href: '#services' },
+    { label: 'EM Slim', href: '#services' },
+  ],
+  Clínica: [
+    { label: 'Sobre nosotros', href: '#about' },
+    { label: 'Nuestro equipo', href: '#doctor' },
+    { label: 'Resultados', href: '#gallery' },
+    { label: 'Contacto', href: '#contact' },
+  ],
+  Soporte: [
+    { label: 'Preguntas frecuentes', href: '#faq' },
+    { label: 'Política de privacidad', href: '/privacidad.html' },
+    { label: 'Agendar cita', href: WHATSAPP, externo: true },
+  ],
 };
 
 const socialLinks = [
@@ -19,20 +37,20 @@ export default function Footer() {
       <div className="container-fluid">
         <div className="pt-16 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
           <div>
-            <a href="#hero" className="inline-block mb-5">
-              <h3 className="font-serif text-2xl font-normal tracking-wider">SHOWCLINIC</h3>
+            <a href="#hero" className="inline-block mb-5" aria-label="Showclinic — inicio">
+              <img src="/Imagenes/logo-blanco.png" alt="Showclinic" width="150" height="48" className="h-12 w-auto object-contain" loading="lazy" decoding="async" />
             </a>
-            <p className="text-white/30 text-sm leading-relaxed mb-6 max-w-xs">
+            <p className="text-white/55 text-sm leading-relaxed mb-6 max-w-xs">
               Estética avanzada y bienestar integral en Arequipa, Perú.
             </p>
             <div className="space-y-2.5 mb-6">
-              <a href="tel:+51974212114" className="flex items-center gap-3 text-sm text-white/40 hover:text-primary transition-colors">
+              <a href="tel:+51974212114" className="flex items-center gap-3 text-sm text-white/65 hover:text-primary transition-colors">
                 <Phone className="w-3.5 h-3.5 text-primary" /> +51 974 212 114
               </a>
-              <a href="mailto:showclinicyanahuara@gmail.com" className="flex items-center gap-3 text-sm text-white/40 hover:text-primary transition-colors">
+              <a href="mailto:showclinicyanahuara@gmail.com" className="flex items-center gap-3 text-sm text-white/65 hover:text-primary transition-colors">
                 <Mail className="w-3.5 h-3.5 text-primary" /> showclinicyanahuara@gmail.com
               </a>
-              <div className="flex items-start gap-3 text-sm text-white/40">
+              <div className="flex items-start gap-3 text-sm text-white/65">
                 <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0 mt-0.5" />
                 <span>Av. Ejército 616, 5to Piso, Yanahuara</span>
               </div>
@@ -40,7 +58,7 @@ export default function Footer() {
             <div className="flex items-center gap-2.5">
               {socialLinks.map((s) => (
                 <a key={s.name} href={s.href} aria-label={s.name} target="_blank" rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/30 hover:text-primary hover:border-primary/30 transition-all duration-300"
+                  className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-primary hover:border-primary/40 transition-all duration-300"
                 >{s.icon}</a>
               ))}
             </div>
@@ -50,8 +68,14 @@ export default function Footer() {
               <h4 className="text-[11px] font-semibold text-primary mb-5 uppercase tracking-[0.18em]">{title}</h4>
               <ul className="space-y-2.5">
                 {links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-sm text-white/30 hover:text-white/60 transition-colors">{link}</a>
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      {...(link.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                      className="text-sm text-white/55 hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -59,10 +83,10 @@ export default function Footer() {
           ))}
         </div>
         <div className="py-5 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/20">© {new Date().getFullYear()} Showclinic. Todos los derechos reservados.</p>
+          <p className="text-xs text-white/45">© {new Date().getFullYear()} Showclinic. Todos los derechos reservados.</p>
           <div className="flex items-center gap-5">
-            <a href="#" className="text-xs text-white/20 hover:text-white/40 transition-colors">Privacidad</a>
-            <a href="#" className="text-xs text-white/20 hover:text-white/40 transition-colors">Términos</a>
+            <a href="/privacidad.html" className="text-xs text-white/45 hover:text-primary transition-colors">Privacidad</a>
+            <a href="/privacidad.html#terminos" className="text-xs text-white/45 hover:text-primary transition-colors">Términos</a>
           </div>
         </div>
       </div>

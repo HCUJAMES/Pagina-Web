@@ -166,7 +166,7 @@ export default function Gallery() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative aspect-square">
-                <img src={galleryItems[selectedIndex].image} alt={galleryItems[selectedIndex].title} className="w-full h-full object-cover" />
+                <img src={galleryItems[selectedIndex].image} alt={galleryItems[selectedIndex].title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 <div className="absolute top-0 left-1/2 w-[1px] h-full bg-white/30" />
                 <div className="absolute top-5 left-5 bg-white/15 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white">Antes</span>

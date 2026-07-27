@@ -142,14 +142,14 @@ function OfferCard({ offer }) {
         {/* Cinta tricolor: acento de Fiestas Patrias */}
         <div className="flex items-center gap-2 mb-5">
           <PeruRibbon className="max-w-[60px] rounded-full" />
-          <span className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-semibold">Fiestas Patrias</span>
+          <span className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-semibold">Fiestas Patrias</span>
         </div>
 
         <h3 className="font-serif text-2xl md:text-3xl font-bold text-white leading-[1.1] mb-3">
           {offer.title}
         </h3>
 
-        <p className="text-white/50 text-[15px] leading-relaxed mb-8 max-w-lg">
+        <p className="text-white/70 text-[15px] leading-relaxed mb-8 max-w-lg">
           {offer.description}
         </p>
 
@@ -191,7 +191,7 @@ function TierCard({ name }) {
       {/* Diagonal glint */}
       <div className="absolute -top-1/4 -left-8 w-20 h-[150%] rotate-[20deg] blur-xl pointer-events-none" style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent)' }} />
       {/* Logo watermark */}
-      <img src="/Imagenes/logo-blanco.png" alt="" className="absolute -bottom-7 -right-6 w-32 h-32 opacity-[0.06] pointer-events-none select-none" />
+      <img src="/Imagenes/logo-blanco.png" alt="" className="absolute -bottom-7 -right-6 w-32 h-32 opacity-[0.06] pointer-events-none select-none" loading="lazy" decoding="async" />
 
       <div className="relative h-full flex flex-col justify-between p-5">
         {/* Top */}
@@ -212,7 +212,7 @@ function TierCard({ name }) {
         {/* Bottom: emblem + tier */}
         <div className="flex items-center gap-3">
           <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${t.chip} flex items-center justify-center shadow-lg ring-1 ring-white/40 flex-shrink-0`}>
-            <img src="/Imagenes/logo-negro.png" alt="Showclinic" className="w-6 h-6" />
+            <img src="/Imagenes/logo-negro.png" alt="Showclinic" className="w-6 h-6" loading="lazy" decoding="async" />
           </div>
           <div>
             <p className="text-white text-[13px] font-semibold tracking-wide leading-tight">Nivel {name}</p>
@@ -252,7 +252,7 @@ export default function OffersClub() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
               </span>
-              <span className="text-[12px] font-bold uppercase tracking-[0.15em] text-red-600">
+              <span className="text-[12px] font-bold uppercase tracking-[0.15em] text-red-700">
                 Ofertas activas
               </span>
               <PeruFlag className="w-5 h-3.5" />

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Crown, Gift, Star, Sparkles, X, User, ChevronDown, LogOut, Trophy, Calendar, UserPlus, MessageSquare, Gem, TrendingUp, ArrowRight } from 'lucide-react';
 import { cardThemes } from '../lib/tierThemes';
+import { supabase } from '../lib/supabase';
 
 const levels = [
   { name: 'Bronce', icon: 'I', min: 0, next: 5000, canje: 3, gradient: 'from-amber-700 to-amber-500', glow: 'shadow-amber-500/20', ring: 'ring-amber-400/30', text: 'text-amber-700', bg: 'bg-amber-50' },
@@ -18,24 +19,58 @@ function getLevel(points) {
   return levels[0];
 }
 
+// Normaliza los datos del paciente para que nunca falten campos (evita pantallas en blanco)
+function normalizar(data) {
+  if (!data || !data.id) return null;
+  return {
+    ...data,
+    id: data.id,
+    name: data.name || 'Cliente',
+    points: Number(data.points) || 0,
+    lastName: data.last_name || '',
+    pointsHistory: Array.isArray(data.points_history) ? data.points_history : [],
+  };
+}
+
 export default function ClientAccountBar({ session, onLogout }) {
   const [client, setClient] = useState(null);
   const [showPanel, setShowPanel] = useState(false);
+  const [ganados, setGanados] = useState(0);
 
   useEffect(() => {
-    // Los datos del paciente vienen del login seguro (guardados en la sesión).
-    // Se normalizan para que nunca falten campos (evita pantallas en blanco).
-    const data = session.client;
-    if (data && data.id) {
-      setClient({
-        ...data,
-        id: data.id,
-        name: data.name || 'Cliente',
-        points: Number(data.points) || 0,
-        lastName: data.last_name || '',
-        pointsHistory: Array.isArray(data.points_history) ? data.points_history : [],
-      });
-    }
+    const base = normalizar(session.client);
+    if (base) setClient(base);
+
+    // Consulta los puntos reales al abrir, para que el paciente vea
+    // de inmediato lo que la clínica le cargó. Si la función aún no
+    // existe en la base, se mantiene lo guardado en la sesión.
+    let cancelado = false;
+    const refrescar = async () => {
+      if (!session.token || !session.id) return;
+      try {
+        const { data, error } = await supabase.rpc('refresh_client', {
+          p_id: session.id,
+          p_token: session.token,
+        });
+        if (cancelado || error || !data) return;
+        const fresco = normalizar(data);
+        if (!fresco) return;
+        setClient(fresco);
+
+        // Aviso de puntos nuevos desde la última vez que miró
+        const clave = `showclinic_pts_${fresco.id}`;
+        const previo = Number(localStorage.getItem(clave));
+        if (Number.isFinite(previo) && fresco.points > previo) {
+          setGanados(fresco.points - previo);
+        }
+        localStorage.setItem(clave, String(fresco.points));
+      } catch { /* se mantiene lo de la sesión */ }
+    };
+    refrescar();
+    // Vuelve a consultar cuando el paciente regresa a la pestaña
+    const alVolver = () => { if (document.visibilityState === 'visible') refrescar(); };
+    document.addEventListener('visibilitychange', alVolver);
+    return () => { cancelado = true; document.removeEventListener('visibilitychange', alVolver); };
   }, [session]);
 
   if (!client) return null;
@@ -63,6 +98,18 @@ export default function ClientAccountBar({ session, onLogout }) {
               <span className="text-[11px] opacity-40">|</span>
               <span className="text-[11px] font-semibold">{client.points.toLocaleString()} pts</span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 font-medium">{level.icon} {level.name}</span>
+              {ganados > 0 && (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  onClick={() => { setShowPanel(true); setGanados(0); }}
+                  className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-500/20 text-green-300 ring-1 ring-green-400/30 hover:bg-green-500/30 transition-colors"
+                  title="Ver tus movimientos"
+                >
+                  <Sparkles className="w-2.5 h-2.5" />
+                  +{ganados.toLocaleString()} nuevos
+                </motion.button>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <button onClick={() => setShowPanel(true)} className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-[11px] font-medium">
@@ -129,7 +176,7 @@ export default function ClientAccountBar({ session, onLogout }) {
                     <div className="absolute -top-1/4 -left-10 w-24 h-[150%] rotate-[20deg] blur-xl pointer-events-none" style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent)' }} />
                     <div className="absolute -top-1/4 left-24 w-10 h-[150%] rotate-[20deg] blur-md pointer-events-none" style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent)' }} />
                     {/* Faint logo watermark */}
-                    <img src="/Imagenes/logo-blanco.png" alt="" className="absolute -bottom-8 -right-7 w-40 h-40 opacity-[0.06] pointer-events-none select-none" />
+                    <img src="/Imagenes/logo-blanco.png" alt="" className="absolute -bottom-8 -right-7 w-40 h-40 opacity-[0.06] pointer-events-none select-none" loading="lazy" decoding="async" />
 
                     <div className="relative p-5">
                       {/* Top row: brand + tier */}
@@ -180,7 +227,7 @@ export default function ClientAccountBar({ session, onLogout }) {
                       {/* Cardholder row */}
                       <div className="flex items-center gap-3 mt-5 pt-4 border-t border-white/10">
                         <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${theme.chip} flex items-center justify-center shadow-lg ring-1 ring-white/40 flex-shrink-0`}>
-                          <img src="/Imagenes/logo-negro.png" alt="Showclinic" className="w-7 h-7" />
+                          <img src="/Imagenes/logo-negro.png" alt="Showclinic" className="w-7 h-7" loading="lazy" decoding="async" />
                         </div>
                         <div className="min-w-0">
                           <p className="text-white text-[13px] font-semibold tracking-wide truncate">{fullName}</p>

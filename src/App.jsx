@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import ContactBar from './components/ContactBar'
@@ -16,12 +16,26 @@ import Marquee from './components/Marquee'
 import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
 import WhatsAppFloat from './components/WhatsAppFloat'
-import LoginModal from './components/LoginModal'
-import AdminDashboard from './components/AdminDashboard'
-import ClientAccountBar from './components/ClientAccountBar'
 import AdminAccountBar from './components/AdminAccountBar'
-import AdminPanel from './components/AdminPanel'
-import { supabase } from './lib/supabase'
+
+// Se descargan solo cuando hacen falta: así el visitante normal
+// no baja el panel de administración ni el modal de acceso.
+const ClientAccountBar = lazy(() => import('./components/ClientAccountBar'))
+const LoginModal = lazy(() => import('./components/LoginModal'))
+const AdminDashboard = lazy(() => import('./components/AdminDashboard'))
+const AdminPanel = lazy(() => import('./components/AdminPanel'))
+
+// Pantalla breve mientras se descarga el panel
+function Cargando() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-cream">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-10 h-10 rounded-full border-2 border-primary/25 border-t-primary animate-spin" />
+        <p className="text-[13px] text-gray-500 tracking-wide">Cargando panel…</p>
+      </div>
+    </div>
+  )
+}
 
 function App() {
   const [showLogin, setShowLogin] = useState(false)
@@ -64,22 +78,28 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('showclinic_session')
     setSession(null)
-    supabase.auth.signOut().catch(() => {})
+    import('./lib/supabase').then(({ supabase }) => supabase.auth.signOut()).catch(() => {})
   }
 
   if (isOldAdmin) {
     return (
-      <AdminPanel
-        onBack={() => {
-          window.location.hash = ''
-          setIsOldAdmin(false)
-        }}
-      />
+      <Suspense fallback={<Cargando />}>
+        <AdminPanel
+          onBack={() => {
+            window.location.hash = ''
+            setIsOldAdmin(false)
+          }}
+        />
+      </Suspense>
     )
   }
 
   if (session?.role === 'admin' && !viewingSite) {
-    return <AdminDashboard session={session} onBack={() => setViewingSite(true)} />
+    return (
+      <Suspense fallback={<Cargando />}>
+        <AdminDashboard session={session} onBack={() => setViewingSite(true)} />
+      </Suspense>
+    )
   }
 
   const isClient = session?.role === 'client'
@@ -88,7 +108,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden w-full" style={{ scrollBehavior: 'smooth' }}>
-      {isClient && <ClientAccountBar session={session} onLogout={handleLogout} />}
+      {isClient && <Suspense fallback={null}><ClientAccountBar session={session} onLogout={handleLogout} /></Suspense>}
       {isAdmin && <AdminAccountBar onBackToPanel={() => setViewingSite(false)} onLogout={handleLogout} />}
       <div className={showAccountBar ? 'pt-12' : ''}>
         <Navbar onLoginClick={showAccountBar ? null : () => { setLoginMode('login'); setShowLogin(true); }} session={session} onLogout={handleLogout} accountBar={showAccountBar} />
@@ -109,12 +129,16 @@ function App() {
         <ScrollToTop />
         <WhatsAppFloat />
       </div>
-      <LoginModal
-        isOpen={showLogin}
-        initialMode={loginMode}
-        onClose={() => { setShowLogin(false); if (window.location.hash === '#registro' || window.location.hash === '#registrarse') window.location.hash = '' }}
-        onLogin={(s) => setSession(s)}
-      />
+      {showLogin && (
+        <Suspense fallback={null}>
+          <LoginModal
+            isOpen={showLogin}
+            initialMode={loginMode}
+            onClose={() => { setShowLogin(false); if (window.location.hash === '#registro' || window.location.hash === '#registrarse') window.location.hash = '' }}
+            onLogin={(s) => setSession(s)}
+          />
+        </Suspense>
+      )}
     </div>
   )
 }
