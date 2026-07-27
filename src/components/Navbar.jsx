@@ -67,7 +67,7 @@ export default function Navbar({ onLoginClick, session, onLogout, accountBar }) 
               </button>
             )}
             <a
-              href="https://wa.me/51974212114?text=Hola%2C%20me%20gustaría%20agendar%20una%20consulta"
+              href="https://wa.me/51974212114?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20agendar%20una%20cita"
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-2.5 text-[12px] font-semibold uppercase tracking-[0.12em] text-white bg-accent rounded-full hover:bg-dark transition-colors duration-300"
@@ -107,7 +107,7 @@ export default function Navbar({ onLoginClick, session, onLogout, accountBar }) 
                     Login
                   </button>
                 )}
-                <a href="https://wa.me/51974212114" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}
+                <a href="https://wa.me/51974212114?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20agendar%20una%20cita" target="_blank" rel="noopener noreferrer" onClick={() => setIsOpen(false)}
                   className="block py-3 text-sm font-semibold uppercase tracking-wider text-center text-white bg-accent rounded-full"
                 >Agendar cita</a>
               </div>

@@ -57,7 +57,7 @@ export default function FAQ() {
                   Escríbenos por WhatsApp y una de nuestras especialistas te orienta sin compromiso.
                 </p>
                 <a
-                  href="https://wa.me/51974212114?text=Hola%2C%20tengo%20una%20consulta%20sobre%20sus%20tratamientos"
+                  href="https://wa.me/51974212114?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20tengo%20una%20consulta%20sobre%20sus%20tratamientos"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white text-accent text-[12px] font-semibold uppercase tracking-[0.12em] hover:bg-cream transition-colors"

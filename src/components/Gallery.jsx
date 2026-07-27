@@ -136,7 +136,7 @@ export default function Gallery() {
           className="text-center mt-14"
         >
           <a
-            href="https://wa.me/51974212114?text=Hola%2C%20estoy%20interesada%20en%20un%20tratamiento"
+            href="https://wa.me/51974212114?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20estoy%20interesada%20en%20un%20tratamiento"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-8 py-4 text-[12px] font-semibold uppercase tracking-[0.15em] text-white border border-white/20 rounded-full hover:bg-white hover:text-accent transition-all duration-400"

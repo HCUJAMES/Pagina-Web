@@ -428,7 +428,7 @@ export default function ClientAccountBar({ session, onLogout }) {
                 {/* Contact CTA */}
                 <div className="pb-8 pt-2">
                   <a
-                    href="https://wa.me/51974212114?text=Hola%2C%20tengo%20una%20consulta%20sobre%20mis%20puntos%20Showclinic"
+                    href="https://wa.me/51974212114?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20tengo%20una%20consulta%20sobre%20mis%20puntos%20Showclinic"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-between w-full px-5 py-4 bg-accent rounded-2xl hover:bg-dark transition-colors group"

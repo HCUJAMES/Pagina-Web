@@ -181,7 +181,7 @@ export default function ClientDashboard({ session, onLogout }) {
           <p className="text-gray-400 text-[13px]">
             ¿Preguntas sobre tus puntos?{' '}
             <a
-              href="https://wa.me/51974212114"
+              href="https://wa.me/51974212114?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20tengo%20una%20consulta%20sobre%20mis%20puntos%20Showclinic"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary font-medium hover:underline"

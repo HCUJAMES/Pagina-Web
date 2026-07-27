@@ -172,7 +172,7 @@ export default function Services() {
           className="text-center mt-14"
         >
           <a
-            href="https://wa.me/51974212114?text=Hola%2C%20me%20gustaría%20consultar%20sobre%20sus%20tratamientos"
+            href="https://wa.me/51974212114?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20consultar%20sobre%20sus%20tratamientos"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-8 py-4 text-[12px] font-semibold uppercase tracking-[0.15em] text-white bg-accent rounded-full hover:bg-dark transition-colors duration-300 shadow-lg shadow-accent/20"

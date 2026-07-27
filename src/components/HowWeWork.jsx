@@ -90,7 +90,7 @@ export default function HowWeWork() {
             >
               <p className="text-dark font-semibold text-sm mb-2">¿Tienes dudas? Escríbenos</p>
               <a
-                href="https://wa.me/51974212114"
+                href="https://wa.me/51974212114?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20tengo%20algunas%20dudas"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-primary hover:text-primary-dark transition-colors"

@@ -154,7 +154,7 @@ function OfferCard({ offer }) {
         </p>
 
         <a
-          href={`https://wa.me/51974212114?text=Hola%2C%20me%20interesa%20la%20oferta%3A%20${encodeURIComponent(offer.title)}%20(${encodeURIComponent(offer.discount)})`}
+          href={`https://wa.me/51974212114?text=${encodeURIComponent(`Hola, vengo de la página web y me interesa la promoción de Fiestas Patrias: ${offer.title} (${offer.discount})`)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.12em] text-accent bg-white rounded-full hover:bg-cream transition-colors duration-300 self-start"
@@ -473,7 +473,7 @@ export default function OffersClub() {
                 {/* CTA */}
                 <div className="flex flex-col items-center md:items-end gap-4">
                   <a
-                    href="https://wa.me/51974212114?text=Hola%2C%20quiero%20saber%20más%20sobre%20Showclinic%20Club"
+                    href="https://wa.me/51974212114?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20saber%20m%C3%A1s%20sobre%20Showclinic%20Club"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 px-10 py-4.5 text-[13px] font-bold uppercase tracking-[0.12em] text-accent bg-white rounded-full hover:bg-cream shadow-xl hover:shadow-2xl transition-all duration-300"

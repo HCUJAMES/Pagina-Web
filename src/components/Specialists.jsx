@@ -184,7 +184,7 @@ export default function Doctor() {
             </div>
           </div>
           <a
-            href="https://wa.me/51974212114?text=Hola%2C%20me%20gustaría%20agendar%20una%20consulta"
+            href="https://wa.me/51974212114?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20agendar%20una%20consulta%20con%20un%20especialista"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-accent bg-white rounded-full hover:bg-primary-light hover:text-white transition-all duration-300 shadow-lg flex-shrink-0"
