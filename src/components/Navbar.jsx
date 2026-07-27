@@ -29,7 +29,7 @@ export default function Navbar({ onLoginClick, session, onLogout, accountBar }) 
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
       className={`fixed left-0 right-0 z-50 transition-all duration-400 ${
-        accountBar ? 'top-12' : 'top-0'
+        accountBar === 'client' ? 'top-16 md:top-20' : accountBar ? 'top-12' : 'top-0'
       } ${
         scrolled
           ? 'bg-white/95 backdrop-blur-md shadow-[0_1px_10px_rgba(0,0,0,0.04)] py-2'

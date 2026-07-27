@@ -95,7 +95,8 @@
       "Bash(perl -pi -e 's/text-\\\\[12px\\\\] font-bold uppercase tracking-\\\\[0\\\\.15em\\\\] text-red-600/text-[12px] font-bold uppercase tracking-[0.15em] text-red-700/' src/components/OffersClub.jsx)",
       "Bash(perl -pi -e 's|text-white/40 text-\\\\[10px\\\\] uppercase tracking-\\\\[0\\\\.2em\\\\] font-semibold\">Fiestas Patrias|text-white/60 text-[10px] uppercase tracking-[0.2em] font-semibold\">Fiestas Patrias|; s|<p className=\"text-white/50 text-\\\\[15px\\\\] leading-relaxed mb-8 max-w-lg\">|<p className=\"text-white/70 text-[15px] leading-relaxed mb-8 max-w-lg\">|' src/components/OffersClub.jsx)",
       "Bash(perl -0pi -e 's|\\(<img src=\"/Imagenes/logosinfondo.png\"[^>]*?\\)loading=\"lazy\" decoding=\"async\"|$1loading=\"eager\" fetchPriority=\"high\"|s' src/components/Navbar.jsx)",
-      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Mejoras de diseno, enlaces, privacidad y rendimiento *)"
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Mejoras de diseno, enlaces, privacidad y rendimiento *)",
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Barra de cuenta del paciente: mas grande, visible y premium *)"
     ]
   }
 }

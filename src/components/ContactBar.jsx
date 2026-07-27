@@ -38,7 +38,7 @@ export default function ContactBar() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-[12px] lg:text-[13px] font-medium text-dark leading-snug break-words">{item.value}</p>
+                    <p className="text-[11px] sm:text-[12px] lg:text-[13px] font-medium text-dark leading-snug break-words" title={item.value}>{item.value}</p>
                   )}
                 </div>
               </Wrapper>

@@ -110,8 +110,8 @@ function App() {
     <div className="min-h-screen bg-white overflow-x-hidden w-full" style={{ scrollBehavior: 'smooth' }}>
       {isClient && <Suspense fallback={null}><ClientAccountBar session={session} onLogout={handleLogout} /></Suspense>}
       {isAdmin && <AdminAccountBar onBackToPanel={() => setViewingSite(false)} onLogout={handleLogout} />}
-      <div className={showAccountBar ? 'pt-12' : ''}>
-        <Navbar onLoginClick={showAccountBar ? null : () => { setLoginMode('login'); setShowLogin(true); }} session={session} onLogout={handleLogout} accountBar={showAccountBar} />
+      <div className={isClient ? 'pt-16 md:pt-20' : isAdmin ? 'pt-12' : ''}>
+        <Navbar onLoginClick={showAccountBar ? null : () => { setLoginMode('login'); setShowLogin(true); }} session={session} onLogout={handleLogout} accountBar={isClient ? 'client' : isAdmin ? 'admin' : null} />
         <Hero />
         <ContactBar />
         <OffersClub />

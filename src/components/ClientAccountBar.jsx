@@ -88,42 +88,113 @@ export default function ClientAccountBar({ session, onLogout }) {
 
   return (
     <>
-      {/* Floating account bar */}
-      <div className="fixed top-0 left-0 right-0 z-[60] bg-accent text-white">
-        <div className="container-fluid">
-          <div className="flex items-center justify-between h-12">
-            <div className="flex items-center gap-3">
-              <Crown className="w-3.5 h-3.5 text-primary-light" />
-              <span className="text-[11px] font-medium tracking-wide opacity-80">Showclinic Club</span>
-              <span className="text-[11px] opacity-40">|</span>
-              <span className="text-[11px] font-semibold">{client.points.toLocaleString()} pts</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 font-medium">{level.icon} {level.name}</span>
+      {/* Barra de cuenta — visible y con el color de su nivel */}
+      <motion.div
+        initial={{ y: -60 }}
+        animate={{ y: 0 }}
+        transition={{ type: 'spring', damping: 22, stiffness: 260 }}
+        className="fixed top-0 left-0 right-0 z-[60] text-white overflow-hidden"
+      >
+        {/* Fondo: base oscura + tinte metálico del nivel */}
+        <div className="absolute inset-0 bg-accent" />
+        <div className={`absolute inset-0 bg-gradient-to-r ${level.gradient} opacity-[0.28]`} />
+        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: 'repeating-linear-gradient(115deg, rgba(255,255,255,0.9) 0px, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 7px)' }} />
+        <div className="absolute -top-10 right-1/4 w-72 h-24 bg-white/10 blur-3xl rounded-full pointer-events-none" />
+        {/* Filo inferior dorado */}
+        <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-primary-light to-transparent" />
+
+        <div className="container-fluid relative">
+          <div className="flex items-center justify-between gap-3 h-16 md:h-20">
+
+            {/* Identidad del socio */}
+            <button
+              onClick={() => setShowPanel(true)}
+              className="flex items-center gap-3 md:gap-4 min-w-0 text-left group"
+              title="Ver mi cuenta"
+            >
+              <div className="relative flex-shrink-0">
+                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-gradient-to-br ${level.gradient} flex items-center justify-center ring-2 ring-white/25 shadow-lg ${level.glow} group-hover:ring-white/50 transition-all`}>
+                  <span className="font-serif text-[15px] md:text-[17px] font-bold text-white drop-shadow">
+                    {client.name.charAt(0)}{(client.lastName || '').charAt(0)}
+                  </span>
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 w-4 h-4 md:w-4.5 md:h-4.5 rounded-full bg-green-500 ring-2 ring-accent flex items-center justify-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                </span>
+              </div>
+
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <Crown className="w-3 h-3 text-primary-light flex-shrink-0" />
+                  <span className="text-[9px] md:text-[10px] uppercase tracking-[0.18em] text-white/60 font-semibold truncate">
+                    Showclinic Club
+                  </span>
+                </div>
+                <p className="font-serif text-[15px] md:text-[19px] font-semibold leading-tight truncate">
+                  Hola, {client.name.split(' ')[0]}
+                </p>
+              </div>
+
+              <span className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/12 ring-1 ring-white/20 text-[10px] md:text-[11px] font-bold uppercase tracking-wider flex-shrink-0 ${level.text === 'text-gray-500' ? 'text-white' : 'text-white'}`}>
+                <Gem className="w-3 h-3 text-primary-light" />
+                Socio {level.name}
+              </span>
+            </button>
+
+            {/* Puntos y canje */}
+            <div className="flex items-center gap-3 md:gap-5 flex-shrink-0">
+              <div className="text-right">
+                <p className="text-[9px] md:text-[10px] uppercase tracking-[0.16em] text-white/55 font-semibold leading-none mb-1">
+                  Tus puntos
+                </p>
+                <div className="flex items-baseline gap-1.5 justify-end">
+                  <span className="font-serif text-[19px] md:text-[26px] font-bold leading-none text-primary-light">
+                    {client.points.toLocaleString()}
+                  </span>
+                  <span className="text-[10px] md:text-[11px] text-white/50 font-semibold">pts</span>
+                </div>
+              </div>
+
+              <div className="hidden lg:block text-right pl-5 border-l border-white/15">
+                <p className="text-[10px] uppercase tracking-[0.16em] text-white/55 font-semibold leading-none mb-1">
+                  Vale
+                </p>
+                <span className="text-[17px] font-bold leading-none">S/ {canjeValue.toFixed(0)}</span>
+              </div>
+
               {ganados > 0 && (
                 <motion.button
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
                   onClick={() => { setShowPanel(true); setGanados(0); }}
-                  className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-500/20 text-green-300 ring-1 ring-green-400/30 hover:bg-green-500/30 transition-colors"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-green-500/25 text-green-200 ring-1 ring-green-400/40 text-[11px] font-bold hover:bg-green-500/40 transition-colors"
                   title="Ver tus movimientos"
                 >
-                  <Sparkles className="w-2.5 h-2.5" />
-                  +{ganados.toLocaleString()} nuevos
+                  <Sparkles className="w-3 h-3" />
+                  +{ganados.toLocaleString()}
                 </motion.button>
               )}
-            </div>
-            <div className="flex items-center gap-2">
-              <button onClick={() => setShowPanel(true)} className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-[11px] font-medium">
-                <User className="w-3 h-3" />
-                <span className="hidden sm:inline">{client.name.split(' ')[0]}</span>
-                <ChevronDown className="w-3 h-3 opacity-60" />
+
+              <button
+                onClick={() => setShowPanel(true)}
+                className="inline-flex items-center gap-2 px-3.5 md:px-5 py-2 md:py-2.5 rounded-full bg-white text-accent text-[11px] md:text-[12px] font-bold uppercase tracking-[0.1em] hover:bg-cream transition-colors shadow-lg"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Mi cuenta</span>
+                <ChevronDown className="w-3.5 h-3.5 opacity-50" />
               </button>
-              <button onClick={onLogout} className="p-1.5 rounded-full hover:bg-white/10 transition-colors opacity-60 hover:opacity-100" title="Cerrar sesión">
-                <LogOut className="w-3 h-3" />
+
+              <button
+                onClick={onLogout}
+                className="p-2 md:p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-colors flex-shrink-0"
+                title="Cerrar sesión"
+              >
+                <LogOut className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Profile slide-out panel */}
       <AnimatePresence>
