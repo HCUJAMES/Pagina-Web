@@ -53,61 +53,109 @@ export default function Hero() {
               </span>
             </div>
 
-            {/* Aviso animado → lleva a las promociones */}
+            {/* Banner animado → lleva a las promociones */}
             <motion.a
               href="#promociones"
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              whileHover={{ scale: 1.035 }}
-              whileTap={{ scale: 0.98 }}
-              className="group relative inline-flex items-center gap-3 sm:gap-3.5 pl-2 pr-3 sm:pr-4 py-2 mb-7 rounded-full bg-white/85 backdrop-blur-md ring-1 ring-[#D91023]/25 shadow-[0_10px_30px_-8px_rgba(217,16,35,0.35)] overflow-hidden"
-              aria-label="Ver promociones de Fiestas Patrias"
+              initial={{ opacity: 0, y: -18, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.45, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ scale: 1.03, y: -3 }}
+              whileTap={{ scale: 0.985 }}
+              className="group relative block w-full max-w-[430px] mb-8 rounded-[1.5rem] overflow-hidden"
+              aria-label="Ver promociones de Fiestas Patrias, hasta 30% de descuento"
             >
-              {/* Halo latiendo */}
+              {/* Resplandor exterior que respira */}
               <motion.span
-                className="absolute inset-0 rounded-full bg-[#D91023]/12 pointer-events-none"
-                animate={{ opacity: [0, 0.65, 0], scale: [0.94, 1.06, 0.94] }}
-                transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
-              />
-              {/* Destello que barre de lado a lado */}
-              <motion.span
-                className="absolute top-0 bottom-0 w-16 -skew-x-12 bg-gradient-to-r from-transparent via-white/85 to-transparent pointer-events-none"
-                animate={{ x: ['-120%', '520%'] }}
-                transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 1.6, ease: 'easeInOut' }}
+                className="absolute -inset-3 rounded-[2rem] bg-[#D91023]/30 blur-2xl pointer-events-none"
+                animate={{ opacity: [0.35, 0.85, 0.35], scale: [0.96, 1.04, 0.96] }}
+                transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
               />
 
-              {/* Insignia con el descuento */}
-              <span className="relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-gradient-to-br from-[#D91023] to-[#a80d1b] shadow-sm flex-shrink-0">
-                <PeruFlag className="w-4 h-2.5" />
-                <span className="text-[11px] sm:text-[12px] font-black text-white tracking-tight">30%</span>
-              </span>
-
-              <span className="relative flex flex-col leading-none min-w-0">
-                <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.18em] text-[#D91023] font-bold mb-0.5">
-                  Fiestas Patrias
-                </span>
-                <span className="text-[12px] sm:text-[13.5px] font-semibold text-dark truncate">
-                  Hasta 30% en tratamientos
-                </span>
-              </span>
-
-              {/* Flecha que rebota */}
+              {/* Flotación continua */}
               <motion.span
-                className="relative flex items-center justify-center w-7 h-7 rounded-full bg-accent text-white flex-shrink-0 group-hover:bg-[#D91023] transition-colors"
-                animate={{ y: [0, 3, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="relative block"
+                animate={{ y: [0, -7, 0] }}
+                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <ChevronDown className="w-3.5 h-3.5" strokeWidth={2.5} />
-              </motion.span>
+                <span className="relative block rounded-[1.5rem] bg-white/92 backdrop-blur-xl ring-1 ring-[#D91023]/30 shadow-[0_22px_55px_-12px_rgba(217,16,35,0.5)] overflow-hidden">
+                  {/* Cinta tricolor superior */}
+                  <span className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#D91023] via-white to-[#D91023]" />
+                  {/* Destello que barre */}
+                  <motion.span
+                    className="absolute top-0 bottom-0 w-28 -skew-x-12 bg-gradient-to-r from-transparent via-white/90 to-transparent pointer-events-none"
+                    animate={{ x: ['-140%', '620%'] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1.4, ease: 'easeInOut' }}
+                  />
 
-              {/* Chispa decorativa */}
-              <motion.span
-                className="absolute -top-1 -right-0.5 text-primary pointer-events-none"
-                animate={{ scale: [0.8, 1.15, 0.8], opacity: [0.5, 1, 0.5], rotate: [0, 18, 0] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <Sparkles className="w-3.5 h-3.5" />
+                  <span className="relative flex items-center gap-4 sm:gap-5 p-3.5 sm:p-4 pt-4 sm:pt-5">
+                    {/* Bloque del descuento */}
+                    <motion.span
+                      className="relative flex flex-col items-center justify-center w-[74px] h-[74px] sm:w-[86px] sm:h-[86px] rounded-2xl bg-gradient-to-br from-[#E11B2D] to-[#960c18] shadow-lg shadow-[#D91023]/40 flex-shrink-0"
+                      animate={{ rotate: [-2.5, 2.5, -2.5] }}
+                      transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                      <PeruFlag className="w-6 h-4 sm:w-7 sm:h-[18px] mb-1" />
+                      <span className="font-serif text-[26px] sm:text-[31px] font-black text-white leading-none tracking-tight drop-shadow">
+                        30%
+                      </span>
+                      <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.22em] text-white/80 font-bold mt-0.5">
+                        Dscto
+                      </span>
+                    </motion.span>
+
+                    {/* Texto */}
+                    <span className="flex flex-col min-w-0 flex-1">
+                      <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-[#D91023] font-black mb-1.5">
+                        <motion.span
+                          className="w-1.5 h-1.5 rounded-full bg-[#D91023]"
+                          animate={{ scale: [1, 1.7, 1], opacity: [1, 0.4, 1] }}
+                          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+                        />
+                        Fiestas Patrias
+                      </span>
+                      <span className="font-serif text-[19px] sm:text-[23px] font-bold text-dark leading-[1.15] mb-1">
+                        Promociones del mes
+                      </span>
+                      <span className="text-[11px] sm:text-[12px] text-gray-500 font-medium mb-2.5">
+                        Válidas del 20 al 28 de julio
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.12em] text-accent group-hover:text-[#D91023] transition-colors">
+                        Ver promociones
+                        <motion.span
+                          animate={{ x: [0, 4, 0] }}
+                          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+                        >
+                          <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+                        </motion.span>
+                      </span>
+                    </span>
+
+                    {/* Flecha circular */}
+                    <motion.span
+                      className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-accent text-white flex-shrink-0 shadow-lg group-hover:bg-[#D91023] transition-colors self-center"
+                      animate={{ y: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                      <ChevronDown className="w-5 h-5" strokeWidth={2.5} />
+                    </motion.span>
+                  </span>
+                </span>
+
+                {/* Chispas */}
+                <motion.span
+                  className="absolute -top-2 -right-1 text-primary pointer-events-none"
+                  animate={{ scale: [0.7, 1.3, 0.7], opacity: [0.4, 1, 0.4], rotate: [0, 25, 0] }}
+                  transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <Sparkles className="w-5 h-5" />
+                </motion.span>
+                <motion.span
+                  className="absolute -bottom-1.5 left-8 text-[#D91023] pointer-events-none"
+                  animate={{ scale: [0.6, 1.15, 0.6], opacity: [0.3, 0.9, 0.3], rotate: [0, -20, 0] }}
+                  transition={{ duration: 2.6, repeat: Infinity, delay: 0.7, ease: 'easeInOut' }}
+                >
+                  <Sparkles className="w-4 h-4" />
+                </motion.span>
               </motion.span>
             </motion.a>
 
