@@ -237,7 +237,7 @@ export default function OffersClub() {
   const currentOffer = offers[active];
 
   return (
-    <section className="bg-white">
+    <section id="promociones" className="bg-white scroll-mt-24">
       <div className="container-fluid py-20 md:py-28 2xl:py-36">
         {/* Offers — Hero Banner */}
         <div className="mb-20 md:mb-28">

@@ -97,7 +97,8 @@
       "Bash(perl -0pi -e 's|\\(<img src=\"/Imagenes/logosinfondo.png\"[^>]*?\\)loading=\"lazy\" decoding=\"async\"|$1loading=\"eager\" fetchPriority=\"high\"|s' src/components/Navbar.jsx)",
       "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Mejoras de diseno, enlaces, privacidad y rendimiento *)",
       "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Barra de cuenta del paciente: mas grande, visible y premium *)",
-      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'WhatsApp: todos los mensajes indican que vienen de la pagina web *)"
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'WhatsApp: todos los mensajes indican que vienen de la pagina web *)",
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Hero: aviso animado de Fiestas Patrias que lleva a las promociones *)"
     ]
   }
 }
