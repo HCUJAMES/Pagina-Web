@@ -3,63 +3,63 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Gift, Crown, Star, Sparkles, ArrowRight, Calendar, UserPlus, Clock, Flame, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cardThemes, tierOrder } from '../lib/tierThemes';
 
-// Promociones Fiestas Patrias — válidas del 20 al 28 de julio
-const VIGENCIA = 'Del 20 al 28 de julio';
+// Promociones Aniversario de Arequipa — válidas hasta el 15 de agosto
+const VIGENCIA = 'Hasta el 15 de agosto';
 
 const offers = [
   {
-    title: 'Exosomas',
-    description: 'Regeneran tu piel desde adentro: suavizan arrugas finas y mejoran la textura y luminosidad.',
+    title: 'HIFU',
+    description: 'Estimula la producción de colágeno, tensa la piel y reduce la flacidez en rostro y cuello.',
     discount: '-30%',
     tag: 'Mayor descuento',
     icon: Flame,
     accentBg: 'bg-rose-600',
-    image: '/Imagenes/promo-fp-exosomas.jpg',
+    image: '/Imagenes/promo-aqp-hifu.jpg',
+  },
+  {
+    title: 'EM Slim',
+    description: 'Reduce hasta 5 cm de cintura y tonifica sin esfuerzo. Paquete de 5 sesiones.',
+    discount: '-25%',
+    tag: 'Resultado corporal',
+    icon: Zap,
+    accentBg: 'bg-teal-600',
+    image: '/Imagenes/promo-aqp-emslim.jpg',
   },
   {
     title: 'Baby Botox',
     description: 'Suaviza las líneas de expresión con dosis mínimas, manteniendo la naturalidad de tu rostro.',
-    discount: '-20%',
+    discount: '-25%',
     tag: 'Más popular',
     icon: Star,
     accentBg: 'bg-amber-500',
-    image: '/Imagenes/promo-fp-babybotox.jpg',
+    image: '/Imagenes/promo-aqp-babybotox.jpg',
   },
   {
-    title: 'Afinamiento Facial',
-    description: 'Baby botox en maseteros: estiliza el contorno de tu rostro y alivia la tensión mandibular.',
-    discount: '-20%',
+    title: 'Botox en Maseteros',
+    description: 'Estiliza el contorno de tu rostro y alivia la tensión mandibular al apretar los dientes.',
+    discount: '-25%',
     tag: 'Top ventas',
     icon: Sparkles,
     accentBg: 'bg-violet-500',
-    image: '/Imagenes/promo-fp-afinamiento.jpg',
+    image: '/Imagenes/promo-aqp-maseteros.jpg',
   },
   {
-    title: 'Lifting en Surcos Nasogenianos',
-    description: 'Atenúa los surcos entre nariz y boca para un rostro más descansado y armónico.',
-    discount: '-20%',
-    tag: 'Efecto rejuvenecedor',
-    icon: Zap,
-    accentBg: 'bg-teal-600',
-    image: '/Imagenes/promo-fp-surcos.jpg',
-  },
-  {
-    title: 'Mentón + Rinomodelación',
-    description: 'Define tu perfil: afina la nariz y proyecta el mentón sin cirugía y en una sola sesión.',
-    discount: '-15%',
-    tag: 'Combo perfil',
-    icon: Zap,
+    title: 'Tratamientos Corporales',
+    description: 'Moldea tu figura con nuestros tratamientos corporales. Incluye consulta de evaluación gratis.',
+    discount: '-25%',
+    tag: 'Consulta gratis',
+    icon: Gift,
     accentBg: 'bg-primary',
-    image: '/Imagenes/promo-fp-menton-rino.jpg',
+    image: '/Imagenes/promo-aqp-corporales.jpg',
   },
   {
-    title: 'Baby Botox + Diseño de Labios',
-    description: 'Rostro fresco y labios definidos: el combo que realza tu expresión con resultados naturales.',
+    title: 'Limpiezas Faciales',
+    description: 'Piel limpia, luminosa y renovada. El cuidado básico que tu rostro agradece cada mes.',
     discount: '-15%',
-    tag: 'Combo estrella',
-    icon: Sparkles,
+    tag: 'Cuidado esencial',
+    icon: Star,
     accentBg: 'bg-pink-600',
-    image: '/Imagenes/promo-fp-babybotox-labios.jpg',
+    image: '/Imagenes/promo-aqp-limpieza.jpg',
   },
 ];
 
@@ -71,24 +71,20 @@ const clubFeatures = [
   { icon: Sparkles, text: '5 niveles: Bronce → Diamante' },
 ];
 
-// Bandera del Perú — franjas rojo · blanco · rojo con brillo sutil
-function PeruFlag({ className = 'w-8 h-5' }) {
+// Sello del aniversario de Arequipa (retoma el carmesí de las piezas gráficas)
+function ArequipaSeal({ className = 'w-8 h-5' }) {
   return (
-    <span className={`relative inline-block overflow-hidden rounded-[3px] ring-1 ring-black/10 shadow-sm align-middle ${className}`} aria-hidden="true">
-      <span className="absolute inset-0 grid grid-cols-3">
-        <span className="bg-[#D91023]" />
-        <span className="bg-white" />
-        <span className="bg-[#D91023]" />
-      </span>
-      <span className="absolute inset-0 bg-gradient-to-b from-white/35 via-transparent to-black/15" />
+    <span className={`relative inline-flex items-center justify-center overflow-hidden rounded-[4px] ring-1 ring-black/10 shadow-sm align-middle bg-gradient-to-br from-[#B30A1E] to-[#7d0715] ${className}`} aria-hidden="true">
+      <span className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-black/20" />
+      <span className="relative text-white font-black leading-none not-italic font-sans" style={{ fontSize: '0.55em', letterSpacing: '0.02em' }}>AQP</span>
     </span>
   );
 }
 
-// Cinta tricolor decorativa (evoca las serpentinas de las piezas gráficas)
-function PeruRibbon({ className = '' }) {
+// Cinta carmesí decorativa
+function ArequipaRibbon({ className = '' }) {
   return (
-    <div className={`h-1 w-full bg-gradient-to-r from-[#D91023] via-white to-[#D91023] ${className}`} aria-hidden="true" />
+    <div className={`h-1 w-full bg-gradient-to-r from-[#B30A1E] via-[#e8536a] to-[#B30A1E] ${className}`} aria-hidden="true" />
   );
 }
 
@@ -100,7 +96,7 @@ function OfferCard({ offer }) {
       <div className="relative flex items-center justify-center p-5 sm:p-6 md:p-7 md:rounded-l-3xl bg-gradient-to-br from-white via-cream to-[#F2EBE2]">
         {/* Marco premium con brillo */}
         <div className="relative group w-full max-w-[380px]">
-          <div className="absolute -inset-2 rounded-[1.6rem] bg-gradient-to-br from-primary/25 via-transparent to-[#D91023]/15 blur-xl opacity-70" />
+          <div className="absolute -inset-2 rounded-[1.6rem] bg-gradient-to-br from-primary/25 via-transparent to-[#B30A1E]/15 blur-xl opacity-70" />
           <div className="relative overflow-hidden rounded-[1.25rem] ring-1 ring-black/[0.06] shadow-[0_18px_45px_-12px_rgba(0,0,0,0.35)]">
             <img
               src={offer.image}
@@ -108,7 +104,7 @@ function OfferCard({ offer }) {
               className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               loading="lazy"
               width="1000"
-              height="1250"
+              height="1000"
             />
             {/* Brillo diagonal al pasar el cursor */}
             <div className="absolute -top-1/3 -left-1/4 w-1/3 h-[180%] rotate-[18deg] bg-gradient-to-r from-transparent via-white/35 to-transparent blur-md opacity-0 group-hover:opacity-100 group-hover:translate-x-[380%] transition-all duration-[1100ms] ease-out pointer-events-none" />
@@ -139,10 +135,10 @@ function OfferCard({ offer }) {
           </div>
         </div>
 
-        {/* Cinta tricolor: acento de Fiestas Patrias */}
+        {/* Cinta carmesí: acento del aniversario */}
         <div className="flex items-center gap-2 mb-5">
-          <PeruRibbon className="max-w-[60px] rounded-full" />
-          <span className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-semibold">Fiestas Patrias</span>
+          <ArequipaRibbon className="max-w-[60px] rounded-full" />
+          <span className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-semibold">Aniversario de Arequipa</span>
         </div>
 
         <h3 className="font-serif text-2xl md:text-3xl font-bold text-white leading-[1.1] mb-3">
@@ -154,7 +150,7 @@ function OfferCard({ offer }) {
         </p>
 
         <a
-          href={`https://wa.me/51974212114?text=${encodeURIComponent(`Hola, vengo de la página web y me interesa la promoción de Fiestas Patrias: ${offer.title} (${offer.discount})`)}`}
+          href={`https://wa.me/51974212114?text=${encodeURIComponent(`Hola, vengo de la página web y me interesa la promoción de Aniversario de Arequipa: ${offer.title} (${offer.discount})`)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.12em] text-accent bg-white rounded-full hover:bg-cream transition-colors duration-300 self-start"
@@ -255,22 +251,22 @@ export default function OffersClub() {
               <span className="text-[12px] font-bold uppercase tracking-[0.15em] text-red-700">
                 Ofertas activas
               </span>
-              <PeruFlag className="w-5 h-3.5" />
+              <ArequipaSeal className="w-7 h-4" />
             </motion.div>
 
             <h2 className="font-serif font-semibold text-dark tracking-tight leading-[1.15] mb-5">
-              Promociones de{' '}
-              <span className="italic text-primary whitespace-nowrap">
-                Fiestas Patrias
-                <PeruFlag className="w-9 h-6 md:w-10 md:h-[1.7rem] ml-3 -translate-y-1" />
+              Promociones por el{' '}
+              <span className="italic text-primary">
+                Aniversario de Arequipa
+                <ArequipaSeal className="w-11 h-7 md:w-12 md:h-8 ml-3 -translate-y-1" />
               </span>
             </h2>
 
-            {/* Cinta tricolor bajo el título */}
+            {/* Cinta carmesí bajo el título */}
             <div className="flex items-center justify-center gap-2 mb-5">
-              <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#D91023]/40" />
-              <PeruRibbon className="max-w-[110px] rounded-full shadow-sm" />
-              <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#D91023]/40" />
+              <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#B30A1E]/40" />
+              <ArequipaRibbon className="max-w-[110px] rounded-full shadow-sm" />
+              <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#B30A1E]/40" />
             </div>
 
             <p className="text-gray-500">
@@ -294,8 +290,8 @@ export default function OffersClub() {
                 style={{ gridArea: '1 / 1' }}
                 className="relative overflow-hidden rounded-3xl bg-accent ring-1 ring-white/10 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
               >
-                {/* Cinta tricolor superior */}
-                <PeruRibbon className="absolute top-0 left-0 right-0 z-20 opacity-90" />
+                {/* Cinta carmesí superior */}
+                <ArequipaRibbon className="absolute top-0 left-0 right-0 z-20 opacity-90" />
                 <div className={`absolute inset-0 bg-gradient-to-br ${currentOffer.accent} opacity-20`} />
                 <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
