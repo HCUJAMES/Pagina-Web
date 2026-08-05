@@ -101,7 +101,7 @@ function OfferCard({ offer }) {
       {/* Image side — promoción completa, sin recortar */}
       <div className="relative flex items-center justify-center p-5 sm:p-6 md:p-7 md:rounded-l-3xl bg-gradient-to-br from-white via-cream to-[#F2EBE2]">
         {/* Marco premium con brillo */}
-        <div className="relative group w-full max-w-[470px]">
+        <div className="relative group w-full max-w-[540px]">
           <div className="absolute -inset-2 rounded-[1.6rem] bg-gradient-to-br from-primary/25 via-transparent to-[#87000F]/15 blur-xl opacity-70" />
           <div className="relative overflow-hidden rounded-[1.25rem] ring-1 ring-black/[0.06] shadow-[0_18px_45px_-12px_rgba(0,0,0,0.35)]">
             <img
@@ -132,7 +132,7 @@ function OfferCard({ offer }) {
         </div>
 
         <div className="flex items-end gap-3 mb-4">
-          <span className="font-serif text-7xl md:text-8xl font-black leading-none bg-gradient-to-br from-white via-primary-light to-primary bg-clip-text text-transparent drop-shadow-sm">
+          <span className="font-serif text-[5rem] md:text-[7rem] font-black leading-[0.85] bg-gradient-to-br from-white via-primary-light to-primary bg-clip-text text-transparent drop-shadow-sm">
             {offer.discount.replace('-', '')}
           </span>
           <div className="pb-2">
@@ -240,50 +240,69 @@ export default function OffersClub() {
   const currentOffer = offers[active];
 
   return (
-    <section id="promociones" className="bg-white scroll-mt-24">
-      <div className="container-fluid py-20 md:py-28 2xl:py-36">
-        {/* Offers — Hero Banner */}
-        <div className="mb-20 md:mb-28">
+    <section id="promociones" className="scroll-mt-24">
+      {/* ===== BANDA DE ANIVERSARIO DE AREQUIPA ===== */}
+      <div className="relative overflow-hidden bg-[#6d000b]">
+        {/* Profundidad y textura */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#87000F] via-[#6d000b] to-[#3d0006]" />
+        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'repeating-linear-gradient(115deg, #fff 0px, #fff 1px, transparent 1px, transparent 9px)' }} />
+        <div className="absolute -top-40 left-1/4 w-[38rem] h-[38rem] bg-[#c81028]/25 rounded-full blur-[110px] pointer-events-none" />
+        <div className="absolute -bottom-52 right-0 w-[34rem] h-[34rem] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
+        {/* Escudo de la bandera como marca de agua */}
+        <img
+          src="/Imagenes/bandera-arequipa.png"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="hidden md:block absolute -right-32 -top-16 w-[34rem] max-w-none opacity-[0.055] mix-blend-overlay blur-[2px] pointer-events-none select-none rotate-[8deg]"
+        />
+        {/* Cintas carmesi arriba y abajo */}
+        <ArequipaRibbon className="absolute top-0 inset-x-0 z-10 opacity-90" />
+        <ArequipaRibbon className="absolute bottom-0 inset-x-0 z-10 opacity-70" />
+
+        <div className="container-fluid py-20 md:py-28 2xl:py-32 relative">
+        <div className="">
           <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-red-50 border border-red-100 mb-6"
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/12 ring-1 ring-white/25 backdrop-blur-sm mb-7"
             >
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-300" />
               </span>
-              <span className="text-[12px] font-bold uppercase tracking-[0.15em] text-red-700">
+              <span className="text-[12px] md:text-[13px] font-bold uppercase tracking-[0.18em] text-white">
                 Ofertas activas
               </span>
-              <ArequipaFlag className="w-7 h-[18px]" />
+              <ArequipaFlag className="w-9 h-6" />
             </motion.div>
 
-            <h2 className="font-serif font-semibold text-dark tracking-tight leading-[1.15] mb-5">
+            <h2 className="font-serif font-semibold text-white tracking-tight leading-[1.12] mb-6 drop-shadow-sm">
               Promociones por el{' '}
-              <span className="italic text-primary">
+              <span className="italic text-[#F4C77B]">
                 Aniversario de Arequipa
-                <ArequipaFlag className="w-12 h-8 md:w-14 md:h-9 ml-3 -translate-y-1" />
+                <ArequipaFlag className="w-20 h-[54px] md:w-24 md:h-16 ml-4 -translate-y-1 ring-white/40 shadow-xl" />
               </span>
             </h2>
 
             {/* Cinta carmesí bajo el título */}
             <div className="flex items-center justify-center gap-2 mb-5">
-              <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#87000F]/40" />
-              <ArequipaRibbon className="max-w-[110px] rounded-full shadow-sm" />
-              <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#87000F]/40" />
+              <span className="h-px w-14 bg-gradient-to-r from-transparent to-white/40" />
+              <span className="px-4 py-1 rounded-full bg-white/10 ring-1 ring-white/20 text-[10px] uppercase tracking-[0.25em] text-white/80 font-bold">Edición especial</span>
+              <span className="h-px w-14 bg-gradient-to-l from-transparent to-white/40" />
             </div>
 
-            <p className="text-gray-500">
-              Descuentos de hasta <span className="font-bold text-dark">30%</span> en nuestros tratamientos más solicitados · {VIGENCIA}
+            <p className="text-white/75 text-[15px] md:text-[17px]">
+              Descuentos de hasta <span className="font-bold text-[#F4C77B]">30%</span> en nuestros tratamientos más solicitados · {VIGENCIA}
             </p>
           </div>
 
           {/* Featured offer — large card */}
           <div
-            className="relative max-w-6xl mx-auto mb-10 grid"
+            className="relative max-w-[1240px] mx-auto mb-12 grid"
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
           >
@@ -329,16 +348,16 @@ export default function OffersClub() {
                 <button
                   key={i}
                   onClick={() => setActive(i)}
-                  className={`group inline-flex items-center gap-2 pl-4 pr-2 py-2.5 rounded-full text-[13px] font-medium transition-all duration-300 ${
+                  className={`group inline-flex items-center gap-2.5 pl-5 pr-2.5 py-3 rounded-full text-[13.5px] font-semibold transition-all duration-300 ${
                     active === i
-                      ? 'bg-accent text-white shadow-xl shadow-accent/25 ring-1 ring-white/15 scale-[1.04]'
-                      : 'bg-cream text-gray-500 hover:bg-white hover:shadow-md hover:text-dark ring-1 ring-transparent hover:ring-gray-200'
+                      ? 'bg-white text-[#6d000b] shadow-2xl ring-2 ring-white/60 scale-[1.06]'
+                      : 'bg-white/12 text-white/85 ring-1 ring-white/20 hover:bg-white/22 hover:text-white backdrop-blur-sm'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 transition-colors ${active === i ? 'text-primary-light' : 'text-primary/70'}`} />
+                  <Icon className={`w-3.5 h-3.5 transition-colors ${active === i ? 'text-[#87000F]' : 'text-white/70'}`} />
                   {offer.title}
                   <span className={`text-[11px] font-bold px-2 py-1 rounded-full transition-colors ${
-                    active === i ? 'bg-primary text-white' : 'bg-white text-primary group-hover:bg-primary/10'
+                    active === i ? 'bg-[#87000F] text-white' : 'bg-white/20 text-white group-hover:bg-white/30'
                   }`}>
                     {offer.discount}
                   </span>
@@ -347,8 +366,12 @@ export default function OffersClub() {
             })}
           </div>
         </div>
+        </div>
+      </div>
 
-        {/* Showclinic Club — Premium Banner */}
+      {/* ===== SHOWCLINIC CLUB (fondo claro) ===== */}
+      <div className="bg-white">
+        <div className="container-fluid py-20 md:py-28 2xl:py-36">
         <div className="relative">
           {/* Top accent strip */}
           <motion.div
@@ -489,6 +512,7 @@ export default function OffersClub() {
               </div>
             </div>
           </motion.div>
+        </div>
         </div>
       </div>
     </section>

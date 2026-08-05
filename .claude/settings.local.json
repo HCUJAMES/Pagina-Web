@@ -102,7 +102,14 @@
       "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Hero: banner de promociones mucho mas grande y con animacion potente *)",
       "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: Aniversario de Arequipa \\(reemplaza las de Fiestas Patrias\\) *)",
       "Bash(awk '{print $5/1024\" KB\"}')",
-      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: bandera real de Arequipa y presentacion mas grande *)"
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: bandera real de Arequipa y presentacion mas grande *)",
+      "Bash(grep -n \"Showclinic Club\\\\|{/\\\\* Club\\\\|</div>$\" src/components/OffersClub.jsx)",
+      "Bash(awk 'NR>=330 && NR<=350' src/components/OffersClub.jsx)",
+      "Bash(awk 'NR>=348 && NR<=360 {printf \"%d: %s\\\\n\", NR, $0}' src/components/OffersClub.jsx)",
+      "Bash(awk 'NR>=505 && NR<=520 {printf \"%d: %s\\\\n\", NR, $0}' src/components/OffersClub.jsx)",
+      "Bash(perl -pi -e 's/opacity-\\\\[0\\\\.09\\\\] mix-blend-overlay blur-\\\\[1px\\\\]/opacity-[0.055] mix-blend-overlay blur-[2px]/' src/components/OffersClub.jsx)",
+      "Bash(perl -pi -e 's/className=\"absolute -right-32 -top-16 w-\\\\[34rem\\\\]/className=\"hidden md:block absolute -right-32 -top-16 w-[34rem]/' src/components/OffersClub.jsx)",
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: banda carmesi de aniversario a todo el ancho *)"
     ]
   }
 }
