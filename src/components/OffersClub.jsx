@@ -244,24 +244,48 @@ export default function OffersClub() {
       {/* ===== BANDA DE ANIVERSARIO DE AREQUIPA ===== */}
       <div className="relative overflow-hidden bg-[#6d000b]">
         {/* Profundidad y textura */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#87000F] via-[#6d000b] to-[#3d0006]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#8f0011] via-[#75000c] to-[#520008]" />
         <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'repeating-linear-gradient(115deg, #fff 0px, #fff 1px, transparent 1px, transparent 9px)' }} />
         <div className="absolute -top-40 left-1/4 w-[38rem] h-[38rem] bg-[#c81028]/25 rounded-full blur-[110px] pointer-events-none" />
         <div className="absolute -bottom-52 right-0 w-[34rem] h-[34rem] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
-        {/* Escudo de la bandera como marca de agua */}
+        {/* La Catedral de Arequipa — acento superior derecho */}
         <img
-          src="/Imagenes/bandera-arequipa.png"
+          src="/Imagenes/aqp-catedral.jpg"
           alt=""
           aria-hidden="true"
           loading="lazy"
           decoding="async"
-          className="hidden md:block absolute -right-32 -top-16 w-[34rem] max-w-none opacity-[0.055] mix-blend-overlay blur-[2px] pointer-events-none select-none rotate-[8deg]"
+          className="hidden lg:block absolute -top-16 -right-20 w-[32rem] max-w-none opacity-[0.4] pointer-events-none select-none"
+          style={{
+            filter: 'grayscale(1) sepia(1) hue-rotate(-28deg) saturate(3) contrast(1.05) brightness(0.9)',
+            maskImage: 'radial-gradient(68% 68% at 68% 38%, #000 18%, transparent 76%)',
+            WebkitMaskImage: 'radial-gradient(68% 68% at 68% 38%, #000 18%, transparent 76%)',
+          }}
         />
+
+        {/* El Misti — horizonte de la ciudad al pie de la banda */}
+        <div className="absolute inset-x-0 bottom-0 h-72 md:h-[26rem] overflow-hidden pointer-events-none select-none">
+          <img
+            src="/Imagenes/aqp-misti.jpg"
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-x-0 bottom-0 w-full h-full object-cover object-center opacity-[0.45]"
+            style={{
+              filter: 'grayscale(1) sepia(1) hue-rotate(-28deg) saturate(3) contrast(1.05) brightness(0.85)',
+              maskImage: 'linear-gradient(to top, #000 0%, rgba(0,0,0,0.8) 32%, rgba(0,0,0,0.3) 68%, transparent 94%)',
+              WebkitMaskImage: 'linear-gradient(to top, #000 0%, rgba(0,0,0,0.8) 32%, rgba(0,0,0,0.3) 68%, transparent 94%)',
+            }}
+          />
+          {/* Velo carmesí para que el horizonte no compita con el contenido */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#5c0008]/55 via-transparent to-transparent" />
+        </div>
         {/* Cintas carmesi arriba y abajo */}
         <ArequipaRibbon className="absolute top-0 inset-x-0 z-10 opacity-90" />
         <ArequipaRibbon className="absolute bottom-0 inset-x-0 z-10 opacity-70" />
 
-        <div className="container-fluid py-20 md:py-28 2xl:py-32 relative">
+        <div className="container-fluid pt-20 md:pt-28 2xl:pt-32 pb-28 md:pb-40 relative">
         <div className="">
           <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
             <motion.div
