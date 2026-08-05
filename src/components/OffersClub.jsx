@@ -71,20 +71,26 @@ const clubFeatures = [
   { icon: Sparkles, text: '5 niveles: Bronce → Diamante' },
 ];
 
-// Sello del aniversario de Arequipa (retoma el carmesí de las piezas gráficas)
-function ArequipaSeal({ className = 'w-8 h-5' }) {
+// Bandera de Arequipa (carmesí con el escudo de la ciudad)
+function ArequipaFlag({ className = 'w-9 h-6' }) {
   return (
-    <span className={`relative inline-flex items-center justify-center overflow-hidden rounded-[4px] ring-1 ring-black/10 shadow-sm align-middle bg-gradient-to-br from-[#B30A1E] to-[#7d0715] ${className}`} aria-hidden="true">
-      <span className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-black/20" />
-      <span className="relative text-white font-black leading-none not-italic font-sans" style={{ fontSize: '0.55em', letterSpacing: '0.02em' }}>AQP</span>
-    </span>
+    <img
+      src="/Imagenes/bandera-arequipa.png"
+      alt=""
+      aria-hidden="true"
+      width="260"
+      height="173"
+      loading="lazy"
+      decoding="async"
+      className={`inline-block object-cover rounded-[3px] ring-1 ring-black/15 shadow-sm align-middle ${className}`}
+    />
   );
 }
 
-// Cinta carmesí decorativa
+// Cinta carmesí decorativa (tono real de la bandera)
 function ArequipaRibbon({ className = '' }) {
   return (
-    <div className={`h-1 w-full bg-gradient-to-r from-[#B30A1E] via-[#e8536a] to-[#B30A1E] ${className}`} aria-hidden="true" />
+    <div className={`h-1 w-full bg-gradient-to-r from-[#87000F] via-[#d4405a] to-[#87000F] ${className}`} aria-hidden="true" />
   );
 }
 
@@ -95,8 +101,8 @@ function OfferCard({ offer }) {
       {/* Image side — promoción completa, sin recortar */}
       <div className="relative flex items-center justify-center p-5 sm:p-6 md:p-7 md:rounded-l-3xl bg-gradient-to-br from-white via-cream to-[#F2EBE2]">
         {/* Marco premium con brillo */}
-        <div className="relative group w-full max-w-[380px]">
-          <div className="absolute -inset-2 rounded-[1.6rem] bg-gradient-to-br from-primary/25 via-transparent to-[#B30A1E]/15 blur-xl opacity-70" />
+        <div className="relative group w-full max-w-[470px]">
+          <div className="absolute -inset-2 rounded-[1.6rem] bg-gradient-to-br from-primary/25 via-transparent to-[#87000F]/15 blur-xl opacity-70" />
           <div className="relative overflow-hidden rounded-[1.25rem] ring-1 ring-black/[0.06] shadow-[0_18px_45px_-12px_rgba(0,0,0,0.35)]">
             <img
               src={offer.image}
@@ -113,20 +119,20 @@ function OfferCard({ offer }) {
       </div>
 
       {/* Content side */}
-      <div className="relative p-8 md:p-10 lg:p-12 flex flex-col justify-center">
+      <div className="relative p-8 md:p-11 lg:p-14 flex flex-col justify-center">
         <div className="flex items-center gap-3 mb-5 flex-wrap">
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-lg ${offer.accentBg}`}>
+          <span className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[11px] font-bold uppercase tracking-[0.12em] text-white shadow-lg ${offer.accentBg}`}>
             <Icon className="w-3 h-3" />
             {offer.tag}
           </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 ring-1 ring-white/15 text-[10px] font-semibold uppercase tracking-wider text-white/70">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/10 ring-1 ring-white/15 text-[11px] font-semibold uppercase tracking-wider text-white/75">
             <Clock className="w-3 h-3" />
             {VIGENCIA}
           </span>
         </div>
 
         <div className="flex items-end gap-3 mb-4">
-          <span className="font-serif text-6xl md:text-7xl font-black leading-none bg-gradient-to-br from-white via-primary-light to-primary bg-clip-text text-transparent drop-shadow-sm">
+          <span className="font-serif text-7xl md:text-8xl font-black leading-none bg-gradient-to-br from-white via-primary-light to-primary bg-clip-text text-transparent drop-shadow-sm">
             {offer.discount.replace('-', '')}
           </span>
           <div className="pb-2">
@@ -135,17 +141,18 @@ function OfferCard({ offer }) {
           </div>
         </div>
 
-        {/* Cinta carmesí: acento del aniversario */}
-        <div className="flex items-center gap-2 mb-5">
-          <ArequipaRibbon className="max-w-[60px] rounded-full" />
-          <span className="text-white/60 text-[10px] uppercase tracking-[0.2em] font-semibold">Aniversario de Arequipa</span>
+        {/* Bandera de Arequipa: acento del aniversario */}
+        <div className="flex items-center gap-2.5 mb-6">
+          <ArequipaFlag className="w-8 h-[21px]" />
+          <span className="text-white/70 text-[11px] uppercase tracking-[0.2em] font-bold">Aniversario de Arequipa</span>
+          <ArequipaRibbon className="max-w-[70px] rounded-full ml-1" />
         </div>
 
-        <h3 className="font-serif text-2xl md:text-3xl font-bold text-white leading-[1.1] mb-3">
+        <h3 className="font-serif text-3xl md:text-4xl font-bold text-white leading-[1.1] mb-3.5">
           {offer.title}
         </h3>
 
-        <p className="text-white/70 text-[15px] leading-relaxed mb-8 max-w-lg">
+        <p className="text-white/75 text-[16px] md:text-[17px] leading-relaxed mb-9 max-w-lg">
           {offer.description}
         </p>
 
@@ -153,7 +160,7 @@ function OfferCard({ offer }) {
           href={`https://wa.me/51974212114?text=${encodeURIComponent(`Hola, vengo de la página web y me interesa la promoción de Aniversario de Arequipa: ${offer.title} (${offer.discount})`)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.12em] text-accent bg-white rounded-full hover:bg-cream transition-colors duration-300 self-start"
+          className="inline-flex items-center justify-center gap-2 px-9 py-4.5 text-[14px] font-bold uppercase tracking-[0.12em] text-accent bg-white rounded-full hover:bg-cream transition-colors duration-300 self-start"
         >
           Quiero esta oferta
           <ArrowRight className="w-4 h-4" />
@@ -251,22 +258,22 @@ export default function OffersClub() {
               <span className="text-[12px] font-bold uppercase tracking-[0.15em] text-red-700">
                 Ofertas activas
               </span>
-              <ArequipaSeal className="w-7 h-4" />
+              <ArequipaFlag className="w-7 h-[18px]" />
             </motion.div>
 
             <h2 className="font-serif font-semibold text-dark tracking-tight leading-[1.15] mb-5">
               Promociones por el{' '}
               <span className="italic text-primary">
                 Aniversario de Arequipa
-                <ArequipaSeal className="w-11 h-7 md:w-12 md:h-8 ml-3 -translate-y-1" />
+                <ArequipaFlag className="w-12 h-8 md:w-14 md:h-9 ml-3 -translate-y-1" />
               </span>
             </h2>
 
             {/* Cinta carmesí bajo el título */}
             <div className="flex items-center justify-center gap-2 mb-5">
-              <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#B30A1E]/40" />
+              <span className="h-px w-10 bg-gradient-to-r from-transparent to-[#87000F]/40" />
               <ArequipaRibbon className="max-w-[110px] rounded-full shadow-sm" />
-              <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#B30A1E]/40" />
+              <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#87000F]/40" />
             </div>
 
             <p className="text-gray-500">
@@ -276,7 +283,7 @@ export default function OffersClub() {
 
           {/* Featured offer — large card */}
           <div
-            className="relative max-w-5xl mx-auto mb-8 grid"
+            className="relative max-w-6xl mx-auto mb-10 grid"
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
           >
@@ -302,15 +309,15 @@ export default function OffersClub() {
             {/* Navigation arrows */}
             <button
               onClick={() => setActive((p) => (p - 1 + offers.length) % offers.length)}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-dark hover:bg-white transition-colors z-20"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/95 shadow-xl flex items-center justify-center text-dark hover:bg-white hover:scale-105 transition-all z-20"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={() => setActive((p) => (p + 1) % offers.length)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-dark hover:bg-white transition-colors z-20"
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/95 shadow-xl flex items-center justify-center text-dark hover:bg-white hover:scale-105 transition-all z-20"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-6 h-6" />
             </button>
           </div>
 

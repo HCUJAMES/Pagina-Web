@@ -100,7 +100,9 @@
       "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'WhatsApp: todos los mensajes indican que vienen de la pagina web *)",
       "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Hero: aviso animado de Fiestas Patrias que lleva a las promociones *)",
       "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Hero: banner de promociones mucho mas grande y con animacion potente *)",
-      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: Aniversario de Arequipa \\(reemplaza las de Fiestas Patrias\\) *)"
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: Aniversario de Arequipa \\(reemplaza las de Fiestas Patrias\\) *)",
+      "Bash(awk '{print $5/1024\" KB\"}')",
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: bandera real de Arequipa y presentacion mas grande *)"
     ]
   }
 }

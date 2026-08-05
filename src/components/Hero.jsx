@@ -1,13 +1,19 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
 
-// Sello del aniversario de Arequipa (mismo carmesí que las piezas gráficas)
-function ArequipaSeal({ className = 'w-6 h-4' }) {
+// Bandera de Arequipa (carmesí con el escudo de la ciudad)
+function ArequipaFlag({ className = 'w-8 h-5' }) {
   return (
-    <span className={`relative inline-flex items-center justify-center overflow-hidden rounded-[3px] ring-1 ring-white/25 align-middle bg-gradient-to-br from-[#C40D22] to-[#7d0715] ${className}`} aria-hidden="true">
-      <span className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-black/20" />
-      <span className="relative text-white font-black leading-none not-italic font-sans" style={{ fontSize: '0.6em', letterSpacing: '0.04em' }}>AQP</span>
-    </span>
+    <img
+      src="/Imagenes/bandera-arequipa.png"
+      alt=""
+      aria-hidden="true"
+      width="260"
+      height="173"
+      loading="eager"
+      decoding="async"
+      className={`inline-block object-cover rounded-[3px] ring-1 ring-white/30 shadow-sm align-middle ${className}`}
+    />
   );
 }
 
@@ -62,7 +68,7 @@ export default function Hero() {
             >
               {/* Resplandor exterior que respira */}
               <motion.span
-                className="absolute -inset-3 rounded-[2rem] bg-[#B30A1E]/30 blur-2xl pointer-events-none"
+                className="absolute -inset-3 rounded-[2rem] bg-[#87000F]/30 blur-2xl pointer-events-none"
                 animate={{ opacity: [0.35, 0.85, 0.35], scale: [0.96, 1.04, 0.96] }}
                 transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
               />
@@ -73,9 +79,9 @@ export default function Hero() {
                 animate={{ y: [0, -7, 0] }}
                 transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <span className="relative block rounded-[1.5rem] bg-white/92 backdrop-blur-xl ring-1 ring-[#B30A1E]/30 shadow-[0_22px_55px_-12px_rgba(179,10,30,0.5)] overflow-hidden">
+                <span className="relative block rounded-[1.5rem] bg-white/92 backdrop-blur-xl ring-1 ring-[#87000F]/30 shadow-[0_22px_55px_-12px_rgba(135,0,15,0.5)] overflow-hidden">
                   {/* Cinta carmesí superior */}
-                  <span className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#B30A1E] via-[#e8536a] to-[#B30A1E]" />
+                  <span className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#87000F] via-[#d4405a] to-[#87000F]" />
                   {/* Destello que barre */}
                   <motion.span
                     className="absolute top-0 bottom-0 w-28 -skew-x-12 bg-gradient-to-r from-transparent via-white/90 to-transparent pointer-events-none"
@@ -86,11 +92,11 @@ export default function Hero() {
                   <span className="relative flex items-center gap-4 sm:gap-5 p-3.5 sm:p-4 pt-4 sm:pt-5">
                     {/* Bloque del descuento */}
                     <motion.span
-                      className="relative flex flex-col items-center justify-center w-[74px] h-[74px] sm:w-[86px] sm:h-[86px] rounded-2xl bg-gradient-to-br from-[#C40D22] to-[#960c18] shadow-lg shadow-[#B30A1E]/40 flex-shrink-0"
+                      className="relative flex flex-col items-center justify-center w-[74px] h-[74px] sm:w-[86px] sm:h-[86px] rounded-2xl bg-gradient-to-br from-[#a80014] to-[#960c18] shadow-lg shadow-[#87000F]/40 flex-shrink-0"
                       animate={{ rotate: [-2.5, 2.5, -2.5] }}
                       transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                      <ArequipaSeal className="w-8 h-[18px] sm:w-9 sm:h-5 mb-1" />
+                      <ArequipaFlag className="w-9 h-6 sm:w-10 sm:h-[26px] mb-1.5" />
                       <span className="font-serif text-[26px] sm:text-[31px] font-black text-white leading-none tracking-tight drop-shadow">
                         30%
                       </span>
@@ -101,9 +107,9 @@ export default function Hero() {
 
                     {/* Texto */}
                     <span className="flex flex-col min-w-0 flex-1">
-                      <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-[#B30A1E] font-black mb-1.5">
+                      <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-[#87000F] font-black mb-1.5">
                         <motion.span
-                          className="w-1.5 h-1.5 rounded-full bg-[#B30A1E]"
+                          className="w-1.5 h-1.5 rounded-full bg-[#87000F]"
                           animate={{ scale: [1, 1.7, 1], opacity: [1, 0.4, 1] }}
                           transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
                         />
@@ -115,7 +121,7 @@ export default function Hero() {
                       <span className="text-[11px] sm:text-[12px] text-gray-500 font-medium mb-2.5">
                         Válidas hasta el 15 de agosto
                       </span>
-                      <span className="inline-flex items-center gap-1.5 text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.12em] text-accent group-hover:text-[#B30A1E] transition-colors">
+                      <span className="inline-flex items-center gap-1.5 text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.12em] text-accent group-hover:text-[#87000F] transition-colors">
                         Ver promociones
                         <motion.span
                           animate={{ x: [0, 4, 0] }}
@@ -128,7 +134,7 @@ export default function Hero() {
 
                     {/* Flecha circular */}
                     <motion.span
-                      className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-accent text-white flex-shrink-0 shadow-lg group-hover:bg-[#B30A1E] transition-colors self-center"
+                      className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-accent text-white flex-shrink-0 shadow-lg group-hover:bg-[#87000F] transition-colors self-center"
                       animate={{ y: [0, 5, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
                     >
@@ -146,7 +152,7 @@ export default function Hero() {
                   <Sparkles className="w-5 h-5" />
                 </motion.span>
                 <motion.span
-                  className="absolute -bottom-1.5 left-8 text-[#B30A1E] pointer-events-none"
+                  className="absolute -bottom-1.5 left-8 text-[#87000F] pointer-events-none"
                   animate={{ scale: [0.6, 1.15, 0.6], opacity: [0.3, 0.9, 0.3], rotate: [0, -20, 0] }}
                   transition={{ duration: 2.6, repeat: Infinity, delay: 0.7, ease: 'easeInOut' }}
                 >
