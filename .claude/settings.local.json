@@ -112,7 +112,9 @@
       "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: banda carmesi de aniversario a todo el ancho *)",
       "Bash(mv image_backup_originales-aqp/* image_backup_originals/)",
       "Bash(rmdir image_backup_originales-aqp)",
-      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: el Misti y la Catedral integrados en la banda de aniversario *)"
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Promociones: el Misti y la Catedral integrados en la banda de aniversario *)",
+      "Bash(node -e \"const l=require\\('lucide-react'\\); console.log\\('BadgeInfo existe:', !!l.BadgeInfo\\)\")",
+      "Bash(git -c user.email=hcugatito97@gmail.com -c user.name=HCUJAMES commit -q -m 'Puntos: nota de condicion de canje en las pantallas del paciente *)"
     ]
   }
 }

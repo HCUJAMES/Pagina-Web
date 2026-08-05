@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, LogIn, UserPlus, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import CanjeNota from './CanjeNota';
 import WelcomeTour from './WelcomeTour';
 
 const inputCls = 'w-full px-5 py-3.5 bg-cream border border-gray-200 rounded-xl text-[15px] text-dark placeholder:text-gray-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all';
@@ -184,6 +185,8 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
                   ¿Ya tienes cuenta?{' '}
                   <button type="button" onClick={() => { setMode('login'); setError(''); }} className="text-primary font-semibold hover:underline">Inicia sesión</button>
                 </p>
+
+                <CanjeNota className="mt-1" />
               </form>
             ) : (
               <form onSubmit={handleLogin} className="space-y-5">
@@ -216,6 +219,8 @@ export default function LoginModal({ isOpen, onClose, onLogin, initialMode = 'lo
                   ¿No tienes cuenta?{' '}
                   <button type="button" onClick={() => { setMode('register'); setError(''); }} className="text-primary font-semibold hover:underline">Regístrate aquí</button>
                 </p>
+
+                <CanjeNota className="mt-1" />
               </form>
             )}
           </motion.div>

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Crown, Gift, Star, Sparkles, X, User, ChevronDown, LogOut, Trophy, Calendar, UserPlus, MessageSquare, Gem, TrendingUp, ArrowRight } from 'lucide-react';
 import { cardThemes } from '../lib/tierThemes';
 import { supabase } from '../lib/supabase';
+import CanjeNota from './CanjeNota';
 
 const levels = [
   { name: 'Bronce', icon: 'I', min: 0, next: 5000, canje: 3, gradient: 'from-amber-700 to-amber-500', glow: 'shadow-amber-500/20', ring: 'ring-amber-400/30', text: 'text-amber-700', bg: 'bg-amber-50' },
@@ -424,6 +425,9 @@ export default function ClientAccountBar({ session, onLogout }) {
                     </div>
                   </div>
                 )}
+
+                {/* Condición de canje */}
+                <CanjeNota className="mb-5" />
 
                 {/* Contact CTA */}
                 <div className="pb-8 pt-2">

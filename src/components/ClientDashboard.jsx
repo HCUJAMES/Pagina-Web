@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Crown, Gift, Star, ArrowLeft, Sparkles } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import CanjeNota from './CanjeNota';
 
 function getLevel(points) {
   if (points >= 30000) return { name: 'Diamante', color: 'text-blue-400', next: null, min: 30000, icon: '💎', canje: 7 };
@@ -178,6 +179,7 @@ export default function ClientDashboard({ session, onLogout }) {
 
         {/* Info */}
         <div className="text-center pb-12">
+          <CanjeNota className="mb-4 max-w-md mx-auto" />
           <p className="text-gray-400 text-[13px]">
             ¿Preguntas sobre tus puntos?{' '}
             <a
