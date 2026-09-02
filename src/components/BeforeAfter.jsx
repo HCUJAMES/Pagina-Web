@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { MoveHorizontal } from 'lucide-react';
+import { MoveHorizontal, Play } from 'lucide-react';
 
 const beforeAfterPairs = [
   {
@@ -14,6 +14,58 @@ const beforeAfterPairs = [
     after: '/Imagenes/despues1Labios .jpg',
   },
 ];
+
+const videos = [
+  { title: 'Armonización facial', src: '/videos/showclinic-video-1.mp4', poster: '/videos/poster-1.jpg' },
+  { title: 'Diseño de labios', src: '/videos/showclinic-video-2.mp4', poster: '/videos/poster-2.jpg' },
+];
+
+// Video que carga solo al pulsar: la portada se ve al instante y el archivo
+// no se descarga hasta que el paciente decide verlo.
+function VideoResultado({ src, poster, title }) {
+  const [activo, setActivo] = useState(false);
+  return (
+    <div className="relative rounded-2xl overflow-hidden bg-dark shadow-xl shadow-black/10 ring-1 ring-black/5 aspect-[9/16]">
+      {activo ? (
+        <video
+          src={src}
+          poster={poster}
+          controls
+          autoPlay
+          playsInline
+          loop
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setActivo(true)}
+          className="group absolute inset-0 w-full h-full"
+          aria-label={`Reproducir video: ${title}`}
+        >
+          <img
+            src={poster}
+            alt={`Resultado de ${title} en video`}
+            className="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
+            width="540"
+            height="964"
+          />
+          <span className="absolute inset-0 bg-gradient-to-t from-dark/70 via-transparent to-dark/20" />
+          <span className="absolute inset-0 flex items-center justify-center">
+            <span className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:bg-white transition-transform duration-300">
+              <Play className="w-6 h-6 text-primary ml-1" fill="currentColor" />
+            </span>
+          </span>
+          <span className="absolute bottom-4 inset-x-4 text-white text-[13px] font-semibold tracking-wide text-left drop-shadow">
+            {title}
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
 
 // Comparador antes/después con soporte total para móvil (toque) y escritorio (mouse)
 function CompareSlider({ before, after, title }) {
@@ -127,6 +179,36 @@ export default function BeforeAfter() {
               <CompareSlider before={pair.before} after={pair.after} title={pair.title} />
             </motion.div>
           ))}
+        </div>
+
+        {/* Resultados en video */}
+        <div className="max-w-3xl mx-auto mt-16 md:mt-20">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <span className="h-px w-10 bg-gradient-to-r from-transparent to-primary/40" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+                En video
+              </span>
+              <span className="h-px w-10 bg-gradient-to-l from-transparent to-primary/40" />
+            </div>
+            <p className="text-gray-500 text-[15px]">
+              Mira la transformación en movimiento
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {videos.map((v, i) => (
+              <motion.div
+                key={v.src}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <VideoResultado src={v.src} poster={v.poster} title={v.title} />
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

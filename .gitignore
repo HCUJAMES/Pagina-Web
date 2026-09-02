@@ -25,3 +25,9 @@ image_backup_originals
 *.njsproj
 *.sln
 *.sw?
+
+# Editores y herramientas locales
+.vscode/
+.idea/
+.claude/
+.DS_Store

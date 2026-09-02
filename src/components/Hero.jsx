@@ -1,21 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
-
-// Bandera de Arequipa (carmesí con el escudo de la ciudad)
-function ArequipaFlag({ className = 'w-8 h-5' }) {
-  return (
-    <img
-      src="/Imagenes/bandera-arequipa.png"
-      alt=""
-      aria-hidden="true"
-      width="260"
-      height="173"
-      loading="eager"
-      decoding="async"
-      className={`inline-block object-cover rounded-[3px] ring-1 ring-white/30 shadow-sm align-middle ${className}`}
-    />
-  );
-}
+import { ArrowRight, ChevronDown, Sparkles, Gift } from 'lucide-react';
 
 export default function Hero() {
   return (
@@ -64,11 +48,11 @@ export default function Hero() {
               whileHover={{ scale: 1.03, y: -3 }}
               whileTap={{ scale: 0.985 }}
               className="group relative block w-full max-w-[430px] mb-8 rounded-[1.5rem] overflow-hidden"
-              aria-label="Ver promociones por el aniversario de Arequipa, hasta 30% de descuento"
+              aria-label="Ver promociones de la semana: reserva un tratamiento y llévate otro de regalo"
             >
               {/* Resplandor exterior que respira */}
               <motion.span
-                className="absolute -inset-3 rounded-[2rem] bg-[#87000F]/30 blur-2xl pointer-events-none"
+                className="absolute -inset-3 rounded-[2rem] bg-[#8B6F4E]/30 blur-2xl pointer-events-none"
                 animate={{ opacity: [0.35, 0.85, 0.35], scale: [0.96, 1.04, 0.96] }}
                 transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
               />
@@ -79,9 +63,9 @@ export default function Hero() {
                 animate={{ y: [0, -7, 0] }}
                 transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <span className="relative block rounded-[1.5rem] bg-white/92 backdrop-blur-xl ring-1 ring-[#87000F]/30 shadow-[0_22px_55px_-12px_rgba(135,0,15,0.5)] overflow-hidden">
-                  {/* Cinta carmesí superior */}
-                  <span className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#87000F] via-[#d4405a] to-[#87000F]" />
+                <span className="relative block rounded-[1.5rem] bg-white/92 backdrop-blur-xl ring-1 ring-[#8B6F4E]/30 shadow-[0_22px_55px_-12px_rgba(139,111,78,0.45)] overflow-hidden">
+                  {/* Filete dorado superior */}
+                  <span className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#8B6F4E] via-[#C9A227] to-[#8B6F4E]" />
                   {/* Destello que barre */}
                   <motion.span
                     className="absolute top-0 bottom-0 w-28 -skew-x-12 bg-gradient-to-r from-transparent via-white/90 to-transparent pointer-events-none"
@@ -90,38 +74,38 @@ export default function Hero() {
                   />
 
                   <span className="relative flex items-center gap-4 sm:gap-5 p-3.5 sm:p-4 pt-4 sm:pt-5">
-                    {/* Bloque del descuento */}
+                    {/* Bloque del regalo */}
                     <motion.span
-                      className="relative flex flex-col items-center justify-center w-[74px] h-[74px] sm:w-[86px] sm:h-[86px] rounded-2xl bg-gradient-to-br from-[#a80014] to-[#960c18] shadow-lg shadow-[#87000F]/40 flex-shrink-0"
+                      className="relative flex flex-col items-center justify-center w-[74px] h-[74px] sm:w-[86px] sm:h-[86px] rounded-2xl bg-gradient-to-br from-[#8B6F4E] to-[#6d563c] shadow-lg shadow-[#8B6F4E]/40 flex-shrink-0"
                       animate={{ rotate: [-2.5, 2.5, -2.5] }}
                       transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                      <ArequipaFlag className="w-9 h-6 sm:w-10 sm:h-[26px] mb-1.5" />
-                      <span className="font-serif text-[26px] sm:text-[31px] font-black text-white leading-none tracking-tight drop-shadow">
-                        30%
+                      <Gift className="w-6 h-6 sm:w-7 sm:h-7 text-white/90 mb-1" strokeWidth={1.8} />
+                      <span className="font-serif text-[19px] sm:text-[23px] font-black text-white leading-none tracking-tight drop-shadow">
+                        GRATIS
                       </span>
-                      <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.22em] text-white/80 font-bold mt-0.5">
-                        Dscto
+                      <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-white/80 font-bold mt-1">
+                        De regalo
                       </span>
                     </motion.span>
 
                     {/* Texto */}
                     <span className="flex flex-col min-w-0 flex-1">
-                      <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-[#87000F] font-black mb-1.5">
+                      <span className="inline-flex items-center gap-1.5 text-[10px] sm:text-[11px] uppercase tracking-[0.2em] text-[#8B6F4E] font-black mb-1.5">
                         <motion.span
-                          className="w-1.5 h-1.5 rounded-full bg-[#87000F]"
+                          className="w-1.5 h-1.5 rounded-full bg-[#8B6F4E]"
                           animate={{ scale: [1, 1.7, 1], opacity: [1, 0.4, 1] }}
                           transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
                         />
-                        Aniversario de Arequipa
+                        Solo esta semana
                       </span>
                       <span className="font-serif text-[19px] sm:text-[23px] font-bold text-dark leading-[1.15] mb-1">
-                        Promociones del mes
+                        Promociones de la semana
                       </span>
                       <span className="text-[11px] sm:text-[12px] text-gray-500 font-medium mb-2.5">
-                        Válidas hasta el 15 de agosto
+                        Válidas hasta el 6 de septiembre
                       </span>
-                      <span className="inline-flex items-center gap-1.5 text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.12em] text-accent group-hover:text-[#87000F] transition-colors">
+                      <span className="inline-flex items-center gap-1.5 text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.12em] text-accent group-hover:text-[#8B6F4E] transition-colors">
                         Ver promociones
                         <motion.span
                           animate={{ x: [0, 4, 0] }}
@@ -134,7 +118,7 @@ export default function Hero() {
 
                     {/* Flecha circular */}
                     <motion.span
-                      className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-accent text-white flex-shrink-0 shadow-lg group-hover:bg-[#87000F] transition-colors self-center"
+                      className="flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-accent text-white flex-shrink-0 shadow-lg group-hover:bg-[#8B6F4E] transition-colors self-center"
                       animate={{ y: [0, 5, 0] }}
                       transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
                     >
@@ -152,7 +136,7 @@ export default function Hero() {
                   <Sparkles className="w-5 h-5" />
                 </motion.span>
                 <motion.span
-                  className="absolute -bottom-1.5 left-8 text-[#87000F] pointer-events-none"
+                  className="absolute -bottom-1.5 left-8 text-[#8B6F4E] pointer-events-none"
                   animate={{ scale: [0.6, 1.15, 0.6], opacity: [0.3, 0.9, 0.3], rotate: [0, -20, 0] }}
                   transition={{ duration: 2.6, repeat: Infinity, delay: 0.7, ease: 'easeInOut' }}
                 >

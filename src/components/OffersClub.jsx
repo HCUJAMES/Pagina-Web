@@ -3,63 +3,37 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Gift, Crown, Star, Sparkles, ArrowRight, Calendar, UserPlus, Clock, Flame, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cardThemes, tierOrder } from '../lib/tierThemes';
 
-// Promociones Aniversario de Arequipa — válidas hasta el 15 de agosto
-const VIGENCIA = 'Hasta el 15 de agosto';
+// Promociones de la semana — válidas hasta el 6 de septiembre
+const VIGENCIA = 'Hasta el 6 de septiembre';
 
+// Estas promos regalan un tratamiento adicional (no son descuento en %)
 const offers = [
   {
-    title: 'HIFU',
-    description: 'Estimula la producción de colágeno, tensa la piel y reduce la flacidez en rostro y cuello.',
-    discount: '-30%',
-    tag: 'Mayor descuento',
-    icon: Flame,
-    accentBg: 'bg-rose-600',
-    image: '/Imagenes/promo-aqp-hifu.jpg',
-  },
-  {
-    title: 'EM Slim',
-    description: 'Reduce hasta 5 cm de cintura y tonifica sin esfuerzo. Paquete de 5 sesiones.',
-    discount: '-25%',
-    tag: 'Resultado corporal',
-    icon: Zap,
-    accentBg: 'bg-teal-600',
-    image: '/Imagenes/promo-aqp-emslim.jpg',
-  },
-  {
-    title: 'Baby Botox',
-    description: 'Suaviza las líneas de expresión con dosis mínimas, manteniendo la naturalidad de tu rostro.',
-    discount: '-25%',
-    tag: 'Más popular',
+    title: 'Bótox Week',
+    regalo: 'HIFU',
+    description: 'Suaviza tus líneas de expresión y llévate una sesión de HIFU de regalo para tensar la piel.',
+    tag: 'Más solicitada',
     icon: Star,
     accentBg: 'bg-amber-500',
-    image: '/Imagenes/promo-aqp-babybotox.jpg',
+    image: '/Imagenes/promo-sep-botox.jpg',
   },
   {
-    title: 'Botox en Maseteros',
-    description: 'Estiliza el contorno de tu rostro y alivia la tensión mandibular al apretar los dientes.',
-    discount: '-25%',
-    tag: 'Top ventas',
+    title: 'Armonización Week',
+    regalo: 'Peeling Hollywood',
+    description: 'Equilibra las proporciones de tu rostro y suma un Peeling Hollywood sin costo para una piel luminosa.',
+    tag: 'Combo estrella',
     icon: Sparkles,
-    accentBg: 'bg-violet-500',
-    image: '/Imagenes/promo-aqp-maseteros.jpg',
-  },
-  {
-    title: 'Tratamientos Corporales',
-    description: 'Moldea tu figura con nuestros tratamientos corporales. Incluye consulta de evaluación gratis.',
-    discount: '-25%',
-    tag: 'Consulta gratis',
-    icon: Gift,
     accentBg: 'bg-primary',
-    image: '/Imagenes/promo-aqp-corporales.jpg',
+    image: '/Imagenes/promo-sep-armonizacion.jpg',
   },
   {
-    title: 'Limpiezas Faciales',
-    description: 'Piel limpia, luminosa y renovada. El cuidado básico que tu rostro agradece cada mes.',
-    discount: '-15%',
-    tag: 'Cuidado esencial',
-    icon: Star,
-    accentBg: 'bg-pink-600',
-    image: '/Imagenes/promo-aqp-limpieza.jpg',
+    title: 'Labios Week',
+    regalo: 'HIFU + Dermo Exfoliación',
+    description: 'Define tus labios y recibe dos regalos: una sesión de HIFU y una dermo exfoliación facial.',
+    tag: 'Doble regalo',
+    icon: Gift,
+    accentBg: 'bg-rose-600',
+    image: '/Imagenes/promo-sep-labios.jpg',
   },
 ];
 
@@ -71,26 +45,10 @@ const clubFeatures = [
   { icon: Sparkles, text: '5 niveles: Bronce → Diamante' },
 ];
 
-// Bandera de Arequipa (carmesí con el escudo de la ciudad)
-function ArequipaFlag({ className = 'w-9 h-6' }) {
+// Filete dorado decorativo
+function GoldRibbon({ className = '' }) {
   return (
-    <img
-      src="/Imagenes/bandera-arequipa.png"
-      alt=""
-      aria-hidden="true"
-      width="260"
-      height="173"
-      loading="lazy"
-      decoding="async"
-      className={`inline-block object-cover rounded-[3px] ring-1 ring-black/15 shadow-sm align-middle ${className}`}
-    />
-  );
-}
-
-// Cinta carmesí decorativa (tono real de la bandera)
-function ArequipaRibbon({ className = '' }) {
-  return (
-    <div className={`h-1 w-full bg-gradient-to-r from-[#87000F] via-[#d4405a] to-[#87000F] ${className}`} aria-hidden="true" />
+    <div className={`h-1 w-full bg-gradient-to-r from-primary via-primary-light to-primary ${className}`} aria-hidden="true" />
   );
 }
 
@@ -102,11 +60,11 @@ function OfferCard({ offer }) {
       <div className="relative flex items-center justify-center p-5 sm:p-6 md:p-7 md:rounded-l-3xl bg-gradient-to-br from-white via-cream to-[#F2EBE2]">
         {/* Marco premium con brillo */}
         <div className="relative group w-full max-w-[540px]">
-          <div className="absolute -inset-2 rounded-[1.6rem] bg-gradient-to-br from-primary/25 via-transparent to-[#87000F]/15 blur-xl opacity-70" />
+          <div className="absolute -inset-2 rounded-[1.6rem] bg-gradient-to-br from-primary/25 via-transparent to-primary-light/20 blur-xl opacity-70" />
           <div className="relative overflow-hidden rounded-[1.25rem] ring-1 ring-black/[0.06] shadow-[0_18px_45px_-12px_rgba(0,0,0,0.35)]">
             <img
               src={offer.image}
-              alt={`Promoción ${offer.title} ${offer.discount}`}
+              alt={`Promoción ${offer.title} — ${offer.regalo} gratis`}
               className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               loading="lazy"
               width="1000"
@@ -131,33 +89,31 @@ function OfferCard({ offer }) {
           </span>
         </div>
 
-        <div className="flex items-end gap-3 mb-4">
-          <span className="font-serif text-[5rem] md:text-[7rem] font-black leading-[0.85] bg-gradient-to-br from-white via-primary-light to-primary bg-clip-text text-transparent drop-shadow-sm">
-            {offer.discount.replace('-', '')}
-          </span>
-          <div className="pb-2">
-            <span className="block text-white/70 text-[12px] uppercase tracking-[0.16em] font-bold leading-tight">de</span>
-            <span className="block text-white/70 text-[12px] uppercase tracking-[0.16em] font-bold leading-tight">descuento</span>
-          </div>
-        </div>
-
-        {/* Bandera de Arequipa: acento del aniversario */}
-        <div className="flex items-center gap-2.5 mb-6">
-          <ArequipaFlag className="w-8 h-[21px]" />
-          <span className="text-white/70 text-[11px] uppercase tracking-[0.2em] font-bold">Aniversario de Arequipa</span>
-          <ArequipaRibbon className="max-w-[70px] rounded-full ml-1" />
-        </div>
-
-        <h3 className="font-serif text-3xl md:text-4xl font-bold text-white leading-[1.1] mb-3.5">
+        <h3 className="font-serif text-4xl md:text-5xl font-bold text-white leading-[1.05] mb-5">
           {offer.title}
         </h3>
+
+        {/* El regalo es el protagonista */}
+        <div className="relative inline-flex flex-col self-start rounded-2xl bg-white/[0.07] ring-1 ring-primary/40 px-6 py-5 mb-7 overflow-hidden">
+          <GoldRibbon className="absolute top-0 inset-x-0" />
+          <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.22em] text-primary-light font-bold mb-2">
+            <Gift className="w-3 h-3" />
+            Te regalamos
+          </span>
+          <span className="font-serif text-[2rem] md:text-[2.6rem] font-bold leading-[1.05] bg-gradient-to-br from-white via-primary-light to-primary bg-clip-text text-transparent">
+            {offer.regalo}
+          </span>
+          <span className="text-[13px] md:text-[14px] uppercase tracking-[0.3em] text-white font-black mt-1.5">
+            Gratis
+          </span>
+        </div>
 
         <p className="text-white/75 text-[16px] md:text-[17px] leading-relaxed mb-9 max-w-lg">
           {offer.description}
         </p>
 
         <a
-          href={`https://wa.me/51974212114?text=${encodeURIComponent(`Hola, vengo de la página web y me interesa la promoción de Aniversario de Arequipa: ${offer.title} (${offer.discount})`)}`}
+          href={`https://wa.me/51974212114?text=${encodeURIComponent(`Hola, vengo de la página web y me interesa la promoción ${offer.title} (con ${offer.regalo} gratis)`)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 px-9 py-4.5 text-[14px] font-bold uppercase tracking-[0.12em] text-accent bg-white rounded-full hover:bg-cream transition-colors duration-300 self-start"
@@ -241,49 +197,16 @@ export default function OffersClub() {
 
   return (
     <section id="promociones" className="scroll-mt-24">
-      {/* ===== BANDA DE ANIVERSARIO DE AREQUIPA ===== */}
-      <div className="relative overflow-hidden bg-[#6d000b]">
-        {/* Profundidad y textura */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#8f0011] via-[#75000c] to-[#520008]" />
-        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'repeating-linear-gradient(115deg, #fff 0px, #fff 1px, transparent 1px, transparent 9px)' }} />
-        <div className="absolute -top-40 left-1/4 w-[38rem] h-[38rem] bg-[#c81028]/25 rounded-full blur-[110px] pointer-events-none" />
-        <div className="absolute -bottom-52 right-0 w-[34rem] h-[34rem] bg-primary/15 rounded-full blur-[120px] pointer-events-none" />
-        {/* La Catedral de Arequipa — acento superior derecho */}
-        <img
-          src="/Imagenes/aqp-catedral.jpg"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          className="hidden lg:block absolute -top-16 -right-20 w-[32rem] max-w-none opacity-[0.4] pointer-events-none select-none"
-          style={{
-            filter: 'grayscale(1) sepia(1) hue-rotate(-28deg) saturate(3) contrast(1.05) brightness(0.9)',
-            maskImage: 'radial-gradient(68% 68% at 68% 38%, #000 18%, transparent 76%)',
-            WebkitMaskImage: 'radial-gradient(68% 68% at 68% 38%, #000 18%, transparent 76%)',
-          }}
-        />
-
-        {/* El Misti — horizonte de la ciudad al pie de la banda */}
-        <div className="absolute inset-x-0 bottom-0 h-72 md:h-[26rem] overflow-hidden pointer-events-none select-none">
-          <img
-            src="/Imagenes/aqp-misti.jpg"
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-x-0 bottom-0 w-full h-full object-cover object-center opacity-[0.45]"
-            style={{
-              filter: 'grayscale(1) sepia(1) hue-rotate(-28deg) saturate(3) contrast(1.05) brightness(0.85)',
-              maskImage: 'linear-gradient(to top, #000 0%, rgba(0,0,0,0.8) 32%, rgba(0,0,0,0.3) 68%, transparent 94%)',
-              WebkitMaskImage: 'linear-gradient(to top, #000 0%, rgba(0,0,0,0.8) 32%, rgba(0,0,0,0.3) 68%, transparent 94%)',
-            }}
-          />
-          {/* Velo carmesí para que el horizonte no compita con el contenido */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#5c0008]/55 via-transparent to-transparent" />
-        </div>
-        {/* Cintas carmesi arriba y abajo */}
-        <ArequipaRibbon className="absolute top-0 inset-x-0 z-10 opacity-90" />
-        <ArequipaRibbon className="absolute bottom-0 inset-x-0 z-10 opacity-70" />
+      {/* ===== BANDA DE PROMOCIONES DE LA SEMANA ===== */}
+      <div className="relative overflow-hidden bg-[#2A2320]">
+        {/* Profundidad y textura cálida */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#3D342E] via-[#2A2320] to-[#1a1512]" />
+        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'repeating-linear-gradient(115deg, #fff 0px, #fff 1px, transparent 1px, transparent 9px)' }} />
+        <div className="absolute -top-40 left-1/4 w-[38rem] h-[38rem] bg-primary/20 rounded-full blur-[110px] pointer-events-none" />
+        <div className="absolute -bottom-52 right-0 w-[34rem] h-[34rem] bg-primary-light/10 rounded-full blur-[120px] pointer-events-none" />
+        {/* Filetes dorados arriba y abajo */}
+        <GoldRibbon className="absolute top-0 inset-x-0 z-10" />
+        <GoldRibbon className="absolute bottom-0 inset-x-0 z-10 opacity-60" />
 
         <div className="container-fluid pt-20 md:pt-28 2xl:pt-32 pb-28 md:pb-40 relative">
         <div className="">
@@ -301,26 +224,22 @@ export default function OffersClub() {
               <span className="text-[12px] md:text-[13px] font-bold uppercase tracking-[0.18em] text-white">
                 Ofertas activas
               </span>
-              <ArequipaFlag className="w-9 h-6" />
             </motion.div>
 
             <h2 className="font-serif font-semibold text-white tracking-tight leading-[1.12] mb-6 drop-shadow-sm">
-              Promociones por el{' '}
-              <span className="italic text-[#F4C77B]">
-                Aniversario de Arequipa
-                <ArequipaFlag className="w-20 h-[54px] md:w-24 md:h-16 ml-4 -translate-y-1 ring-white/40 shadow-xl" />
-              </span>
+              Promociones de la{' '}
+              <span className="italic text-[#F4C77B]">semana</span>
             </h2>
 
             {/* Cinta carmesí bajo el título */}
             <div className="flex items-center justify-center gap-2 mb-5">
               <span className="h-px w-14 bg-gradient-to-r from-transparent to-white/40" />
-              <span className="px-4 py-1 rounded-full bg-white/10 ring-1 ring-white/20 text-[10px] uppercase tracking-[0.25em] text-white/80 font-bold">Edición especial</span>
+              <span className="px-4 py-1 rounded-full bg-white/10 ring-1 ring-white/20 text-[10px] uppercase tracking-[0.25em] text-white/80 font-bold">Solo esta semana</span>
               <span className="h-px w-14 bg-gradient-to-l from-transparent to-white/40" />
             </div>
 
             <p className="text-white/75 text-[15px] md:text-[17px]">
-              Descuentos de hasta <span className="font-bold text-[#F4C77B]">30%</span> en nuestros tratamientos más solicitados · {VIGENCIA}
+              Reserva tu tratamiento y llévate <span className="font-bold text-[#F4C77B]">otro de regalo</span> · {VIGENCIA}
             </p>
           </div>
 
@@ -341,7 +260,7 @@ export default function OffersClub() {
                 className="relative overflow-hidden rounded-3xl bg-accent ring-1 ring-white/10 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.55)]"
               >
                 {/* Cinta carmesí superior */}
-                <ArequipaRibbon className="absolute top-0 left-0 right-0 z-20 opacity-90" />
+                <GoldRibbon className="absolute top-0 left-0 right-0 z-20 opacity-90" />
                 <div className={`absolute inset-0 bg-gradient-to-br ${currentOffer.accent} opacity-20`} />
                 <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4" />
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
@@ -374,16 +293,16 @@ export default function OffersClub() {
                   onClick={() => setActive(i)}
                   className={`group inline-flex items-center gap-2.5 pl-5 pr-2.5 py-3 rounded-full text-[13.5px] font-semibold transition-all duration-300 ${
                     active === i
-                      ? 'bg-white text-[#6d000b] shadow-2xl ring-2 ring-white/60 scale-[1.06]'
+                      ? 'bg-white text-accent shadow-2xl ring-2 ring-primary/50 scale-[1.06]'
                       : 'bg-white/12 text-white/85 ring-1 ring-white/20 hover:bg-white/22 hover:text-white backdrop-blur-sm'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 transition-colors ${active === i ? 'text-[#87000F]' : 'text-white/70'}`} />
+                  <Icon className={`w-3.5 h-3.5 transition-colors ${active === i ? 'text-primary' : 'text-white/70'}`} />
                   {offer.title}
                   <span className={`text-[11px] font-bold px-2 py-1 rounded-full transition-colors ${
-                    active === i ? 'bg-[#87000F] text-white' : 'bg-white/20 text-white group-hover:bg-white/30'
+                    active === i ? 'bg-primary text-white' : 'bg-white/20 text-white group-hover:bg-white/30'
                   }`}>
-                    {offer.discount}
+                    + {offer.regalo}
                   </span>
                 </button>
               );
