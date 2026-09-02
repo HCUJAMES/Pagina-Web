@@ -368,7 +368,7 @@ export default function OffersClub() {
           </div>
 
           {/* Resultados en video de estas promociones */}
-          <div className="max-w-3xl mx-auto mt-16 md:mt-20">
+          <div className="max-w-4xl mx-auto mt-16 md:mt-20">
             <div className="text-center mb-8">
               <div className="flex items-center justify-center gap-3 mb-3">
                 <span className="h-px w-12 bg-gradient-to-r from-transparent to-primary/50" />
@@ -382,7 +382,7 @@ export default function OffersClub() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-lg mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-7 sm:gap-8 max-w-[360px] sm:max-w-3xl mx-auto">
               {videos.map((v, i) => (
                 <motion.div
                   key={v.src}
