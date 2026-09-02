@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Gift, Crown, Star, Sparkles, ArrowRight, Calendar, UserPlus, Clock, Flame, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cardThemes, tierOrder } from '../lib/tierThemes';
@@ -49,6 +49,64 @@ const clubFeatures = [
 function GoldRibbon({ className = '' }) {
   return (
     <div className={`h-1 w-full bg-gradient-to-r from-primary via-primary-light to-primary ${className}`} aria-hidden="true" />
+  );
+}
+
+// Videos de resultados que acompañan a las promociones
+const videos = [
+  { title: 'Armonización facial', src: '/videos/showclinic-video-1.mp4', poster: '/videos/poster-1.jpg' },
+  { title: 'Diseño de labios', src: '/videos/showclinic-video-2.mp4', poster: '/videos/poster-2.jpg' },
+];
+
+// Se reproduce solo (sin sonido, en bucle) cuando entra en pantalla,
+// y se pausa al salir para no gastar datos ni batería del paciente.
+function VideoPromo({ src, poster, title }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === 'undefined') return;
+
+    const io = new IntersectionObserver(
+      ([entrada]) => {
+        if (entrada.isIntersecting) {
+          el.play().catch(() => { /* si el navegador lo bloquea, queda la portada */ });
+        } else {
+          el.pause();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <figure className="group relative">
+      <div className="relative rounded-2xl overflow-hidden ring-1 ring-primary/30 shadow-[0_18px_45px_-12px_rgba(0,0,0,0.55)] aspect-[9/16] bg-dark">
+        <video
+          ref={ref}
+          src={src}
+          poster={poster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label={`Resultado en video: ${title}`}
+          className="w-full h-full object-cover"
+        />
+        {/* Velo inferior para que el rótulo se lea siempre */}
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/75 to-transparent pointer-events-none" />
+        <figcaption className="absolute bottom-3.5 inset-x-4 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary-light flex-shrink-0" />
+          <span className="text-white text-[12.5px] font-semibold tracking-wide drop-shadow">
+            {title}
+          </span>
+        </figcaption>
+      </div>
+    </figure>
   );
 }
 
@@ -307,6 +365,36 @@ export default function OffersClub() {
                 </button>
               );
             })}
+          </div>
+
+          {/* Resultados en video de estas promociones */}
+          <div className="max-w-3xl mx-auto mt-16 md:mt-20">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <span className="h-px w-12 bg-gradient-to-r from-transparent to-primary/50" />
+                <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-primary-light">
+                  Resultados reales
+                </span>
+                <span className="h-px w-12 bg-gradient-to-l from-transparent to-primary/50" />
+              </div>
+              <p className="text-white/65 text-[15px]">
+                Mira el antes y después de nuestras pacientes
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 max-w-lg mx-auto">
+              {videos.map((v, i) => (
+                <motion.div
+                  key={v.src}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.12 }}
+                >
+                  <VideoPromo src={v.src} poster={v.poster} title={v.title} />
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
         </div>
