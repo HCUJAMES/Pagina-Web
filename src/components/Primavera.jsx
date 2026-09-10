@@ -118,11 +118,12 @@ function Petalo({ tono }) {
 }
 
 /**
- * Lluvia de pétalos y margaritas sobre la portada.
- * Vive dentro de la portada, así cae sobre la imagen de inicio y desaparece
- * al bajar. No estorba el clic y respeta a quien pidió menos animaciones.
+ * Lluvia de pétalos y margaritas sobre toda la web.
+ * Capa fija: caen desde arriba a lo ancho de la pantalla y acompañan al
+ * visitante mientras baja. No estorba el clic ni tapa el menú, y respeta
+ * a quien pidió menos animaciones en su dispositivo.
  */
-export function LluviaDePetalos({ cantidad = 18 }) {
+export function LluviaDePetalos({ cantidad = 20 }) {
   const [animar, setAnimar] = useState(true);
 
   useEffect(() => {
@@ -156,14 +157,14 @@ export function LluviaDePetalos({ cantidad = 18 }) {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 z-20 pointer-events-none overflow-hidden"
+      className="fixed inset-0 z-[45] pointer-events-none overflow-hidden"
     >
       <style>{`
         @keyframes sc-caer {
-          0%   { transform: translate3d(0, -14%, 0); opacity: 0; }
-          8%   { opacity: 1; }
-          88%  { opacity: 1; }
-          100% { transform: translate3d(0, 105vh, 0); opacity: 0; }
+          0%   { transform: translate3d(0, -15vh, 0); opacity: 0; }
+          6%   { opacity: 1; }
+          90%  { opacity: 1; }
+          100% { transform: translate3d(0, 108vh, 0); opacity: 0; }
         }
         @keyframes sc-vaiven {
           0%, 100% { transform: translateX(-16px) rotate(0deg); }
