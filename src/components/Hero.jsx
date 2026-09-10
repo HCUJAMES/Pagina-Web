@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, ChevronDown, Sparkles, Gift } from 'lucide-react';
+import { ArrowRight, ChevronDown, Sparkles, Flower2 } from 'lucide-react';
 
 export default function Hero() {
   return (
@@ -48,7 +48,7 @@ export default function Hero() {
               whileHover={{ scale: 1.03, y: -3 }}
               whileTap={{ scale: 0.985 }}
               className="group relative block w-full max-w-[430px] mb-8 rounded-[1.5rem] overflow-hidden"
-              aria-label="Ver promociones de la semana: reserva un tratamiento y llévate otro de regalo"
+              aria-label="Ver promociones de primavera: hasta 30% de descuento"
             >
               {/* Resplandor exterior que respira */}
               <motion.span
@@ -74,18 +74,18 @@ export default function Hero() {
                   />
 
                   <span className="relative flex items-center gap-4 sm:gap-5 p-3.5 sm:p-4 pt-4 sm:pt-5">
-                    {/* Bloque del regalo */}
+                    {/* Bloque del descuento */}
                     <motion.span
                       className="relative flex flex-col items-center justify-center w-[74px] h-[74px] sm:w-[86px] sm:h-[86px] rounded-2xl bg-gradient-to-br from-[#8B6F4E] to-[#6d563c] shadow-lg shadow-[#8B6F4E]/40 flex-shrink-0"
                       animate={{ rotate: [-2.5, 2.5, -2.5] }}
                       transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                      <Gift className="w-6 h-6 sm:w-7 sm:h-7 text-white/90 mb-1" strokeWidth={1.8} />
-                      <span className="font-serif text-[19px] sm:text-[23px] font-black text-white leading-none tracking-tight drop-shadow">
-                        GRATIS
+                      <Flower2 className="w-5 h-5 sm:w-6 sm:h-6 text-white/85 mb-1" strokeWidth={1.8} />
+                      <span className="font-serif text-[26px] sm:text-[31px] font-black text-white leading-none tracking-tight drop-shadow">
+                        30%
                       </span>
                       <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-white/80 font-bold mt-1">
-                        De regalo
+                        Dscto
                       </span>
                     </motion.span>
 
@@ -97,13 +97,13 @@ export default function Hero() {
                           animate={{ scale: [1, 1.7, 1], opacity: [1, 0.4, 1] }}
                           transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
                         />
-                        Solo esta semana
+                        Spring Glow
                       </span>
                       <span className="font-serif text-[19px] sm:text-[23px] font-bold text-dark leading-[1.15] mb-1">
-                        Promociones de la semana
+                        Promociones de primavera
                       </span>
                       <span className="text-[11px] sm:text-[12px] text-gray-500 font-medium mb-2.5">
-                        Válidas hasta el 6 de septiembre
+                        Válidas hasta el 22 de septiembre
                       </span>
                       <span className="inline-flex items-center gap-1.5 text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.12em] text-accent group-hover:text-[#8B6F4E] transition-colors">
                         Ver promociones

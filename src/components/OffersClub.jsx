@@ -1,39 +1,38 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Gift, Crown, Star, Sparkles, ArrowRight, Calendar, UserPlus, Clock, Flame, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Gift, Crown, Star, Sparkles, ArrowRight, Calendar, UserPlus, Clock, Flame, Zap, Flower2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cardThemes, tierOrder } from '../lib/tierThemes';
 
-// Promociones de la semana — válidas hasta el 6 de septiembre
-const VIGENCIA = 'Hasta el 6 de septiembre';
+// Promociones de primavera — válidas hasta el 22 de septiembre
+const VIGENCIA = 'Hasta el 22 de septiembre';
 
-// Estas promos regalan un tratamiento adicional (no son descuento en %)
 const offers = [
   {
-    title: 'Bótox Week',
-    regalo: 'HIFU',
-    description: 'Suaviza tus líneas de expresión y llévate una sesión de HIFU de regalo para tensar la piel.',
+    title: 'Rinomodelación + Labios',
+    discount: '-30%',
+    description: 'Define tu perfil y realza tus labios en una sola sesión. El combo que transforma tu rostro con armonía.',
+    tag: 'Mayor descuento',
+    icon: Flame,
+    accentBg: 'bg-rose-500',
+    image: '/Imagenes/promo-primavera-rino-labios.jpg',
+  },
+  {
+    title: 'Diseño de Labios',
+    discount: '-25%',
+    description: 'Labios definidos, hidratados y con volumen natural. El detalle que ilumina toda tu expresión.',
     tag: 'Más solicitada',
     icon: Star,
-    accentBg: 'bg-amber-500',
-    image: '/Imagenes/promo-sep-botox.jpg',
-  },
-  {
-    title: 'Armonización Week',
-    regalo: 'Peeling Hollywood',
-    description: 'Equilibra las proporciones de tu rostro y suma un Peeling Hollywood sin costo para una piel luminosa.',
-    tag: 'Combo estrella',
-    icon: Sparkles,
     accentBg: 'bg-primary',
-    image: '/Imagenes/promo-sep-armonizacion.jpg',
+    image: '/Imagenes/promo-primavera-labios.jpg',
   },
   {
-    title: 'Labios Week',
-    regalo: 'HIFU + Dermo Exfoliación',
-    description: 'Define tus labios y recibe dos regalos: una sesión de HIFU y una dermo exfoliación facial.',
-    tag: 'Doble regalo',
-    icon: Gift,
-    accentBg: 'bg-rose-600',
-    image: '/Imagenes/promo-sep-labios.jpg',
+    title: 'Biostimuladores',
+    discount: '-15%',
+    description: 'Estimulan tu propio colágeno para una piel firme y luminosa. Resultados que se ven con el tiempo.',
+    tag: 'Efecto colágeno',
+    icon: Sparkles,
+    accentBg: 'bg-emerald-600',
+    image: '/Imagenes/promo-primavera-biostimuladores.jpg',
   },
 ];
 
@@ -44,6 +43,47 @@ const clubFeatures = [
   { icon: UserPlus, text: '+3,000 pts por referir un paciente' },
   { icon: Sparkles, text: '5 niveles: Bronce → Diamante' },
 ];
+
+// Rama botánica de primavera, dibujada en trazo fino
+function BotanicalBranch({ className = '', flip = false }) {
+  return (
+    <svg
+      viewBox="0 0 200 320"
+      fill="none"
+      aria-hidden="true"
+      className={`${className} ${flip ? 'scale-x-[-1]' : ''}`}
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <path d="M100 320 C100 240 96 170 88 96 C84 60 76 30 66 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      {[
+        { x: 92, y: 250, r: -28 }, { x: 96, y: 200, r: 26 },
+        { x: 88, y: 158, r: -34 }, { x: 84, y: 118, r: 30 },
+        { x: 78, y: 82, r: -26 }, { x: 72, y: 48, r: 24 },
+      ].map((h, i) => (
+        <ellipse
+          key={i}
+          cx={h.x + (h.r < 0 ? -22 : 22)}
+          cy={h.y}
+          rx="21"
+          ry="9"
+          stroke="currentColor"
+          strokeWidth="1.3"
+          transform={`rotate(${h.r} ${h.x + (h.r < 0 ? -22 : 22)} ${h.y})`}
+        />
+      ))}
+      {[
+        { x: 118, y: 176 }, { x: 60, y: 128 }, { x: 112, y: 66 },
+      ].map((f, i) => (
+        <g key={`f${i}`} transform={`translate(${f.x} ${f.y})`}>
+          {[0, 72, 144, 216, 288].map((a) => (
+            <ellipse key={a} cx="0" cy="-9" rx="5" ry="9.5" stroke="currentColor" strokeWidth="1.2" transform={`rotate(${a})`} />
+          ))}
+          <circle cx="0" cy="0" r="2.4" fill="currentColor" opacity="0.5" />
+        </g>
+      ))}
+    </svg>
+  );
+}
 
 // Filete dorado decorativo
 function GoldRibbon({ className = '' }) {
@@ -122,7 +162,7 @@ function OfferCard({ offer }) {
           <div className="relative overflow-hidden rounded-[1.25rem] ring-1 ring-black/[0.06] shadow-[0_18px_45px_-12px_rgba(0,0,0,0.35)]">
             <img
               src={offer.image}
-              alt={`Promoción ${offer.title} — ${offer.regalo} gratis`}
+              alt={`Promoción ${offer.title} ${offer.discount}`}
               className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-[1.04]"
               loading="lazy"
               width="1000"
@@ -151,19 +191,19 @@ function OfferCard({ offer }) {
           {offer.title}
         </h3>
 
-        {/* El regalo es el protagonista */}
-        <div className="relative inline-flex flex-col self-start rounded-2xl bg-white/[0.07] ring-1 ring-primary/40 px-6 py-5 mb-7 overflow-hidden">
-          <GoldRibbon className="absolute top-0 inset-x-0" />
-          <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.22em] text-primary-light font-bold mb-2">
-            <Gift className="w-3 h-3" />
-            Te regalamos
+        {/* El descuento es el protagonista */}
+        <div className="flex items-end gap-4 mb-7">
+          <span className="font-serif text-[5rem] md:text-[7rem] font-black leading-[0.85] bg-gradient-to-br from-white via-primary-light to-primary bg-clip-text text-transparent drop-shadow-sm">
+            {offer.discount.replace('-', '')}
           </span>
-          <span className="font-serif text-[2rem] md:text-[2.6rem] font-bold leading-[1.05] bg-gradient-to-br from-white via-primary-light to-primary bg-clip-text text-transparent">
-            {offer.regalo}
-          </span>
-          <span className="text-[13px] md:text-[14px] uppercase tracking-[0.3em] text-white font-black mt-1.5">
-            Gratis
-          </span>
+          <div className="pb-2.5">
+            <span className="block text-white/70 text-[12px] uppercase tracking-[0.16em] font-bold leading-tight">de</span>
+            <span className="block text-white/70 text-[12px] uppercase tracking-[0.16em] font-bold leading-tight">descuento</span>
+            <span className="inline-flex items-center gap-1 mt-2 text-[10px] uppercase tracking-[0.2em] text-primary-light font-bold">
+              <Flower2 className="w-3 h-3" />
+              Spring Glow
+            </span>
+          </div>
         </div>
 
         <p className="text-white/75 text-[16px] md:text-[17px] leading-relaxed mb-9 max-w-lg">
@@ -171,7 +211,7 @@ function OfferCard({ offer }) {
         </p>
 
         <a
-          href={`https://wa.me/51974212114?text=${encodeURIComponent(`Hola, vengo de la página web y me interesa la promoción ${offer.title} (con ${offer.regalo} gratis)`)}`}
+          href={`https://wa.me/51974212114?text=${encodeURIComponent(`Hola, vengo de la página web y me interesa la promoción de primavera: ${offer.title} (${offer.discount})`)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 px-9 py-4.5 text-[14px] font-bold uppercase tracking-[0.12em] text-accent bg-white rounded-full hover:bg-cream transition-colors duration-300 self-start"
@@ -255,13 +295,18 @@ export default function OffersClub() {
 
   return (
     <section id="promociones" className="scroll-mt-24">
-      {/* ===== BANDA DE PROMOCIONES DE LA SEMANA ===== */}
-      <div className="relative overflow-hidden bg-[#2A2320]">
-        {/* Profundidad y textura cálida */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#3D342E] via-[#2A2320] to-[#1a1512]" />
-        <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'repeating-linear-gradient(115deg, #fff 0px, #fff 1px, transparent 1px, transparent 9px)' }} />
-        <div className="absolute -top-40 left-1/4 w-[38rem] h-[38rem] bg-primary/20 rounded-full blur-[110px] pointer-events-none" />
-        <div className="absolute -bottom-52 right-0 w-[34rem] h-[34rem] bg-primary-light/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* ===== BANDA DE PRIMAVERA ===== */}
+      <div className="relative overflow-hidden bg-[#FBF7F2]">
+        {/* Luz de primavera: crema, durazno y un velo verde muy tenue */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF8] via-[#F7EFE6] to-[#F0E7DC]" />
+        <div className="absolute -top-44 left-1/5 w-[40rem] h-[40rem] bg-[#E8C9A8]/40 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute top-1/3 -right-32 w-[34rem] h-[34rem] bg-[#CBD9C4]/35 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute -bottom-52 left-1/3 w-[32rem] h-[32rem] bg-[#F0D8D2]/40 rounded-full blur-[130px] pointer-events-none" />
+
+        {/* Ramas botánicas a los costados */}
+        <BotanicalBranch className="hidden lg:block absolute -left-10 top-16 w-56 h-auto text-primary/[0.18] pointer-events-none" />
+        <BotanicalBranch flip className="hidden lg:block absolute -right-10 bottom-24 w-64 h-auto text-primary/[0.15] pointer-events-none" />
+
         {/* Filetes dorados arriba y abajo */}
         <GoldRibbon className="absolute top-0 inset-x-0 z-10" />
         <GoldRibbon className="absolute bottom-0 inset-x-0 z-10 opacity-60" />
@@ -273,31 +318,31 @@ export default function OffersClub() {
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/12 ring-1 ring-white/25 backdrop-blur-sm mb-7"
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/80 ring-1 ring-primary/25 shadow-sm backdrop-blur-sm mb-7"
             >
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-300 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-300" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
               </span>
-              <span className="text-[12px] md:text-[13px] font-bold uppercase tracking-[0.18em] text-white">
+              <span className="text-[12px] md:text-[13px] font-bold uppercase tracking-[0.18em] text-dark">
                 Ofertas activas
               </span>
             </motion.div>
 
-            <h2 className="font-serif font-semibold text-white tracking-tight leading-[1.12] mb-6 drop-shadow-sm">
-              Promociones de la{' '}
-              <span className="italic text-[#F4C77B]">semana</span>
+            <h2 className="font-serif font-semibold text-dark tracking-tight leading-[1.12] mb-6">
+              Promociones de{' '}
+              <span className="italic text-primary">primavera</span>
             </h2>
 
             {/* Cinta carmesí bajo el título */}
             <div className="flex items-center justify-center gap-2 mb-5">
-              <span className="h-px w-14 bg-gradient-to-r from-transparent to-white/40" />
-              <span className="px-4 py-1 rounded-full bg-white/10 ring-1 ring-white/20 text-[10px] uppercase tracking-[0.25em] text-white/80 font-bold">Solo esta semana</span>
-              <span className="h-px w-14 bg-gradient-to-l from-transparent to-white/40" />
+              <span className="h-px w-14 bg-gradient-to-r from-transparent to-primary/40" />
+              <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/80 ring-1 ring-primary/25 text-[10px] uppercase tracking-[0.25em] text-primary font-bold"><Flower2 className="w-3 h-3" />Spring Glow</span>
+              <span className="h-px w-14 bg-gradient-to-l from-transparent to-primary/40" />
             </div>
 
-            <p className="text-white/75 text-[15px] md:text-[17px]">
-              Reserva tu tratamiento y llévate <span className="font-bold text-[#F4C77B]">otro de regalo</span> · {VIGENCIA}
+            <p className="text-gray-600 text-[15px] md:text-[17px]">
+              Renueva tu piel esta primavera con hasta <span className="font-bold text-primary">30% de descuento</span> · {VIGENCIA}
             </p>
           </div>
 
@@ -329,13 +374,13 @@ export default function OffersClub() {
             {/* Navigation arrows */}
             <button
               onClick={() => setActive((p) => (p - 1 + offers.length) % offers.length)}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/95 shadow-xl flex items-center justify-center text-dark hover:bg-white hover:scale-105 transition-all z-20"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white shadow-xl ring-1 ring-primary/15 flex items-center justify-center text-dark hover:bg-cream hover:scale-105 transition-all z-20"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={() => setActive((p) => (p + 1) % offers.length)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/95 shadow-xl flex items-center justify-center text-dark hover:bg-white hover:scale-105 transition-all z-20"
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white shadow-xl ring-1 ring-primary/15 flex items-center justify-center text-dark hover:bg-cream hover:scale-105 transition-all z-20"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -351,16 +396,16 @@ export default function OffersClub() {
                   onClick={() => setActive(i)}
                   className={`group inline-flex items-center gap-2.5 pl-5 pr-2.5 py-3 rounded-full text-[13.5px] font-semibold transition-all duration-300 ${
                     active === i
-                      ? 'bg-white text-accent shadow-2xl ring-2 ring-primary/50 scale-[1.06]'
-                      : 'bg-white/12 text-white/85 ring-1 ring-white/20 hover:bg-white/22 hover:text-white backdrop-blur-sm'
+                      ? 'bg-accent text-white shadow-xl ring-2 ring-primary/40 scale-[1.06]'
+                      : 'bg-white/75 text-gray-600 ring-1 ring-gray-200 hover:bg-white hover:text-dark hover:ring-primary/30 shadow-sm backdrop-blur-sm'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 transition-colors ${active === i ? 'text-primary' : 'text-white/70'}`} />
+                  <Icon className={`w-3.5 h-3.5 transition-colors ${active === i ? 'text-primary-light' : 'text-primary/70'}`} />
                   {offer.title}
                   <span className={`text-[11px] font-bold px-2 py-1 rounded-full transition-colors ${
-                    active === i ? 'bg-primary text-white' : 'bg-white/20 text-white group-hover:bg-white/30'
+                    active === i ? 'bg-primary text-white' : 'bg-primary/10 text-primary group-hover:bg-primary/20'
                   }`}>
-                    + {offer.regalo}
+                    {offer.discount}
                   </span>
                 </button>
               );
@@ -372,12 +417,12 @@ export default function OffersClub() {
             <div className="text-center mb-8">
               <div className="flex items-center justify-center gap-3 mb-3">
                 <span className="h-px w-12 bg-gradient-to-r from-transparent to-primary/50" />
-                <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-primary-light">
+                <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
                   Resultados reales
                 </span>
                 <span className="h-px w-12 bg-gradient-to-l from-transparent to-primary/50" />
               </div>
-              <p className="text-white/65 text-[15px]">
+              <p className="text-gray-600 text-[15px]">
                 Mira el antes y después de nuestras pacientes
               </p>
             </div>
