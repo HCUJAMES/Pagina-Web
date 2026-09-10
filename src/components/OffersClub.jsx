@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Gift, Crown, Star, Sparkles, ArrowRight, Calendar, UserPlus, Clock, Flame, Zap, Flower2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cardThemes, tierOrder } from '../lib/tierThemes';
+import { Blossom, Branch } from './Primavera';
 
 // Promociones de primavera — válidas hasta el 22 de septiembre
 const VIGENCIA = 'Hasta el 22 de septiembre';
@@ -43,47 +44,6 @@ const clubFeatures = [
   { icon: UserPlus, text: '+3,000 pts por referir un paciente' },
   { icon: Sparkles, text: '5 niveles: Bronce → Diamante' },
 ];
-
-// Rama botánica de primavera, dibujada en trazo fino
-function BotanicalBranch({ className = '', flip = false }) {
-  return (
-    <svg
-      viewBox="0 0 200 320"
-      fill="none"
-      aria-hidden="true"
-      className={`${className} ${flip ? 'scale-x-[-1]' : ''}`}
-      preserveAspectRatio="xMidYMid meet"
-    >
-      <path d="M100 320 C100 240 96 170 88 96 C84 60 76 30 66 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      {[
-        { x: 92, y: 250, r: -28 }, { x: 96, y: 200, r: 26 },
-        { x: 88, y: 158, r: -34 }, { x: 84, y: 118, r: 30 },
-        { x: 78, y: 82, r: -26 }, { x: 72, y: 48, r: 24 },
-      ].map((h, i) => (
-        <ellipse
-          key={i}
-          cx={h.x + (h.r < 0 ? -22 : 22)}
-          cy={h.y}
-          rx="21"
-          ry="9"
-          stroke="currentColor"
-          strokeWidth="1.3"
-          transform={`rotate(${h.r} ${h.x + (h.r < 0 ? -22 : 22)} ${h.y})`}
-        />
-      ))}
-      {[
-        { x: 118, y: 176 }, { x: 60, y: 128 }, { x: 112, y: 66 },
-      ].map((f, i) => (
-        <g key={`f${i}`} transform={`translate(${f.x} ${f.y})`}>
-          {[0, 72, 144, 216, 288].map((a) => (
-            <ellipse key={a} cx="0" cy="-9" rx="5" ry="9.5" stroke="currentColor" strokeWidth="1.2" transform={`rotate(${a})`} />
-          ))}
-          <circle cx="0" cy="0" r="2.4" fill="currentColor" opacity="0.5" />
-        </g>
-      ))}
-    </svg>
-  );
-}
 
 // Filete dorado decorativo
 function GoldRibbon({ className = '' }) {
@@ -304,8 +264,15 @@ export default function OffersClub() {
         <div className="absolute -bottom-52 left-1/3 w-[32rem] h-[32rem] bg-[#F0D8D2]/40 rounded-full blur-[130px] pointer-events-none" />
 
         {/* Ramas botánicas a los costados */}
-        <BotanicalBranch className="hidden lg:block absolute -left-10 top-16 w-56 h-auto text-primary/[0.18] pointer-events-none" />
-        <BotanicalBranch flip className="hidden lg:block absolute -right-10 bottom-24 w-64 h-auto text-primary/[0.15] pointer-events-none" />
+        <Branch className="hidden lg:block absolute -left-12 top-14 w-56 h-auto text-primary/[0.16] pointer-events-none" />
+        <Branch flip className="hidden lg:block absolute -right-12 bottom-20 w-64 h-auto text-primary/[0.14] pointer-events-none" />
+
+        {/* Flores grandes: dejan claro que es primavera */}
+        <Blossom tono="blush" className="absolute -top-16 -left-16 w-56 h-56 md:w-80 md:h-80 opacity-70 rotate-12 pointer-events-none" />
+        <Blossom tono="crema" className="absolute top-24 -right-20 w-48 h-48 md:w-72 md:h-72 opacity-60 -rotate-12 pointer-events-none" />
+        <Blossom tono="rosa" className="hidden sm:block absolute bottom-10 -left-14 w-44 h-44 md:w-64 md:h-64 opacity-55 rotate-[25deg] pointer-events-none" />
+        <Blossom tono="blush" className="hidden md:block absolute -bottom-20 right-1/4 w-52 h-52 opacity-50 -rotate-[18deg] pointer-events-none" />
+        <Blossom tono="crema" className="hidden lg:block absolute top-1/2 left-[8%] w-24 h-24 opacity-70 rotate-45 pointer-events-none" />
 
         {/* Filetes dorados arriba y abajo */}
         <GoldRibbon className="absolute top-0 inset-x-0 z-10" />

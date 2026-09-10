@@ -17,6 +17,7 @@ import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
 import WhatsAppFloat from './components/WhatsAppFloat'
 import AdminAccountBar from './components/AdminAccountBar'
+import { LluviaDePetalos } from './components/Primavera'
 
 // Se descargan solo cuando hacen falta: así el visitante normal
 // no baja el panel de administración ni el modal de acceso.
@@ -129,6 +130,9 @@ function App() {
         <ScrollToTop />
         <WhatsAppFloat />
       </div>
+      {/* Lluvia de pétalos de bienvenida (campaña de primavera) */}
+      <LluviaDePetalos />
+
       {showLogin && (
         <Suspense fallback={null}>
           <LoginModal

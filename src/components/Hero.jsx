@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown, Sparkles, Flower2 } from 'lucide-react';
+import { Blossom } from './Primavera';
 
 export default function Hero() {
   return (
@@ -47,7 +48,7 @@ export default function Hero() {
               transition={{ delay: 0.45, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ scale: 1.03, y: -3 }}
               whileTap={{ scale: 0.985 }}
-              className="group relative block w-full max-w-[430px] mb-8 rounded-[1.5rem] overflow-hidden"
+              className="group relative block w-full max-w-[430px] mb-8 rounded-[1.5rem]"
               aria-label="Ver promociones de primavera: hasta 30% de descuento"
             >
               {/* Resplandor exterior que respira */}
@@ -125,6 +126,25 @@ export default function Hero() {
                       <ChevronDown className="w-5 h-5" strokeWidth={2.5} />
                     </motion.span>
                   </span>
+                </span>
+
+                {/* Flores que adornan el cuadro */}
+                <motion.span
+                  className="absolute -top-7 -right-5 w-16 h-16 sm:w-20 sm:h-20 pointer-events-none drop-shadow-sm"
+                  animate={{ rotate: [0, 8, 0], y: [0, -3, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <Blossom tono="blush" className="w-full h-full" />
+                </motion.span>
+                <motion.span
+                  className="absolute -bottom-6 -left-6 w-12 h-12 sm:w-14 sm:h-14 pointer-events-none drop-shadow-sm"
+                  animate={{ rotate: [0, -10, 0], y: [0, 3, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, delay: 0.8, ease: 'easeInOut' }}
+                >
+                  <Blossom tono="rosa" className="w-full h-full" />
+                </motion.span>
+                <span className="absolute top-1/2 -left-4 w-8 h-8 pointer-events-none opacity-80">
+                  <Blossom tono="crema" className="w-full h-full" />
                 </span>
 
                 {/* Chispas */}
