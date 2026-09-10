@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown, Sparkles, Flower2 } from 'lucide-react';
-import { Blossom } from './Primavera';
+import { Blossom, LluviaDePetalos } from './Primavera';
 
 export default function Hero() {
   return (
@@ -23,6 +23,9 @@ export default function Hero() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-cream/40 via-transparent to-transparent lg:hidden" />
       </div>
+
+      {/* Pétalos y margaritas cayendo sobre la portada */}
+      <LluviaDePetalos />
 
       {/* Content */}
       <div className="relative z-10 w-full px-6 sm:px-10 md:px-16 lg:px-20 xl:px-28 2xl:px-36 h-full">

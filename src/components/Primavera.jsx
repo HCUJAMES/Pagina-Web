@@ -84,6 +84,22 @@ export function Branch({ className = '', flip = false }) {
   );
 }
 
+// ---- Margarita amarilla (foto recortada, con fondo transparente) ----
+export function Margarita({ className = '' }) {
+  return (
+    <img
+      src="/Imagenes/margarita.webp"
+      alt=""
+      aria-hidden="true"
+      width="220"
+      height="220"
+      loading="eager"
+      decoding="async"
+      className={`block w-full h-full object-contain ${className}`}
+    />
+  );
+}
+
 // ---- Pétalo suelto, para la lluvia ----
 function Petalo({ tono }) {
   const colores = {
@@ -102,12 +118,11 @@ function Petalo({ tono }) {
 }
 
 /**
- * Lluvia de pétalos al entrar a la web.
- * Cae suave, no estorba el clic y se desvanece sola tras unos segundos
- * para no distraer. Respeta a quien pidió menos animaciones.
+ * Lluvia de pétalos y margaritas sobre la portada.
+ * Vive dentro de la portada, así cae sobre la imagen de inicio y desaparece
+ * al bajar. No estorba el clic y respeta a quien pidió menos animaciones.
  */
-export function LluviaDePetalos({ cantidad = 16, duracionTotal = 22000 }) {
-  const [visible, setVisible] = useState(true);
+export function LluviaDePetalos({ cantidad = 18 }) {
   const [animar, setAnimar] = useState(true);
 
   useEffect(() => {
@@ -115,38 +130,40 @@ export function LluviaDePetalos({ cantidad = 16, duracionTotal = 22000 }) {
       typeof window !== 'undefined' &&
       window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (menosMovimiento) { setAnimar(false); return; }
-
-    const t1 = setTimeout(() => setVisible(false), duracionTotal);
-    return () => clearTimeout(t1);
-  }, [duracionTotal]);
+    if (menosMovimiento) setAnimar(false);
+  }, []);
 
   if (!animar) return null;
 
   const tonos = ['blush', 'crema', 'rosa'];
-  // Valores fijos (no aleatorios) para que el resultado sea siempre el mismo
-  const petalos = Array.from({ length: cantidad }, (_, i) => ({
-    izquierda: ((i * 37) % 100),
-    tam: 13 + ((i * 7) % 16),
-    demora: (i * 0.9) % 12,
-    caida: 11 + ((i * 5) % 7),
-    vaiven: 3.5 + ((i * 3) % 4),
-    giro: i % 2 === 0 ? 1 : -1,
-    tono: tonos[i % tonos.length],
-    opacidad: 0.45 + ((i * 13) % 30) / 100,
-  }));
+  // Valores fijos (no aleatorios) para que el resultado sea siempre el mismo.
+  // Una de cada tres piezas es una margarita amarilla, y va algo más grande.
+  const petalos = Array.from({ length: cantidad }, (_, i) => {
+    const esMargarita = i % 3 === 0;
+    return {
+      izquierda: ((i * 37) % 100),
+      tam: esMargarita ? 34 + ((i * 5) % 20) : 20 + ((i * 7) % 18),
+      demora: (i * 0.9) % 12,
+      caida: 12 + ((i * 5) % 7),
+      vaiven: 3.5 + ((i * 3) % 4),
+      giro: i % 2 === 0 ? 1 : -1,
+      tono: tonos[i % tonos.length],
+      opacidad: esMargarita ? 0.75 + ((i * 7) % 20) / 100 : 0.5 + ((i * 13) % 30) / 100,
+      esMargarita,
+    };
+  });
 
   return (
     <div
       aria-hidden="true"
-      className={`fixed inset-0 z-[45] pointer-events-none overflow-hidden transition-opacity duration-[2500ms] ${
-        visible ? 'opacity-100' : 'opacity-0'
-      }`}
+      className="absolute inset-0 z-20 pointer-events-none overflow-hidden"
     >
       <style>{`
         @keyframes sc-caer {
-          0%   { transform: translate3d(0, -12vh, 0); }
-          100% { transform: translate3d(0, 112vh, 0); }
+          0%   { transform: translate3d(0, -14%, 0); opacity: 0; }
+          8%   { opacity: 1; }
+          88%  { opacity: 1; }
+          100% { transform: translate3d(0, 105vh, 0); opacity: 0; }
         }
         @keyframes sc-vaiven {
           0%, 100% { transform: translateX(-16px) rotate(0deg); }
@@ -164,7 +181,7 @@ export function LluviaDePetalos({ cantidad = 16, duracionTotal = 22000 }) {
           style={{
             left: `${p.izquierda}%`,
             width: `${p.tam}px`,
-            height: `${p.tam * 1.25}px`,
+            height: `${p.esMargarita ? p.tam : p.tam * 1.25}px`,
             opacity: p.opacidad,
             animation: `sc-caer ${p.caida}s linear ${p.demora}s infinite`,
             willChange: 'transform',
@@ -178,7 +195,7 @@ export function LluviaDePetalos({ cantidad = 16, duracionTotal = 22000 }) {
               willChange: 'transform',
             }}
           >
-            <Petalo tono={p.tono} />
+            {p.esMargarita ? <Margarita /> : <Petalo tono={p.tono} />}
           </span>
         </span>
       ))}

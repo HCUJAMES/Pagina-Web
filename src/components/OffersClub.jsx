@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Gift, Crown, Star, Sparkles, ArrowRight, Calendar, UserPlus, Clock, Flame, Zap, Flower2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cardThemes, tierOrder } from '../lib/tierThemes';
-import { Blossom, Branch } from './Primavera';
+import { Blossom, Branch, Margarita } from './Primavera';
 
 // Promociones de primavera — válidas hasta el 22 de septiembre
 const VIGENCIA = 'Hasta el 22 de septiembre';
@@ -267,12 +267,26 @@ export default function OffersClub() {
         <Branch className="hidden lg:block absolute -left-12 top-14 w-56 h-auto text-primary/[0.16] pointer-events-none" />
         <Branch flip className="hidden lg:block absolute -right-12 bottom-20 w-64 h-auto text-primary/[0.14] pointer-events-none" />
 
-        {/* Flores grandes: dejan claro que es primavera */}
-        <Blossom tono="blush" className="absolute -top-16 -left-16 w-56 h-56 md:w-80 md:h-80 opacity-70 rotate-12 pointer-events-none" />
-        <Blossom tono="crema" className="absolute top-24 -right-20 w-48 h-48 md:w-72 md:h-72 opacity-60 -rotate-12 pointer-events-none" />
-        <Blossom tono="rosa" className="hidden sm:block absolute bottom-10 -left-14 w-44 h-44 md:w-64 md:h-64 opacity-55 rotate-[25deg] pointer-events-none" />
-        <Blossom tono="blush" className="hidden md:block absolute -bottom-20 right-1/4 w-52 h-52 opacity-50 -rotate-[18deg] pointer-events-none" />
-        <Blossom tono="crema" className="hidden lg:block absolute top-1/2 left-[8%] w-24 h-24 opacity-70 rotate-45 pointer-events-none" />
+        {/* Halos suaves de color (las margaritas llevan el protagonismo floral) */}
+        <Blossom tono="blush" className="absolute -top-20 -left-20 w-64 h-64 md:w-80 md:h-80 opacity-30 rotate-12 pointer-events-none blur-[1px]" />
+        <Blossom tono="rosa" className="hidden md:block absolute -bottom-24 right-1/4 w-56 h-56 opacity-25 -rotate-[18deg] pointer-events-none blur-[1px]" />
+
+        {/* Margaritas amarillas, el sello de la campaña */}
+        <span className="absolute top-8 left-[12%] w-20 h-20 md:w-28 md:h-28 opacity-90 rotate-[14deg] pointer-events-none drop-shadow-sm">
+          <Margarita />
+        </span>
+        <span className="hidden sm:block absolute top-[38%] right-[6%] w-24 h-24 md:w-32 md:h-32 opacity-85 -rotate-12 pointer-events-none drop-shadow-sm">
+          <Margarita />
+        </span>
+        <span className="absolute bottom-16 right-[16%] w-16 h-16 md:w-24 md:h-24 opacity-80 rotate-[28deg] pointer-events-none drop-shadow-sm">
+          <Margarita />
+        </span>
+        <span className="hidden md:block absolute bottom-[42%] left-[4%] w-24 h-24 opacity-75 -rotate-[20deg] pointer-events-none drop-shadow-sm">
+          <Margarita />
+        </span>
+        <span className="hidden lg:block absolute top-[62%] left-[26%] w-16 h-16 opacity-70 rotate-[40deg] pointer-events-none drop-shadow-sm">
+          <Margarita />
+        </span>
 
         {/* Filetes dorados arriba y abajo */}
         <GoldRibbon className="absolute top-0 inset-x-0 z-10" />
